@@ -1,0 +1,38 @@
+name: MeetingOS SSH check
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      MEETING_SSH_PRIVATE_KEY: ${{ secrets.MEETING_SSH_PRIVATE_KEY }}
+      MEETING_SSH_KNOWN_HOSTS: ${{ secrets.MEETING_SSH_KNOWN_HOSTS }}
+    steps:
+      - name: Verify SSH login and read access to MeetingOS
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${MEETING_SSH_PRIVATE_KEY:?Configure the MEETING_SSH_PRIVATE_KEY Actions secret}"
+          : "${MEETING_SSH_KNOWN_HOSTS:?Configure the MEETING_SSH_KNOWN_HOSTS Actions secret}"
+          meeting_ssh_dir="$(mktemp -d "$RUNNER_TEMP/meetingos-ssh.XXXXXX")"
+          trap 'rm -rf "$meeting_ssh_dir"' EXIT
+          umask 077
+          printf '%s\n' "$MEETING_SSH_PRIVATE_KEY" | tr -d '\r' > "$meeting_ssh_dir/key"
+          printf '%s\n' "$MEETING_SSH_KNOWN_HOSTS" | tr -d '\r' > "$meeting_ssh_dir/known_hosts"
+          ssh -F /dev/null \
+            -i "$meeting_ssh_dir/key" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$meeting_ssh_dir/known_hosts" \
+            -o GlobalKnownHostsFile=/dev/null \
+            -o ConnectTimeout=10 \
+            -o ServerAliveInterval=15 \
+            -o ServerAliveCountMax=2 \
+            -p 22 ubuntu@101.35.232.194 \
+            'test "$(id -un)" = ubuntu && test -r /opt/aiboard/package.json && test -r /opt/aiboard/server/api-server.mjs && node --version'

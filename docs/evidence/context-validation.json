@@ -1,0 +1,8 @@
+{
+  "prompt_has_uploaded_material": true,
+  "prompt_has_transcript": true,
+  "prompt_has_meeting_brief": false,
+  "summary_prompt_has_untyped_speech": false,
+  "summary_prompt_has_typed_speech": true,
+  "method": "synthetic context markers with local fetch capture; no real model call"
+}

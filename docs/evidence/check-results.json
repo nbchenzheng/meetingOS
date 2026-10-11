@@ -1,0 +1,309 @@
+[
+  {
+    "name": "create_synthetic_meeting_without_auth",
+    "method": "POST",
+    "path": "/api/meetings",
+    "status": 200,
+    "seconds": 2.09,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "read_synthetic_meeting_without_auth",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 200,
+    "seconds": 0.97,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "meeting_supported_methods",
+    "method": "OPTIONS",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 404,
+    "seconds": 0.63,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "upload_synthetic_markdown",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/materials",
+    "status": 200,
+    "seconds": 0.34,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "persist_transcript_1",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.91,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "persist_transcript_2",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 2.29,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "persist_transcript_3",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.55,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "transcript_idempotency_retry",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.33,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "read_saved_transcript",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.62,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "select_automatic_speakers",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/auto-speakers",
+    "status": 200,
+    "seconds": 0.34,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "read_server_commentaries_after_transcript",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/commentaries",
+    "status": 200,
+    "seconds": 0.33,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "manual_gpt_model_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 1.35,
+    "content_type": "text/event-stream; charset=utf-8",
+    "result": {
+      "text": "（本地兜底模式）GPT-5.5：当前议题关键在「方案、执行、效率、增长、对比、落地、数据」。建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。",
+      "fallback": true
+    }
+  },
+  {
+    "name": "read_persisted_model_opinions",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/opinions",
+    "status": 200,
+    "seconds": 0.34,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "manual_claude_model_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 2.46,
+    "content_type": "text/event-stream; charset=utf-8",
+    "result": {
+      "text": "（本地兜底模式）Claude：围绕「风险、合规、安全、伦理、结构化、权衡、责任」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。",
+      "fallback": true
+    }
+  },
+  {
+    "name": "manual_deepseek_role_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 19.01,
+    "content_type": "text/event-stream; charset=utf-8",
+    "result": {
+      "text": "先别拍板。我看得到的死法非常清楚：附件明确客户要求离线私有化部署、不允许数据离开内网、不接受公网SaaS，而拟拍板方案却是公网SaaS——这不是偏差，是直接违背客户边界，交付即违约。报价8万、工期4周是否与简报冲突，我没看到简报中的预算与工期基准，不能假装核对；附件校验码是“银杏83”。明天分配工作前，先回答一个问题：这个公网SaaS方案，是因为我们真认为比私有化更符合客户要求，还是因为我们只有公网SaaS可卖？前者需要证据，后者必须叫停。",
+      "fallback": false
+    }
+  },
+  {
+    "name": "periodic_commentary_same_context_as_frontend",
+    "method": "POST",
+    "path": "/api/transcript/commentary",
+    "status": 200,
+    "seconds": 9.21,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 8213
+    }
+  },
+  {
+    "name": "refine_synthetic_transcript",
+    "method": "POST",
+    "path": "/api/transcript/refine",
+    "status": 200,
+    "seconds": 1.23,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": false,
+      "error": "整理服务暂不可用，已保留原始转录",
+      "degraded": true
+    }
+  },
+  {
+    "name": "mindmap_synthetic_transcript",
+    "method": "POST",
+    "path": "/api/transcript/mindmap",
+    "status": 200,
+    "seconds": 14.86,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true,
+      "tookMs": 14256
+    }
+  },
+  {
+    "name": "summary_synthetic_meeting",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 11.5,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 10918,
+      "cached": false
+    }
+  },
+  {
+    "name": "read_meeting_after_analysis",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 200,
+    "seconds": 0.86,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "read_commentaries_after_periodic_request",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/commentaries",
+    "status": 200,
+    "seconds": 0.6,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "name": "refine_with_exact_frontend_entry_shape",
+    "method": "POST",
+    "path": "/api/transcript/refine",
+    "status": 200,
+    "seconds": 0.43,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": false,
+      "error": "整理服务暂不可用，已保留原始转录",
+      "degraded": true
+    }
+  },
+  {
+    "name": "summary_with_exact_frontend_entry_shape",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 42.13,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 41806,
+      "cached": false
+    }
+  },
+  {
+    "name": "summary_with_initial_empty_meeting_snapshot",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 0.32,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": false,
+      "error": "尚无转录内容，无法生成总结",
+      "degraded": true
+    }
+  },
+  {
+    "name": "cleanup_only_our_synthetic_meeting",
+    "method": "DELETE",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 404,
+    "seconds": 1.02,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": false
+    }
+  },
+  {
+    "name": "summary_isolated_add_speech_type_only",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 32.18,
+    "content_type": "application/json; charset=utf-8",
+    "result": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 29831,
+      "cached": false
+    }
+  }
+]

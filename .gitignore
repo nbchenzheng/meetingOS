@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+server/data/*
+!server/data/大咖角色库.json
+.tmp/
+*.log
+*.bak*
+*.pem
+*.key
+.credentials/
+*.tar.gz

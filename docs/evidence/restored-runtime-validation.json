@@ -1,0 +1,22 @@
+{
+  "health": true,
+  "asr_provider": "web-speech",
+  "prebuilt_frontend_served": true,
+  "role_count": 25,
+  "markdown_material_parsed": true,
+  "empty_transcript_rejected": true,
+  "retry_transcript_count": 2,
+  "transcript_idempotent": false,
+  "stored_transcript_has_type": false,
+  "unconfigured_model_explicit_fallback": true,
+  "summary_without_model_credentials": {
+    "ok": false,
+    "degraded": true
+  },
+  "markdown_export": true,
+  "websocket_transcript_persisted": true,
+  "anonymous_meeting_read_write": true,
+  "meeting_recovers_after_local_restart": true,
+  "transcript_recovers_after_local_restart": true,
+  "opinion_recovers_after_local_restart": true
+}

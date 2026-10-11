@@ -1,0 +1,851 @@
+[
+  {
+    "name": "create_synthetic_meeting_without_auth",
+    "method": "POST",
+    "path": "/api/meetings",
+    "status": 200,
+    "seconds": 2.09,
+    "data": {
+      "ok": true,
+      "meeting": {
+        "id": "7d3dba5d",
+        "title": "审计测试-20261011-仅合成数据-可删除",
+        "brief": "这是网站功能审计的合成会议，不是真实客户。内部约束：预算最多3万元，工期最多10天，只有1位工程师。背景校验码为蓝桥47。请优先识别决策风险。",
+        "roleIds": [
+          "charlie_munger",
+          "claude",
+          "gpt55"
+        ],
+        "materials": [],
+        "transcript": [],
+        "opinions": [],
+        "commentaries": [],
+        "commentaryEnabled": true,
+        "mindmapTopBranches": [],
+        "createdAt": "2026-10-11T09:19:00.232Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_synthetic_meeting_without_auth",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 200,
+    "seconds": 0.97,
+    "data": {
+      "ok": true,
+      "meeting": {
+        "id": "7d3dba5d",
+        "title": "审计测试-20261011-仅合成数据-可删除",
+        "brief": "这是网站功能审计的合成会议，不是真实客户。内部约束：预算最多3万元，工期最多10天，只有1位工程师。背景校验码为蓝桥47。请优先识别决策风险。",
+        "roleIds": [
+          "charlie_munger",
+          "claude",
+          "gpt55"
+        ],
+        "materials": [],
+        "transcript": [],
+        "opinions": [],
+        "commentaries": [],
+        "commentaryEnabled": true,
+        "mindmapTopBranches": [],
+        "createdAt": "2026-10-11T09:19:00.232Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "meeting_supported_methods",
+    "method": "OPTIONS",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 404,
+    "seconds": 0.63,
+    "data": {
+      "ok": false,
+      "message": "not found"
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "upload_synthetic_markdown",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/materials",
+    "status": 200,
+    "seconds": 0.34,
+    "data": {
+      "ok": true,
+      "id": "8a9eea84",
+      "name": "audit-synthetic-context.md",
+      "type": "md",
+      "parsedText": "# 合成客户资料 客户要求离线私有化部署，不允许数据离开内网；不接受公网SaaS。附件校验码为银杏83。 这是功能审计资料，不含真实客户信息。",
+      "sizeBytes": 193
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "persist_transcript_1",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.91,
+    "data": {
+      "ok": true,
+      "entry": {
+        "id": "meetingos-audit-20261011-1",
+        "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+        "final": true,
+        "ts": "2026-10-11T09:19:03.074Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "persist_transcript_2",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 2.29,
+    "data": {
+      "ok": true,
+      "entry": {
+        "id": "meetingos-audit-20261011-2",
+        "text": "我们准备拍板：报价8万元，工期4周，采用公网SaaS方案，明天分配工作。",
+        "final": true,
+        "ts": "2026-10-11T09:19:05.371Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "persist_transcript_3",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.55,
+    "data": {
+      "ok": true,
+      "entry": {
+        "id": "meetingos-audit-20261011-3",
+        "text": "请AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾，并准确复述简报和附件的校验码；不要捏造没看到的资料。",
+        "final": true,
+        "ts": "2026-10-11T09:19:05.918Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "transcript_idempotency_retry",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.33,
+    "data": {
+      "ok": true,
+      "entry": {
+        "id": "meetingos-audit-20261011-1",
+        "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+        "final": true,
+        "ts": "2026-10-11T09:19:06.249Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_saved_transcript",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/transcript",
+    "status": 200,
+    "seconds": 0.62,
+    "data": {
+      "ok": true,
+      "transcript": [
+        {
+          "id": "meetingos-audit-20261011-1",
+          "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+          "final": true,
+          "ts": "2026-10-11T09:19:03.074Z"
+        },
+        {
+          "id": "meetingos-audit-20261011-2",
+          "text": "我们准备拍板：报价8万元，工期4周，采用公网SaaS方案，明天分配工作。",
+          "final": true,
+          "ts": "2026-10-11T09:19:05.371Z"
+        },
+        {
+          "id": "meetingos-audit-20261011-3",
+          "text": "请AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾，并准确复述简报和附件的校验码；不要捏造没看到的资料。",
+          "final": true,
+          "ts": "2026-10-11T09:19:05.918Z"
+        },
+        {
+          "id": "meetingos-audit-20261011-1",
+          "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+          "final": true,
+          "ts": "2026-10-11T09:19:06.249Z"
+        }
+      ]
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "select_automatic_speakers",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/auto-speakers",
+    "status": 200,
+    "seconds": 0.34,
+    "data": {
+      "ok": true,
+      "roleIds": [
+        "gpt55"
+      ]
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_server_commentaries_after_transcript",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/commentaries",
+    "status": 200,
+    "seconds": 0.33,
+    "data": {
+      "ok": true,
+      "commentaries": [
+        {
+          "id": "55176de2",
+          "source": "bigshot",
+          "roleId": "gpt55",
+          "roleCn": "GPT-5.5",
+          "color": "#10a37f",
+          "type": "suggestion",
+          "text": "（本地兜底模式）GPT-5.5：围绕「方案、执行、效率、增长、对比、落地、数据」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。",
+          "ts": "2026-10-11T09:19:04.856Z",
+          "anchorTs": "2026-10-11T09:19:03.074Z",
+          "anchorEntryIds": [
+            "meetingos-audit-20261011-1"
+          ],
+          "trigger": "auto",
+          "pinned": false,
+          "ignored": false,
+          "importance": 2
+        }
+      ],
+      "commentaryEnabled": true
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "manual_gpt_model_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 1.35,
+    "data": {
+      "body": "event: start\ndata: {\"roleId\":\"gpt55\",\"color\":\"#10a37f\",\"cn\":\"GPT-5.5\"}\n\nevent: token\ndata: {\"delta\":\"（\"}\n\nevent: token\ndata: {\"delta\":\"本\"}\n\nevent: token\ndata: {\"delta\":\"地\"}\n\nevent: token\ndata: {\"delta\":\"兜\"}\n\nevent: token\ndata: {\"delta\":\"底\"}\n\nevent: token\ndata: {\"delta\":\"模\"}\n\nevent: token\ndata: {\"delta\":\"式\"}\n\nevent: token\ndata: {\"delta\":\"）\"}\n\nevent: token\ndata: {\"delta\":\"G\"}\n\nevent: token\ndata: {\"delta\":\"P\"}\n\nevent: token\ndata: {\"delta\":\"T\"}\n\nevent: token\ndata: {\"delta\":\"-\"}\n\nevent: token\ndata: {\"delta\":\"5\"}\n\nevent: token\ndata: {\"delta\":\".\"}\n\nevent: token\ndata: {\"delta\":\"5\"}\n\nevent: token\ndata: {\"delta\":\"：\"}\n\nevent: token\ndata: {\"delta\":\"当\"}\n\nevent: token\ndata: {\"delta\":\"前\"}\n\nevent: token\ndata: {\"delta\":\"议\"}\n\nevent: token\ndata: {\"delta\":\"题\"}\n\nevent: token\ndata: {\"delta\":\"关\"}\n\nevent: token\ndata: {\"delta\":\"键\"}\n\nevent: token\ndata: {\"delta\":\"在\"}\n\nevent: token\ndata: {\"delta\":\"「\"}\n\nevent: token\ndata: {\"delta\":\"方\"}\n\nevent: token\ndata: {\"delta\":\"案\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"执\"}\n\nevent: token\ndata: {\"delta\":\"行\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"效\"}\n\nevent: token\ndata: {\"delta\":\"率\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"增\"}\n\nevent: token\ndata: {\"delta\":\"长\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"对\"}\n\nevent: token\ndata: {\"delta\":\"比\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"落\"}\n\nevent: token\ndata: {\"delta\":\"地\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"数\"}\n\nevent: token\ndata: {\"delta\":\"据\"}\n\nevent: token\ndata: {\"delta\":\"」\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: token\ndata: {\"delta\":\"建\"}\n\nevent: token\ndata: {\"delta\":\"议\"}\n\nevent: token\ndata: {\"delta\":\"先\"}\n\nevent: token\ndata: {\"delta\":\"定\"}\n\nevent: token\ndata: {\"delta\":\"义\"}\n\nevent: token\ndata: {\"delta\":\"最\"}\n\nevent: token\ndata: {\"delta\":\"小\"}\n\nevent: token\ndata: {\"delta\":\"可\"}\n\nevent: token\ndata: {\"delta\":\"行\"}\n\nevent: token\ndata: {\"delta\":\"闭\"}\n\nevent: token\ndata: {\"delta\":\"环\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"把\"}\n\nevent: token\ndata: {\"delta\":\"验\"}\n\nevent: token\ndata: {\"delta\":\"证\"}\n\nevent: token\ndata: {\"delta\":\"成\"}\n\nevent: token\ndata: {\"delta\":\"本\"}\n\nevent: token\ndata: {\"delta\":\"压\"}\n\nevent: token\ndata: {\"delta\":\"到\"}\n\nevent: token\ndata: {\"delta\":\"最\"}\n\nevent: token\ndata: {\"delta\":\"低\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"再\"}\n\nevent: token\ndata: {\"delta\":\"决\"}\n\nevent: token\ndata: {\"delta\":\"定\"}\n\nevent: token\ndata: {\"delta\":\"是\"}\n\nevent: token\ndata: {\"delta\":\"否\"}\n\nevent: token\ndata: {\"delta\":\"放\"}\n\nevent: token\ndata: {\"delta\":\"大\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: end\ndata: {\"opinionId\":\"dd69dc91\",\"text\":\"（本地兜底模式）GPT-5.5：当前议题关键在「方案、执行、效率、增长、对比、落地、数据」。建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。\"}\n\n"
+    },
+    "content_type": "text/event-stream; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_persisted_model_opinions",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/opinions",
+    "status": 200,
+    "seconds": 0.34,
+    "data": {
+      "ok": true,
+      "opinions": [
+        {
+          "id": "dd69dc91",
+          "roleId": "gpt55",
+          "text": "（本地兜底模式）GPT-5.5：当前议题关键在「方案、执行、效率、增长、对比、落地、数据」。建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。",
+          "severity": "info",
+          "trigger": "manual",
+          "ts": "2026-10-11T09:19:08.886Z"
+        }
+      ]
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "manual_claude_model_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 2.46,
+    "data": {
+      "body": "event: start\ndata: {\"roleId\":\"claude\",\"color\":\"#d97757\",\"cn\":\"Claude\"}\n\nevent: token\ndata: {\"delta\":\"（\"}\n\nevent: token\ndata: {\"delta\":\"本\"}\n\nevent: token\ndata: {\"delta\":\"地\"}\n\nevent: token\ndata: {\"delta\":\"兜\"}\n\nevent: token\ndata: {\"delta\":\"底\"}\n\nevent: token\ndata: {\"delta\":\"模\"}\n\nevent: token\ndata: {\"delta\":\"式\"}\n\nevent: token\ndata: {\"delta\":\"）\"}\n\nevent: token\ndata: {\"delta\":\"C\"}\n\nevent: token\ndata: {\"delta\":\"l\"}\n\nevent: token\ndata: {\"delta\":\"a\"}\n\nevent: token\ndata: {\"delta\":\"u\"}\n\nevent: token\ndata: {\"delta\":\"d\"}\n\nevent: token\ndata: {\"delta\":\"e\"}\n\nevent: token\ndata: {\"delta\":\"：\"}\n\nevent: token\ndata: {\"delta\":\"围\"}\n\nevent: token\ndata: {\"delta\":\"绕\"}\n\nevent: token\ndata: {\"delta\":\"「\"}\n\nevent: token\ndata: {\"delta\":\"风\"}\n\nevent: token\ndata: {\"delta\":\"险\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"合\"}\n\nevent: token\ndata: {\"delta\":\"规\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"安\"}\n\nevent: token\ndata: {\"delta\":\"全\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"伦\"}\n\nevent: token\ndata: {\"delta\":\"理\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"结\"}\n\nevent: token\ndata: {\"delta\":\"构\"}\n\nevent: token\ndata: {\"delta\":\"化\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"权\"}\n\nevent: token\ndata: {\"delta\":\"衡\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"责\"}\n\nevent: token\ndata: {\"delta\":\"任\"}\n\nevent: token\ndata: {\"delta\":\"」\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"我\"}\n\nevent: token\ndata: {\"delta\":\"倾\"}\n\nevent: token\ndata: {\"delta\":\"向\"}\n\nevent: token\ndata: {\"delta\":\"先\"}\n\nevent: token\ndata: {\"delta\":\"小\"}\n\nevent: token\ndata: {\"delta\":\"步\"}\n\nevent: token\ndata: {\"delta\":\"快\"}\n\nevent: token\ndata: {\"delta\":\"跑\"}\n\nevent: token\ndata: {\"delta\":\"验\"}\n\nevent: token\ndata: {\"delta\":\"证\"}\n\nevent: token\ndata: {\"delta\":\"假\"}\n\nevent: token\ndata: {\"delta\":\"设\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"用\"}\n\nevent: token\ndata: {\"delta\":\"真\"}\n\nevent: token\ndata: {\"delta\":\"实\"}\n\nevent: token\ndata: {\"delta\":\"数\"}\n\nevent: token\ndata: {\"delta\":\"据\"}\n\nevent: token\ndata: {\"delta\":\"替\"}\n\nevent: token\ndata: {\"delta\":\"代\"}\n\nevent: token\ndata: {\"delta\":\"直\"}\n\nevent: token\ndata: {\"delta\":\"觉\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"再\"}\n\nevent: token\ndata: {\"delta\":\"谈\"}\n\nevent: token\ndata: {\"delta\":\"规\"}\n\nevent: token\ndata: {\"delta\":\"模\"}\n\nevent: token\ndata: {\"delta\":\"化\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: end\ndata: {\"opinionId\":\"34a9065f\",\"text\":\"（本地兜底模式）Claude：围绕「风险、合规、安全、伦理、结构化、权衡、责任」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。\"}\n\n"
+    },
+    "content_type": "text/event-stream; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "manual_deepseek_role_with_full_meeting_context",
+    "method": "POST",
+    "path": "/api/meetings/7d3dba5d/speak",
+    "status": 200,
+    "seconds": 19.01,
+    "data": {
+      "body": "event: start\ndata: {\"roleId\":\"charlie_munger\",\"color\":\"#0d9488\",\"cn\":\"芒格\"}\n\nevent: token\ndata: {\"delta\":\"先\"}\n\nevent: token\ndata: {\"delta\":\"别\"}\n\nevent: token\ndata: {\"delta\":\"拍\"}\n\nevent: token\ndata: {\"delta\":\"板\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: token\ndata: {\"delta\":\"我看\"}\n\nevent: token\ndata: {\"delta\":\"得到的\"}\n\nevent: token\ndata: {\"delta\":\"死\"}\n\nevent: token\ndata: {\"delta\":\"法\"}\n\nevent: token\ndata: {\"delta\":\"非常\"}\n\nevent: token\ndata: {\"delta\":\"清楚\"}\n\nevent: token\ndata: {\"delta\":\"：\"}\n\nevent: token\ndata: {\"delta\":\"附件\"}\n\nevent: token\ndata: {\"delta\":\"明确\"}\n\nevent: token\ndata: {\"delta\":\"客户\"}\n\nevent: token\ndata: {\"delta\":\"要求\"}\n\nevent: token\ndata: {\"delta\":\"离线\"}\n\nevent: token\ndata: {\"delta\":\"私有\"}\n\nevent: token\ndata: {\"delta\":\"化\"}\n\nevent: token\ndata: {\"delta\":\"部署\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"不允许\"}\n\nevent: token\ndata: {\"delta\":\"数据\"}\n\nevent: token\ndata: {\"delta\":\"离开\"}\n\nevent: token\ndata: {\"delta\":\"内\"}\n\nevent: token\ndata: {\"delta\":\"网\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"不接受\"}\n\nevent: token\ndata: {\"delta\":\"公\"}\n\nevent: token\ndata: {\"delta\":\"网\"}\n\nevent: token\ndata: {\"delta\":\"S\"}\n\nevent: token\ndata: {\"delta\":\"aaS\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"而\"}\n\nevent: token\ndata: {\"delta\":\"拟\"}\n\nevent: token\ndata: {\"delta\":\"拍\"}\n\nevent: token\ndata: {\"delta\":\"板\"}\n\nevent: token\ndata: {\"delta\":\"方案\"}\n\nevent: token\ndata: {\"delta\":\"却是\"}\n\nevent: token\ndata: {\"delta\":\"公\"}\n\nevent: token\ndata: {\"delta\":\"网\"}\n\nevent: token\ndata: {\"delta\":\"S\"}\n\nevent: token\ndata: {\"delta\":\"aaS\"}\n\nevent: token\ndata: {\"delta\":\"——\"}\n\nevent: token\ndata: {\"delta\":\"这不是\"}\n\nevent: token\ndata: {\"delta\":\"偏差\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"是\"}\n\nevent: token\ndata: {\"delta\":\"直接\"}\n\nevent: token\ndata: {\"delta\":\"违背\"}\n\nevent: token\ndata: {\"delta\":\"客户\"}\n\nevent: token\ndata: {\"delta\":\"边界\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"交付\"}\n\nevent: token\ndata: {\"delta\":\"即\"}\n\nevent: token\ndata: {\"delta\":\"违约\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: token\ndata: {\"delta\":\"报价\"}\n\nevent: token\ndata: {\"delta\":\"8\"}\n\nevent: token\ndata: {\"delta\":\"万\"}\n\nevent: token\ndata: {\"delta\":\"、\"}\n\nevent: token\ndata: {\"delta\":\"工期\"}\n\nevent: token\ndata: {\"delta\":\"4\"}\n\nevent: token\ndata: {\"delta\":\"周\"}\n\nevent: token\ndata: {\"delta\":\"是否\"}\n\nevent: token\ndata: {\"delta\":\"与\"}\n\nevent: token\ndata: {\"delta\":\"简报\"}\n\nevent: token\ndata: {\"delta\":\"冲突\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"我没\"}\n\nevent: token\ndata: {\"delta\":\"看到\"}\n\nevent: token\ndata: {\"delta\":\"简报\"}\n\nevent: token\ndata: {\"delta\":\"中的\"}\n\nevent: token\ndata: {\"delta\":\"预算\"}\n\nevent: token\ndata: {\"delta\":\"与\"}\n\nevent: token\ndata: {\"delta\":\"工期\"}\n\nevent: token\ndata: {\"delta\":\"基准\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"不能\"}\n\nevent: token\ndata: {\"delta\":\"假装\"}\n\nevent: token\ndata: {\"delta\":\"核对\"}\n\nevent: token\ndata: {\"delta\":\"；\"}\n\nevent: token\ndata: {\"delta\":\"附件\"}\n\nevent: token\ndata: {\"delta\":\"校验\"}\n\nevent: token\ndata: {\"delta\":\"码\"}\n\nevent: token\ndata: {\"delta\":\"是\"}\n\nevent: token\ndata: {\"delta\":\"“\"}\n\nevent: token\ndata: {\"delta\":\"银杏\"}\n\nevent: token\ndata: {\"delta\":\"83\"}\n\nevent: token\ndata: {\"delta\":\"”。\"}\n\nevent: token\ndata: {\"delta\":\"明天\"}\n\nevent: token\ndata: {\"delta\":\"分配\"}\n\nevent: token\ndata: {\"delta\":\"工作\"}\n\nevent: token\ndata: {\"delta\":\"前\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"先\"}\n\nevent: token\ndata: {\"delta\":\"回答\"}\n\nevent: token\ndata: {\"delta\":\"一个问题\"}\n\nevent: token\ndata: {\"delta\":\"：\"}\n\nevent: token\ndata: {\"delta\":\"这个\"}\n\nevent: token\ndata: {\"delta\":\"公\"}\n\nevent: token\ndata: {\"delta\":\"网\"}\n\nevent: token\ndata: {\"delta\":\"S\"}\n\nevent: token\ndata: {\"delta\":\"aaS\"}\n\nevent: token\ndata: {\"delta\":\"方案\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"是因为\"}\n\nevent: token\ndata: {\"delta\":\"我们\"}\n\nevent: token\ndata: {\"delta\":\"真\"}\n\nevent: token\ndata: {\"delta\":\"认为\"}\n\nevent: token\ndata: {\"delta\":\"比\"}\n\nevent: token\ndata: {\"delta\":\"私有\"}\n\nevent: token\ndata: {\"delta\":\"化\"}\n\nevent: token\ndata: {\"delta\":\"更\"}\n\nevent: token\ndata: {\"delta\":\"符合\"}\n\nevent: token\ndata: {\"delta\":\"客户\"}\n\nevent: token\ndata: {\"delta\":\"要求\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"还是\"}\n\nevent: token\ndata: {\"delta\":\"因为我们\"}\n\nevent: token\ndata: {\"delta\":\"只有\"}\n\nevent: token\ndata: {\"delta\":\"公\"}\n\nevent: token\ndata: {\"delta\":\"网\"}\n\nevent: token\ndata: {\"delta\":\"S\"}\n\nevent: token\ndata: {\"delta\":\"aaS\"}\n\nevent: token\ndata: {\"delta\":\"可\"}\n\nevent: token\ndata: {\"delta\":\"卖\"}\n\nevent: token\ndata: {\"delta\":\"？\"}\n\nevent: token\ndata: {\"delta\":\"前者\"}\n\nevent: token\ndata: {\"delta\":\"需要\"}\n\nevent: token\ndata: {\"delta\":\"证据\"}\n\nevent: token\ndata: {\"delta\":\"，\"}\n\nevent: token\ndata: {\"delta\":\"后者\"}\n\nevent: token\ndata: {\"delta\":\"必须\"}\n\nevent: token\ndata: {\"delta\":\"叫\"}\n\nevent: token\ndata: {\"delta\":\"停\"}\n\nevent: token\ndata: {\"delta\":\"。\"}\n\nevent: end\ndata: {\"opinionId\":\"c014db20\",\"text\":\"先别拍板。我看得到的死法非常清楚：附件明确客户要求离线私有化部署、不允许数据离开内网、不接受公网SaaS，而拟拍板方案却是公网SaaS——这不是偏差，是直接违背客户边界，交付即违约。报价8万、工期4周是否与简报冲突，我没看到简报中的预算与工期基准，不能假装核对；附件校验码是“银杏83”。明天分配工作前，先回答一个问题：这个公网SaaS方案，是因为我们真认为比私有化更符合客户要求，还是因为我们只有公网SaaS可卖？前者需要证据，后者必须叫停。\"}\n\n"
+    },
+    "content_type": "text/event-stream; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "periodic_commentary_same_context_as_frontend",
+    "method": "POST",
+    "path": "/api/transcript/commentary",
+    "status": 200,
+    "seconds": 9.21,
+    "data": {
+      "ok": true,
+      "commentary": {
+        "id": "250e7913",
+        "source": "llm",
+        "roleId": "",
+        "roleCn": "",
+        "color": "",
+        "type": "risk",
+        "text": "拍板前未核对简报与附件中的预算、工期和部署要求，公网SaaS可能存在合规冲突；先复述校验码并确认限制，再谈分工。",
+        "ts": "2026-10-11T09:20:44.185Z",
+        "anchorTs": "2026-10-11T09:20:35.139305+00:00",
+        "anchorEntryIds": [
+          "meetingos-audit-20261011-1",
+          "meetingos-audit-20261011-2",
+          "meetingos-audit-20261011-3",
+          "meetingos-audit-20261011-1"
+        ],
+        "trigger": "topic",
+        "pinned": false,
+        "ignored": false,
+        "importance": 2
+      },
+      "tookMs": 8213,
+      "model": "deepseek-v4-pro"
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "refine_synthetic_transcript",
+    "method": "POST",
+    "path": "/api/transcript/refine",
+    "status": 200,
+    "seconds": 1.23,
+    "data": {
+      "ok": false,
+      "refinedText": "审计测试会议开始：请结合会议简报和客户附件讨论方案。\n我们准备拍板：报价8万元，工期4周，采用公网SaaS方案，明天分配工作。\n请AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾，并准确复述简报和附件的校验码；不要捏造没看到的资料。\n审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+      "structured": null,
+      "error": "整理服务暂不可用，已保留原始转录",
+      "degraded": true
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "mindmap_synthetic_transcript",
+    "method": "POST",
+    "path": "/api/transcript/mindmap",
+    "status": 200,
+    "seconds": 14.86,
+    "data": {
+      "ok": true,
+      "root": {
+        "title": "合成测试会议",
+        "children": [
+          {
+            "title": "会议主题",
+            "children": [
+              {
+                "title": "结合会议简报和客户附件讨论方案",
+                "children": []
+              }
+            ]
+          },
+          {
+            "title": "待拍板方案",
+            "children": [
+              {
+                "title": "报价8万元",
+                "children": []
+              },
+              {
+                "title": "工期4周",
+                "children": []
+              },
+              {
+                "title": "采用公网SaaS方案",
+                "children": []
+              },
+              {
+                "title": "明天分配工作",
+                "children": []
+              }
+            ]
+          },
+          {
+            "title": "拍板前核查要求",
+            "children": [
+              {
+                "title": "指出与简报预算的矛盾",
+                "children": []
+              },
+              {
+                "title": "指出与工期的矛盾",
+                "children": []
+              },
+              {
+                "title": "指出与附件部署要求的矛盾",
+                "children": []
+              },
+              {
+                "title": "准确复述简报和附件校验码",
+                "children": []
+              },
+              {
+                "title": "不要捏造未看到的资料",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      "tookMs": 14256
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "summary_synthetic_meeting",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 11.5,
+    "data": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 10918,
+      "cached": false,
+      "result": {
+        "level": "detailed",
+        "subject": "审计测试-20261011-仅合成数据-可删除",
+        "occurredAt": "2026-10-11T09:19:00.232Z",
+        "elements": [
+          {
+            "key": "meta",
+            "title": "会议主题与时间",
+            "content": "会议主题：审计测试-20261011-仅合成数据-可删除\n会议时间：（未提供）",
+            "collapsed": false
+          },
+          {
+            "key": "topics",
+            "title": "核心议题",
+            "content": "（会议未涉及）",
+            "collapsed": false
+          },
+          {
+            "key": "conclusions",
+            "title": "关键结论与决策",
+            "content": "（会议未涉及）",
+            "collapsed": false
+          },
+          {
+            "key": "actions",
+            "title": "行动项 / 待办",
+            "content": "（会议未涉及）",
+            "collapsed": false
+          },
+          {
+            "key": "views",
+            "title": "各预设大咖核心观点摘要",
+            "content": "（会议未涉及）",
+            "collapsed": false
+          },
+          {
+            "key": "thread",
+            "title": "整体脉络",
+            "content": "（会议未涉及）",
+            "collapsed": false
+          }
+        ],
+        "bigShots": [
+          {
+            "roleId": "charlie_munger",
+            "cn": "芒格",
+            "title": "逆向思维大师",
+            "viewpoint": "本次会议未见其明确观点"
+          },
+          {
+            "roleId": "claude",
+            "cn": "Claude",
+            "title": "Anthropic 大模型",
+            "viewpoint": "本次会议未见其明确观点"
+          },
+          {
+            "roleId": "gpt55",
+            "cn": "GPT-5.5",
+            "title": "OpenAI 大模型",
+            "viewpoint": "本次会议未见其明确观点"
+          }
+        ]
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_meeting_after_analysis",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 200,
+    "seconds": 0.86,
+    "data": {
+      "ok": true,
+      "meeting": {
+        "id": "7d3dba5d",
+        "title": "审计测试-20261011-仅合成数据-可删除",
+        "brief": "这是网站功能审计的合成会议，不是真实客户。内部约束：预算最多3万元，工期最多10天，只有1位工程师。背景校验码为蓝桥47。请优先识别决策风险。",
+        "roleIds": [
+          "charlie_munger",
+          "claude",
+          "gpt55"
+        ],
+        "materials": [
+          {
+            "id": "8a9eea84",
+            "name": "audit-synthetic-context.md",
+            "type": "md",
+            "parsedText": "# 合成客户资料 客户要求离线私有化部署，不允许数据离开内网；不接受公网SaaS。附件校验码为银杏83。 这是功能审计资料，不含真实客户信息。",
+            "sizeBytes": 193,
+            "addedAt": "2026-10-11T09:19:02.169Z"
+          }
+        ],
+        "transcript": [
+          {
+            "id": "meetingos-audit-20261011-1",
+            "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+            "final": true,
+            "ts": "2026-10-11T09:19:03.074Z"
+          },
+          {
+            "id": "meetingos-audit-20261011-2",
+            "text": "我们准备拍板：报价8万元，工期4周，采用公网SaaS方案，明天分配工作。",
+            "final": true,
+            "ts": "2026-10-11T09:19:05.371Z"
+          },
+          {
+            "id": "meetingos-audit-20261011-3",
+            "text": "请AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾，并准确复述简报和附件的校验码；不要捏造没看到的资料。",
+            "final": true,
+            "ts": "2026-10-11T09:19:05.918Z"
+          },
+          {
+            "id": "meetingos-audit-20261011-1",
+            "text": "审计测试会议开始：请结合会议简报和客户附件讨论方案。",
+            "final": true,
+            "ts": "2026-10-11T09:19:06.249Z"
+          }
+        ],
+        "opinions": [
+          {
+            "id": "dd69dc91",
+            "roleId": "gpt55",
+            "text": "（本地兜底模式）GPT-5.5：当前议题关键在「方案、执行、效率、增长、对比、落地、数据」。建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。",
+            "severity": "info",
+            "trigger": "manual",
+            "ts": "2026-10-11T09:19:08.886Z"
+          },
+          {
+            "id": "34a9065f",
+            "roleId": "claude",
+            "text": "（本地兜底模式）Claude：围绕「风险、合规、安全、伦理、结构化、权衡、责任」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。",
+            "severity": "info",
+            "trigger": "manual",
+            "ts": "2026-10-11T09:20:15.972Z"
+          },
+          {
+            "id": "c014db20",
+            "roleId": "charlie_munger",
+            "text": "先别拍板。我看得到的死法非常清楚：附件明确客户要求离线私有化部署、不允许数据离开内网、不接受公网SaaS，而拟拍板方案却是公网SaaS——这不是偏差，是直接违背客户边界，交付即违约。报价8万、工期4周是否与简报冲突，我没看到简报中的预算与工期基准，不能假装核对；附件校验码是“银杏83”。明天分配工作前，先回答一个问题：这个公网SaaS方案，是因为我们真认为比私有化更符合客户要求，还是因为我们只有公网SaaS可卖？前者需要证据，后者必须叫停。",
+            "severity": "info",
+            "trigger": "manual",
+            "ts": "2026-10-11T09:20:34.981Z"
+          }
+        ],
+        "commentaries": [
+          {
+            "id": "55176de2",
+            "source": "bigshot",
+            "roleId": "gpt55",
+            "roleCn": "GPT-5.5",
+            "color": "#10a37f",
+            "type": "suggestion",
+            "text": "（本地兜底模式）GPT-5.5：围绕「方案、执行、效率、增长、对比、落地、数据」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。",
+            "ts": "2026-10-11T09:19:04.856Z",
+            "anchorTs": "2026-10-11T09:19:03.074Z",
+            "anchorEntryIds": [
+              "meetingos-audit-20261011-1"
+            ],
+            "trigger": "auto",
+            "pinned": false,
+            "ignored": false,
+            "importance": 2
+          }
+        ],
+        "commentaryEnabled": true,
+        "mindmapTopBranches": [
+          "会议主题",
+          "待拍板方案",
+          "拍板前核查要求"
+        ],
+        "createdAt": "2026-10-11T09:19:00.232Z"
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "read_commentaries_after_periodic_request",
+    "method": "GET",
+    "path": "/api/meetings/7d3dba5d/commentaries",
+    "status": 200,
+    "seconds": 0.6,
+    "data": {
+      "ok": true,
+      "commentaries": [
+        {
+          "id": "55176de2",
+          "source": "bigshot",
+          "roleId": "gpt55",
+          "roleCn": "GPT-5.5",
+          "color": "#10a37f",
+          "type": "suggestion",
+          "text": "（本地兜底模式）GPT-5.5：围绕「方案、执行、效率、增长、对比、落地、数据」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。",
+          "ts": "2026-10-11T09:19:04.856Z",
+          "anchorTs": "2026-10-11T09:19:03.074Z",
+          "anchorEntryIds": [
+            "meetingos-audit-20261011-1"
+          ],
+          "trigger": "auto",
+          "pinned": false,
+          "ignored": false,
+          "importance": 2
+        }
+      ],
+      "commentaryEnabled": true
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "refine_with_exact_frontend_entry_shape",
+    "method": "POST",
+    "path": "/api/transcript/refine",
+    "status": 200,
+    "seconds": 0.43,
+    "data": {
+      "ok": false,
+      "refinedText": "审计测试会议开始：请结合会议简报和客户附件讨论方案。\n我们准备拍板：报价8万元，工期4周，采用公网SaaS方案，明天分配工作。\n请AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾，并准确复述简报和附件的校验码；不要捏造没看到的资料。\n审计测试会议开始：请结合会议简报和客户附件讨论方案。\n（本地兜底模式）GPT-5.5：当前议题关键在「方案、执行、效率、增长、对比、落地、数据」。建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。\n（本地兜底模式）Claude：围绕「风险、合规、安全、伦理、结构化、权衡、责任」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。\n先别拍板。我看得到的死法非常清楚：附件明确客户要求离线私有化部署、不允许数据离开内网、不接受公网SaaS，而拟拍板方案却是公网SaaS——这不是偏差，是直接违背客户边界，交付即违约。报价8万、工期4周是否与简报冲突，我没看到简报中的预算与工期基准，不能假装核对；附件校验码是“银杏83”。明天分配工作前，先回答一个问题：这个公网SaaS方案，是因为我们真认为比私有化更符合客户要求，还是因为我们只有公网SaaS可卖？前者需要证据，后者必须叫停。",
+      "structured": null,
+      "error": "整理服务暂不可用，已保留原始转录",
+      "degraded": true
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "summary_with_exact_frontend_entry_shape",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 42.13,
+    "data": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 41806,
+      "cached": false,
+      "result": {
+        "level": "detailed",
+        "subject": "审计测试-20261011-仅合成数据-可删除",
+        "occurredAt": "2026-10-11T09:19:00.232Z",
+        "elements": [
+          {
+            "key": "meta",
+            "title": "会议主题与时间",
+            "content": "会议主题：审计测试-20261011-仅合成数据-可删除\n会议时间：2026-10-11（标题日期，具体时刻未提供）",
+            "collapsed": false
+          },
+          {
+            "key": "topics",
+            "title": "核心议题",
+            "content": "1. 是否拍板方案：报价8万元、工期4周、采用公网SaaS。\n2. 核对拟拍板方案与简报预算、工期及附件部署要求是否冲突。\n3. 准确复述简报和附件校验码，禁止捏造未看到的资料。",
+            "collapsed": false
+          },
+          {
+            "key": "conclusions",
+            "title": "关键结论与决策",
+            "content": "1. 暂不拍板：附件明确要求离线私有化部署、数据不出内网、不接受公网SaaS，拟拍板公网SaaS方案直接违背客户边界，交付即违约。\n2. 报价8万元、工期4周是否与简报冲突：未看到简报预算与工期基准，无法核对。\n3. 附件校验码为“银杏83”；简报校验码未复述。\n4. 明天分配工作前需先回答：公网SaaS方案是否有证据支撑比私有化更符合客户要求，还是仅因只能卖SaaS。",
+            "collapsed": false
+          },
+          {
+            "key": "actions",
+            "title": "行动项 / 待办",
+            "content": "1. 明日分配工作前，核实公网SaaS方案与客户私有化部署要求；若仅因我们只有公网SaaS可卖，则必须叫停。\n2. 补充取得并核对简报中的预算、工期基准及简报校验码。\n3. 依据附件部署要求重新评估方案、报价8万元和4周工期是否需要调整。",
+            "collapsed": false
+          },
+          {
+            "key": "views",
+            "title": "各预设大咖核心观点摘要",
+            "content": "芒格：先别拍板；附件要求离线私有化、数据不出内网、不接受公网SaaS，拟拍板公网SaaS交付即违约；未看到简报预算与工期基准，不能假装核对；附件校验码“银杏83”；明天分配工作前先回答是证据支持还是只有SaaS可卖。\nClaude：围绕风险、合规、安全、伦理、结构化、权衡、责任，倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。\nGPT-5.5：围绕方案、执行、效率、增长、对比、落地、数据，建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。",
+            "collapsed": false
+          },
+          {
+            "key": "thread",
+            "title": "整体脉络",
+            "content": "主持人宣布审计测试会议开始，要求结合简报和客户附件讨论方案；随后出现拟拍板方案：报价8万元、工期4周、公网SaaS。主持人再次要求AI在拍板前指出与简报预算、工期、附件部署要求的矛盾，并准确复述校验码，不捏造未读资料。GPT-5.5与Claude分别给出方法论建议，未直接核对具体文件。芒格提出明确反对，指出附件部署要求与公网SaaS方案冲突、交付即违约，复述附件校验码，并要求分配工作前先厘清方案动机。",
+            "collapsed": false
+          }
+        ],
+        "bigShots": [
+          {
+            "roleId": "charlie_munger",
+            "cn": "芒格",
+            "title": "逆向思维大师",
+            "viewpoint": "先别拍板。附件明确要求离线私有化部署、不允许数据离开内网、不接受公网SaaS，而拟拍板方案却是公网SaaS，这不是偏差，是直接违背客户边界，交付即违约。报价8万、工期4周是否与简报冲突，因未看到简报预算与工期基准，不能假装核对；附件校验码是“银杏83”。明天分配工作前先回答：公网SaaS是因为证据表明比私有化更符合客户要求，还是因为我们只有公网SaaS可卖？前者需要证据，后者必须叫停。"
+          },
+          {
+            "roleId": "claude",
+            "cn": "Claude",
+            "title": "Anthropic 大模型",
+            "viewpoint": "围绕风险、合规、安全、伦理、结构化、权衡、责任，倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。"
+          },
+          {
+            "roleId": "gpt55",
+            "cn": "GPT-5.5",
+            "title": "OpenAI 大模型",
+            "viewpoint": "当前议题关键在方案、执行、效率、增长、对比、落地、数据；建议先定义最小可行闭环，把验证成本压到最低，再决定是否放大。"
+          }
+        ]
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "summary_with_initial_empty_meeting_snapshot",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 0.32,
+    "data": {
+      "ok": false,
+      "error": "尚无转录内容，无法生成总结",
+      "degraded": true
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "cleanup_only_our_synthetic_meeting",
+    "method": "DELETE",
+    "path": "/api/meetings/7d3dba5d",
+    "status": 404,
+    "seconds": 1.02,
+    "data": {
+      "ok": false,
+      "message": "not found"
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  },
+  {
+    "name": "summary_isolated_add_speech_type_only",
+    "method": "POST",
+    "path": "/api/summary/generate",
+    "status": 200,
+    "seconds": 32.18,
+    "data": {
+      "ok": true,
+      "model": "deepseek-v4-pro",
+      "tookMs": 29831,
+      "cached": false,
+      "result": {
+        "level": "detailed",
+        "subject": "审计测试-20261011-仅合成数据-可删除",
+        "occurredAt": "2026-10-11T09:19:00.232Z",
+        "elements": [
+          {
+            "key": "meta",
+            "title": "会议主题与时间",
+            "content": "会议主题：审计测试-20261011-仅合成数据-可删除\n会议时间：2026年10月11日（据标题，转录未提供具体时刻）",
+            "collapsed": false
+          },
+          {
+            "key": "topics",
+            "title": "核心议题",
+            "content": "1. 结合会议简报和客户附件讨论方案。\n2. 准备拍板：报价8万元，工期4周，采用公网SaaS方案。\n3. 拍板前需核验方案与简报预算、工期、附件部署要求的矛盾，并复述简报和附件的校验码。",
+            "collapsed": false
+          },
+          {
+            "key": "conclusions",
+            "title": "关键结论与决策",
+            "content": "1. 初步提出拍板方案：报价8万元，工期4周，采用公网SaaS方案；计划明天分配工作。\n2. 因审计要求先行核验方案与简报、附件的矛盾并复述校验码，尚未形成最终确认。",
+            "collapsed": false
+          },
+          {
+            "key": "actions",
+            "title": "行动项 / 待办",
+            "content": "1. AI在拍板前指出方案与简报预算、工期、附件部署要求的矛盾。\n2. AI准确复述简报和附件的校验码。\n3. 不得捏造未看到的资料。\n4. 若方案通过，明天分配工作。",
+            "collapsed": false
+          },
+          {
+            "key": "views",
+            "title": "各预设大咖核心观点摘要",
+            "content": "芒格（逆向思维大师）：本次会议未见其明确观点。\nClaude（Anthropic 大模型）：本次会议未见其明确观点。\nGPT-5.5（OpenAI 大模型）：本次会议未见其明确观点。",
+            "collapsed": false
+          },
+          {
+            "key": "thread",
+            "title": "整体脉络",
+            "content": "1. 会议以审计测试开场，要求结合会议简报和客户附件讨论方案。\n2. 发言人提出准备拍板的报价、工期和公网SaaS部署方案。\n3. 审计指令要求AI在拍板前先核验方案与简报、附件之间的矛盾并复述校验码，强调不得捏造资料；会议处于拍板前核验阶段。",
+            "collapsed": false
+          }
+        ],
+        "bigShots": [
+          {
+            "roleId": "charlie_munger",
+            "cn": "芒格",
+            "title": "逆向思维大师",
+            "viewpoint": "本次会议未见其明确观点"
+          },
+          {
+            "roleId": "claude",
+            "cn": "Claude",
+            "title": "Anthropic 大模型",
+            "viewpoint": "本次会议未见其明确观点"
+          },
+          {
+            "roleId": "gpt55",
+            "cn": "GPT-5.5",
+            "title": "OpenAI 大模型",
+            "viewpoint": "本次会议未见其明确观点"
+          }
+        ]
+      }
+    },
+    "content_type": "application/json; charset=utf-8",
+    "allow": null
+  }
+]

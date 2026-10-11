@@ -1,0 +1,13 @@
+# Add this host entry to your local SSH configuration.
+# The user has verified password login from Windows; this key entry requires
+# installing the corresponding public key in ubuntu's authorized_keys first.
+Host meetingos
+    HostName 101.35.232.194
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/meetingOS_deploy
+    IdentitiesOnly yes
+    StrictHostKeyChecking yes
+    ConnectTimeout 10
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
