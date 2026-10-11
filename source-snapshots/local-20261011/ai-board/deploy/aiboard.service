@@ -1,0 +1,19 @@
+[Unit]
+Description=AI Board Meeting (AI 大咖会议私董会) backend
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/aiboard
+Environment=NODE_ENV=production
+Environment=PORT=3001
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/opt/aiboard/.env
+ExecStart=/usr/bin/env node server/api-server.mjs
+Restart=on-failure
+RestartSec=3
+# 安全建议：用专用非 root 用户运行，并将 /opt/aiboard 属主改为该用户
+User=root
+
+[Install]
+WantedBy=multi-user.target

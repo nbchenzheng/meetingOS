@@ -1,0 +1,99 @@
+%% ===== 4.1 生成总结时序 =====
+sequenceDiagram
+    participant U as 用户
+    participant SR as SummaryRoom
+    participant US as useSummary
+    participant API as api.generateSummary
+    participant Srv as api-server(/api/summary/generate)
+    participant TS as transcriptSvc.summarize
+    participant LLM as streamDeepSeek(DeepSeek)
+
+    U->>SR: 点「获取总结报告」
+    SR->>US: generate()
+    US->>US: 置 S1（生成中）
+    Note over US: entries = meeting.transcript（含 speaker/text/ts）<br/>meta = {meetingId,title,createdAt,bigShots(从 roleIds 取)}
+    US->>API: POST /api/summary/generate {meetingId, entries, level}
+    API->>Srv: 路由分发
+    Srv->>Srv: getMeeting(meetingId)；查内存缓存(meetingId)
+    alt 命中缓存
+        Srv-->>API: {ok,cached:true,result}
+    else 未命中
+        Srv->>TS: summarize(entries, meta, signal)
+        TS->>TS: buildSummaryMessages（六要素约束 + 逐字稿 + 大咖白名单）
+        TS->>LLM: streamDeepSeek({messages,signal})
+        LLM-->>TS: 流式 delta
+        TS->>TS: collectDeepSeek 收集全文 → parseSummaryJson → normalizeSummary
+        TS-->>Srv: SummaryResult
+        Srv->>Srv: 写入内存缓存(meetingId)
+        Srv-->>API: {ok,model,tookMs,result}
+    end
+    API-->>US: GenerateSummaryResponse
+    US->>US: 置 summary，渲染面板（展示态，非 S2）
+    US-->>SR: 传 summary
+    SR->>SR: 渲染 SummaryPanel（六要素可折叠）
+
+%% ===== 4.2 两步确认发信时序（含 CLI 调用与 ctk 暂存） =====
+sequenceDiagram
+    participant U as 用户
+    participant DLG as EmailConfirmDialog
+    participant US as useSummary
+    participant API as api.sendSummary / confirmSendSummary
+    participant Srv as api-server(/api/summary/send|/confirm)
+    participant SS as summarySvc
+    participant Q as quota
+    participant CLI as mail-cli(spawn agently-cli)
+
+    %% —— step1：stage ——
+    U->>DLG: 输入邮箱，点「发送」
+    DLG->>DLG: validateEmail()（空值禁用 / 格式校验）
+    DLG->>US: send(email)
+    US->>API: POST /api/summary/send {meetingId,email}
+    API->>Srv: 路由
+    Srv->>SS: stageSend({meetingId,email})
+    SS->>SS: 取缓存 SummaryResult；若空 → SUMMARY_EMPTY
+    SS->>SS: validateEmail；buildMail（HTML 承载六要素+逐字稿）
+    SS->>SS: estimateBytes(html) > 15MB? → 逐字稿转 .txt 附件
+    SS->>CLI: runAgentlySend({mode:'stage',email,subject,html,attachmentText})
+    CLI->>CLI: spawn agently-cli message +send（无 ctk）
+    alt CLI 不存在
+        CLI-->>SS: exit 7 → CLI_NOT_FOUND
+    else 授权过期
+        CLI-->>SS: exit 2 → CLI_AUTH_EXPIRED
+    else 成功
+        CLI-->>SS: exit 0 + ctk
+    end
+    SS->>SS: 生成 confirmationRef=randomUUID；ctkStore.set(ref,{ctk,email,subject,html,attachmentText,createdAt})
+    SS-->>Srv: SendResponse(ok,confirmationRef,preview)
+    Srv-->>API: SendResponse
+    API-->>US: SendResponse
+    US->>US: 置 S2（待确认），保存 confirmationRef
+    US-->>DLG: 弹确认框（展示 preview.email + 内容摘要）
+
+    %% —— step2：confirm ——
+    U->>DLG: 点「确认」
+    DLG->>US: confirm()
+    US->>US: 置 S3（发送中）
+    US->>API: POST /api/summary/send/confirm {confirmationRef}
+    API->>Srv: 路由
+    Srv->>SS: confirmSend({confirmationRef})
+    SS->>SS: ctkStore.get(ref)；不存在/过期 → CONFIRMATION_EXPIRED
+    SS->>Q: checkAndInc()；超 50 → QUOTA_EXCEEDED（删 ref）
+    SS->>CLI: runAgentlySend({mode:'send',ctk,...}) 真发
+    alt exit 1/4（可重试）
+        CLI-->>SS: 重试 ≤2 次（退避 1.5s）；仍失败 → NETWORK_ERROR
+    else exit 0
+        CLI-->>SS: 发送成功
+    else 其他
+        CLI-->>SS: 映射对应错误码，不重试
+    end
+    SS->>SS: 成功则 ctkStore.delete(ref)
+    SS-->>Srv: SendResponse(ok | error)
+    Srv-->>API: SendResponse
+    API-->>US: SendResponse
+    alt ok
+        US->>US: 置 S4（成功）
+    else 失败
+        US->>US: 置 S6（错误降级）
+    end
+
+    Note over U,SS: 用户在确认框点「取消」→ US.cancel() 置 S5（取消），前端清本地态；<br/>后端 ref 由 TTL(建议10min) 清理

@@ -1,0 +1,58 @@
+classDiagram
+    direction TB
+
+    class TabKey {
+        <<type>>
+        'speech' | 'summary'
+    }
+
+    class BoardRoom {
+        +activeTab: TabKey
+        +handleAnchor(c: Commentary): void
+        -renderTabBar(): JSX
+        -renderSpeechPanel(): JSX
+        -renderSummaryStack(): JSX
+    }
+
+    class TranscriptPanel {
+        +entries: TranscriptEntry[]
+        +interim: string
+        +view: 'raw' | 'refined'
+        +refinedText: string | null
+        +anchorEntryIds: string[]
+        +anchorTs: string
+    }
+
+    class MindMap {
+        +root: MindMapNode
+    }
+
+    class CommentaryPanel {
+        +meetingId: string
+        +commentaries: Commentary[]
+        +commentaryEnabled: boolean
+        +collecting: boolean
+        +error: string
+        +onToggle: (enabled: boolean) => void
+        +onAnchor: (c: Commentary) => void
+        -pinned: Set~string~
+        -ignored: Set~string~
+        -seen: Set~string~
+        -newIds: Set~string~
+    }
+
+    class Commentary {
+        <<type>>
+        +id: string
+        +ts: string
+        +anchorEntryIds: string[]
+        +pinned: boolean
+    }
+
+    BoardRoom ..> TabKey : uses
+    BoardRoom *-- TranscriptPanel : 发言区(view=raw)
+    BoardRoom *-- TranscriptPanel : 整理版块(view=refined)
+    BoardRoom *-- MindMap : 思维导图块
+    BoardRoom *-- CommentaryPanel : 实时点评块(onAnchor)
+    CommentaryPanel ..> Commentary : renders cards
+    CommentaryPanel ..> BoardRoom : onAnchor → handleAnchor

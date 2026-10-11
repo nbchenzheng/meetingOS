@@ -1,0 +1,16 @@
+node_modules/
+dist/
+out/
+.vite-cache/
+server/data/
+.env
+*.log
+.DS_Store
+
+# 发信临时附件目录（运行时生成，发完即删）
+.tmp/
+
+# 早期手动核查残留产物（非源码，可清理）
+ck_*.txt
+_c*.txt
+_cleanup_done.txt

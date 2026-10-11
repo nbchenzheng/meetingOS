@@ -1,0 +1,33 @@
+{
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "install_command": "npm ci --ignore-scripts --no-audit --no-fund --cache /tmp/meetingos-npm-cache",
+  "build_command": "npm run build",
+  "build_passed": true,
+  "lockfile_unchanged": true,
+  "artifacts": [
+    {
+      "path": "out/favicon.svg",
+      "bytes": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66",
+      "matches_local_existing_artifact": true,
+      "matches_server_artifact": true
+    },
+    {
+      "path": "out/assets/index-BRK4FwEI.js",
+      "bytes": 269784,
+      "sha256": "91ed51298483af3475b1963d18b4642dce4edbaec479b38d568f415ddd87c687",
+      "matches_local_existing_artifact": false,
+      "matches_server_artifact": false
+    },
+    {
+      "path": "out/assets/index-_lfPI7VS.css",
+      "bytes": 39465,
+      "sha256": "88fef5732115337988b60c19f384bbdd808db4620ae813ed3789049ce86573e8",
+      "matches_local_existing_artifact": true,
+      "matches_server_artifact": false
+    }
+  ],
+  "browser_visual_audit": false,
+  "real_audio_models_email_tested": false
+}

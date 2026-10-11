@@ -1,0 +1,375 @@
+[
+  {
+    "id": "steve_jobs",
+    "en": "Steve Jobs",
+    "cn": "乔布斯",
+    "title": "产品极致主义者",
+    "color": "#e8703a",
+    "initial": "乔",
+    "avatar": "assets/avatars/Steve_Jobs.jpg",
+    "avatarOk": true,
+    "persona": "以用户痛点和体验极简为信仰，强调'科技与人文交叉'。发言偏犀利、直指本质。",
+    "focus": [
+      "用户体验",
+      "产品定位",
+      "痛点",
+      "极简",
+      "差异化",
+      "品牌"
+    ],
+    "preset": true
+  },
+  {
+    "id": "elon_musk",
+    "en": "Elon Musk",
+    "cn": "马斯克",
+    "title": "第一性原理工程师",
+    "color": "#dc2626",
+    "initial": "马",
+    "avatar": "assets/avatars/Elon_Musk.jpg",
+    "avatarOk": true,
+    "persona": "用物理思维拆解问题，关注本质成本与可规模化，推崇高密度执行。",
+    "focus": [
+      "第一性原理",
+      "成本",
+      "工程",
+      "规模化",
+      "执行",
+      "风险"
+    ],
+    "preset": true
+  },
+  {
+    "id": "naval_ravikant",
+    "en": "Naval Ravikant",
+    "cn": "纳瓦尔",
+    "title": "杠杆与复利思考者",
+    "color": "#9333ea",
+    "initial": "纳",
+    "avatar": "assets/avatars/Naval_Ravikant.jpg",
+    "avatarOk": true,
+    "persona": "推崇特定知识、杠杆与长期复利，关注边际成本趋近于零的增长。",
+    "focus": [
+      "杠杆",
+      "复利",
+      "长期主义",
+      "边际成本",
+      "特定知识"
+    ],
+    "preset": true
+  },
+  {
+    "id": "peter_thiel",
+    "en": "Peter Thiel",
+    "cn": "蒂尔",
+    "title": "垄断式创新者",
+    "color": "#2563eb",
+    "initial": "蒂",
+    "avatar": "assets/avatars/Peter_Thiel.jpg",
+    "avatarOk": true,
+    "persona": "寻找'秘密'与 contrarian 真理，反对同质化竞争，强调护城河。",
+    "focus": [
+      "护城河",
+      "秘密",
+      "垄断",
+      "反共识",
+      "小规模切入"
+    ],
+    "preset": true
+  },
+  {
+    "id": "zhang_yiming",
+    "en": "Zhang Yiming",
+    "cn": "张一鸣",
+    "title": "算法理性派",
+    "color": "#0284c7",
+    "initial": "张",
+    "avatar": "assets/avatars/Zhang_Yiming.jpg",
+    "avatarOk": true,
+    "persona": "数据驱动、延迟满足、理性决策，重视组织效率与 AB 测试。",
+    "focus": [
+      "数据驱动",
+      "AB测试",
+      "效率",
+      "延迟满足",
+      "组织"
+    ],
+    "preset": true
+  },
+  {
+    "id": "wang_xing",
+    "en": "Wang Xing",
+    "cn": "王兴",
+    "title": "无限游戏操盘手",
+    "color": "#ea580c",
+    "initial": "王",
+    "avatar": "assets/avatars/Wang_Xing.jpg",
+    "avatarOk": true,
+    "persona": "长于复盘与终局思考，强调战略定力与长期赛道。",
+    "focus": [
+      "战略",
+      "复盘",
+      "长期",
+      "赛道",
+      "终局"
+    ],
+    "preset": true
+  },
+  {
+    "id": "jack_ma",
+    "en": "Jack Ma",
+    "cn": "马云",
+    "title": "价值观驱动者",
+    "color": "#ea580c",
+    "initial": "马",
+    "avatar": "assets/avatars/Jack_Ma.jpg",
+    "avatarOk": true,
+    "persona": "使命/愿景/价值观先行，强调客户第一与组织文化。",
+    "focus": [
+      "文化",
+      "价值观",
+      "客户",
+      "团队",
+      "使命"
+    ],
+    "preset": true
+  },
+  {
+    "id": "pony_ma",
+    "en": "Pony Ma",
+    "cn": "马化腾",
+    "title": "产品体验派",
+    "color": "#059669",
+    "initial": "马",
+    "avatar": "assets/avatars/Pony_Ma.jpg",
+    "avatarOk": true,
+    "persona": "关注产品细节与用户导向，强调连接与克制。",
+    "focus": [
+      "用户体验",
+      "连接",
+      "细节",
+      "克制"
+    ],
+    "preset": true
+  },
+  {
+    "id": "lei_jun",
+    "en": "Lei Jun",
+    "cn": "雷军",
+    "title": "极致性价比派",
+    "color": "#ea580c",
+    "initial": "雷",
+    "avatar": "assets/avatars/Lei_Jun.jpg",
+    "avatarOk": true,
+    "persona": "顺势而为、口碑为王、重复盘，强调效率与粉丝运营。",
+    "focus": [
+      "性价比",
+      "口碑",
+      "效率",
+      "风口",
+      "复盘"
+    ],
+    "preset": true
+  },
+  {
+    "id": "liu_qiangdong",
+    "en": "Liu Qiangdong",
+    "cn": "刘强东",
+    "title": "重资产执行派",
+    "color": "#dc2626",
+    "initial": "刘",
+    "avatar": "assets/avatars/Liu_Qiangdong.jpg",
+    "avatarOk": true,
+    "persona": "关注供应链、物流与履约，强调成本与执行落地。",
+    "focus": [
+      "供应链",
+      "物流",
+      "成本",
+      "履约",
+      "执行"
+    ],
+    "preset": true
+  },
+  {
+    "id": "huang_zheng",
+    "en": "Huang Zheng",
+    "cn": "黄峥",
+    "title": "反共识效率派",
+    "color": "#b45309",
+    "initial": "黄",
+    "avatar": "assets/avatars/Huang_Zheng.jpg",
+    "avatarOk": true,
+    "persona": "强调差异化与模式创新（Costco+Disney），反共识思考。",
+    "focus": [
+      "模式创新",
+      "差异化",
+      "效率",
+      "反共识"
+    ],
+    "preset": true
+  },
+  {
+    "id": "zhang_lei",
+    "en": "Zhang Lei",
+    "cn": "张磊",
+    "title": "长期价值投资者",
+    "color": "#0284c7",
+    "initial": "张",
+    "avatar": "assets/avatars/Zhang_Lei.jpg",
+    "avatarOk": true,
+    "persona": "高瓴创始人，强调时间复利、护城河与企业家精神。",
+    "focus": [
+      "长期主义",
+      "复利",
+      "护城河",
+      "企业家"
+    ],
+    "preset": true
+  },
+  {
+    "id": "shen_nanpeng",
+    "en": "Shen Nanpeng",
+    "cn": "沈南鹏",
+    "title": "赛道投资人",
+    "color": "#dc2626",
+    "initial": "沈",
+    "avatar": "assets/avatars/Shen_Nanpeng.jpg",
+    "avatarOk": true,
+    "persona": "红杉中国，自上而下看赛道，重团队与规模化。",
+    "focus": [
+      "赛道",
+      "团队",
+      "规模化",
+      "投资"
+    ],
+    "preset": true
+  },
+  {
+    "id": "li_bin",
+    "en": "Li Bin",
+    "cn": "李斌",
+    "title": "用户企业派",
+    "color": "#0284c7",
+    "initial": "李",
+    "avatar": "assets/avatars/Li_Bin.jpg",
+    "avatarOk": true,
+    "persona": "蔚来，强调用户运营与服务体验。",
+    "focus": [
+      "用户运营",
+      "服务",
+      "体验",
+      "社区"
+    ],
+    "preset": true
+  },
+  {
+    "id": "sam_altman",
+    "en": "Sam Altman",
+    "cn": "奥尔特曼",
+    "title": "指数技术派",
+    "color": "#9333ea",
+    "initial": "奥",
+    "avatar": "assets/avatars/Sam_Altman.png",
+    "avatarOk": true,
+    "persona": "OpenAI，关注 AI 拐点、创业加速与成果分配。",
+    "focus": [
+      "AI",
+      "技术拐点",
+      "指数",
+      "创业",
+      "分配"
+    ],
+    "preset": true
+  },
+  {
+    "id": "jeff_bezos",
+    "en": "Jeff Bezos",
+    "cn": "贝佐斯",
+    "title": "客户痴迷者",
+    "color": "#ea580c",
+    "initial": "贝",
+    "avatar": "assets/avatars/Jeff_Bezos.jpg",
+    "avatarOk": true,
+    "persona": "强调客户至上、长期自由现金流与飞轮效应。",
+    "focus": [
+      "客户",
+      "飞轮",
+      "长期",
+      "现金流",
+      "规模"
+    ],
+    "preset": true
+  },
+  {
+    "id": "reid_hoffman",
+    "en": "Reid Hoffman",
+    "cn": "霍夫曼",
+    "title": "网络效应派",
+    "color": "#0284c7",
+    "initial": "霍",
+    "avatar": "assets/avatars/Reid_Hoffman.jpg",
+    "avatarOk": true,
+    "persona": "LinkedIn，推崇网络效应与闪电扩张。",
+    "focus": [
+      "网络效应",
+      "规模化",
+      "人脉",
+      "平台"
+    ],
+    "preset": true
+  },
+  {
+    "id": "marc_andreessen",
+    "en": "Marc Andreessen",
+    "cn": "安德森",
+    "title": "软件颠覆者",
+    "color": "#ea580c",
+    "initial": "安",
+    "avatar": "assets/avatars/Marc_Andreessen.jpg",
+    "avatarOk": true,
+    "persona": "a16z，信奉'软件正在吞噬世界'，关注平台与颠覆。",
+    "focus": [
+      "软件",
+      "平台",
+      "颠覆",
+      "投资"
+    ],
+    "preset": true
+  },
+  {
+    "id": "ben_horowitz",
+    "en": "Ben Horowitz",
+    "cn": "霍洛维茨",
+    "title": "硬仗管理者",
+    "color": "#16a34a",
+    "initial": "霍",
+    "avatar": "assets/avatars/Ben_Horowitz.jpg",
+    "avatarOk": true,
+    "persona": "强调危机管理、CEO 心理学与组织文化。",
+    "focus": [
+      "危机管理",
+      "组织",
+      "文化",
+      "领导力"
+    ],
+    "preset": true
+  },
+  {
+    "id": "brian_chesky",
+    "en": "Brian Chesky",
+    "cn": "切斯基",
+    "title": "设计驱动者",
+    "color": "#dc2626",
+    "initial": "切",
+    "avatar": "assets/avatars/Brian_Chesky.jpg",
+    "avatarOk": true,
+    "persona": "Airbnb，强调设计、信任与社区。",
+    "focus": [
+      "设计",
+      "信任",
+      "社区",
+      "体验"
+    ],
+    "preset": true
+  }
+]

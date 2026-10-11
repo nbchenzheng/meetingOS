@@ -1,0 +1,115 @@
+%% 飞书借鉴点增量 · 6 个核心时序
+%% 统一跳转入口：BoardRoom.jumpToEntry(id) = 设 anchorEntryIds + setActiveTab('speech')
+
+%% ① 全局搜索跳转高亮（P0-①）
+sequenceDiagram
+    participant U as 用户
+    participant SB as SearchBar
+    participant S as useBoardSearch
+    participant BR as BoardRoom
+    participant TP as TranscriptPanel(发言区)
+    participant SM as StructuredMinutes
+    participant MM as MindMap
+    participant CP as CommentaryPanel
+
+    U->>SB: 输入关键词（防抖 200ms / ⌘K 聚焦）
+    SB->>S: query
+    S->>S: 扁平化检索 entries + structuredRefined + mindmap + commentaries
+    S-->>SB: SearchResult[] 分组（发言区/纪要/导图/点评）
+    U->>SB: 点击某结果 / ↑↓ + Enter
+    SB->>BR: jumpTo(result)
+    alt kind = entry
+        BR->>BR: jumpToEntry(targetId)
+        BR-->>TP: anchorEntryIds=[id] + activeTab='speech'
+        TP->>TP: scrollIntoView + .anchor-hl
+    else kind = minutes-paragraph
+        BR->>BR: setActiveTab('smart') + minutesScrollTarget=id
+        BR-->>SM: scrollTargetId=id → 滚动 + 高亮该段
+    else kind = mindmap-node
+        BR->>BR: setActiveTab('smart') + mindmapScrollTarget=title
+        BR-->>MM: 外层 MindMapDrill 滚动到 .mm-title 并高亮
+    else kind = commentary
+        BR->>CP: onAnchor(c) → 切发言区 + 锚点
+    end
+
+%% ② 结构化纪要渲染（P0-②，消费 B1）
+sequenceDiagram
+    participant E as useTranscriptEnhance
+    participant BR as BoardRoom
+    participant SM as StructuredMinutes
+    participant B1 as 后端 refine(B1)
+
+    B1-->>E: structured: StructuredMinutes + keywords
+    E-->>BR: structuredRefined / keywords
+    BR->>SM: data=structuredRefined, highlightTerm, onJumpToEntry
+    SM->>SM: 渲染章节折叠标题
+    SM->>SM: 段落（结论句 .conclusion-hl 高亮）
+    SM->>SM: ✅行动项子区块（owner/due + 来源按钮）
+    SM->>SM: 顶部关键词区渲染 keywords
+    Note over SM: 空态沿用「AI 整理版生成中…」
+
+%% ③ 标签筛选聚合（P1-④）
+sequenceDiagram
+    participant U as 用户
+    participant TF as TagFilterBar
+    participant BR as BoardRoom
+    participant TP as TranscriptPanel(发言区)
+
+    U->>TF: 点击 [🟢结论] / [全部]
+    TF->>BR: setActiveTagFilter('conclusion')
+    BR->>BR: 过滤 entries（entryTags[id] 含该标签）
+    BR->>TP: entries=过滤后 + decorations.tags
+    TP->>TP: 仅渲染命中条成清单；条目前彩色标签条
+
+%% ④ 划词工具条（P1-⑦）
+sequenceDiagram
+    participant U as 用户
+    participant ST as SelectionToolbar
+    participant BR as BoardRoom
+    participant CP as CommentaryPanel
+
+    U->>ST: 选中文字（mouseup）
+    ST->>ST: 定位浮动 [高亮|评论|引用]
+    alt 高亮
+        U->>ST: 点「高亮」
+        ST->>BR: 写 highlights（会话常驻）
+    else 评论
+        U->>ST: 点「评论」→ 输入
+        ST->>BR: 写 userCommentaries
+        BR-->>CP: extraCommentaries（新增可选 prop）
+    else 引用
+        U->>ST: 点「引用」
+        ST->>BR: 进 ExcerptCard 草稿
+    end
+
+%% ⑤ 导图节点下钻跳转（P1-⑥，消费 B2）
+sequenceDiagram
+    participant U as 用户
+    participant MD as useMindMapDrill(DOM 委托)
+    participant MM as MindMap(不变)
+    participant DR as MindMapDrill
+    participant BR as BoardRoom
+    participant TP as TranscriptPanel(发言区)
+
+    U->>MM: 点击某节点
+    MM-->>MD: 捕获 .mm-row 点击（不改 MindMap）
+    MD->>DR: 打开浮层（节点 entryIds + 大咖观点）
+    U->>DR: 点某来源条目
+    DR->>BR: jumpToEntry(entryId)
+    BR->>BR: jumpToEntry → anchorEntryIds + activeTab='speech'
+    BR-->>TP: scrollIntoView + .anchor-hl
+
+%% ⑥ 发言占比条计算与筛选（P2-②，前端算）
+sequenceDiagram
+    participant U as 用户
+    participant QB as SpeechQuotaBar
+    participant BR as BoardRoom
+    participant TP as TranscriptPanel(发言区)
+
+    BR-->>QB: entries + roles（含 isBigShot）
+    QB->>QB: 按角色累加计时长（相邻 speech 间隔；opinion 计入对应角色）
+    QB-->>QB: 渲染按角色着色占比段（大咖AI 置顶）
+    U->>QB: 点击某角色段
+    QB->>BR: setActiveRoleFilter(roleId) + jumpToRole
+    BR->>BR: 过滤 entries 为该角色 + 滚动到首条
+    BR-->>TP: 渲染该角色发言清单

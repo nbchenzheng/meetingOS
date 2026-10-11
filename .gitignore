@@ -11,3 +11,8 @@ server/data/*
 *.key
 .credentials/
 *.tar.gz
+.workbuddy/
+.vite-cache/
+**/server/data/meetings.json
+source-snapshots/**/out/
+source-snapshots/**/dist/

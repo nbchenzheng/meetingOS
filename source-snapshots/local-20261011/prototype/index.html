@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>虚拟私董会 · Virtual Boardroom</title>
+<style>
+  :root {
+    --bg-1: #0a0e27;
+    --bg-2: #0f1b3d;
+    --bg-3: #131c44;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-strong: rgba(255, 255, 255, 0.10);
+    --border: rgba(255, 255, 255, 0.12);
+    --border-soft: rgba(255, 255, 255, 0.08);
+    --text: #eef2ff;
+    --text-2: #aab4d4;
+    --text-3: #6b769c;
+    --accent: #3b82f6;
+    --accent-2: #2563eb;
+    --radius: 18px;
+    --radius-sm: 12px;
+    --shadow: 0 18px 50px -12px rgba(0, 0, 0, 0.55);
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    background:
+      radial-gradient(1200px 600px at 12% -8%, rgba(59, 130, 246, 0.18), transparent 60%),
+      radial-gradient(1000px 700px at 100% 0%, rgba(37, 99, 235, 0.14), transparent 55%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============ 上半区：字幕流 ============ */
+  .stage {
+    flex: 0 0 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 0;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: var(--shadow);
+  }
+
+  .mic-wrap { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+  .mic-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #4b5563;
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    transition: background .3s, box-shadow .3s;
+  }
+  body.listening .mic-dot {
+    background: #ef4444;
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.18);
+    animation: micPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12); }
+    50% { box-shadow: 0 0 0 9px rgba(239, 68, 68, 0.05); }
+  }
+  .mic-label { font-size: 13px; color: var(--text-2); white-space: nowrap; }
+
+  .volume {
+    display: flex; align-items: flex-end; gap: 3px;
+    height: 26px; width: 120px;
+  }
+  .volume span {
+    flex: 1;
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+    border-radius: 3px;
+    height: 20%;
+    transition: height .12s ease;
+    opacity: .55;
+  }
+  body.listening .volume span { opacity: 1; }
+
+  .session-pill {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 10px;
+    background: var(--glass-strong);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    user-select: none;
+  }
+  .session-pill:hover { border-color: rgba(59,130,246,.55); }
+  .session-pill .title { font-weight: 600; font-size: 14px; }
+  .session-pill .live {
+    font-size: 11px; color: #93c5fd; letter-spacing: .5px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .session-pill .live::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: #22d3ee; box-shadow: 0 0 8px #22d3ee;
+  }
+  .session-pill .chev { color: var(--text-3); transition: transform .25s; }
+  body.brief-open .session-pill .chev { transform: rotate(180deg); }
+
+  .brief {
+    max-height: 0; overflow: hidden;
+    transition: max-height .3s ease;
+    background: var(--glass);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  body.brief-open .brief { max-height: 200px; }
+  .brief-inner { padding: 14px 18px; font-size: 13px; line-height: 1.7; color: var(--text-2); }
+  .brief-inner b { color: var(--text); }
+
+  .transcript {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px 4px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+  }
+  .transcript::-webkit-scrollbar { width: 8px; }
+  .transcript::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 8px; }
+
+  .line {
+    position: relative;
+    padding: 14px 18px 14px 22px;
+    background: var(--glass);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: lineIn .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes lineIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .line::before {
+    content: "";
+    position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 4px; border-radius: 4px;
+    background: var(--accent);
+  }
+  .line.speaker::before { background: var(--spk, var(--accent)); width: 5px; }
+  .line .meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-3); margin-bottom: 6px;
+  }
+  .line .meta .who { color: var(--text-2); font-weight: 600; }
+  .line .meta .who .swatch {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 6px; vertical-align: middle;
+    background: var(--spk, var(--accent));
+  }
+  .line .text { font-size: 19px; line-height: 1.6; color: var(--text); letter-spacing: .2px; }
+  .line.latest { box-shadow: 0 0 0 1px rgba(59,130,246,.25), 0 10px 30px -10px rgba(59,130,246,.4); }
+
+  .controls {
+    display: flex; gap: 12px; align-items: center; flex: 0 0 auto;
+  }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--glass-strong);
+    color: var(--text);
+    font-size: 14px; font-weight: 600;
+    padding: 11px 22px; border-radius: 999px;
+    cursor: pointer; backdrop-filter: blur(10px);
+    transition: transform .15s, box-shadow .2s, border-color .2s, background .2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: rgba(59,130,246,.5); }
+  .btn:active { transform: translateY(0); }
+  .btn.primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-color: transparent;
+    box-shadow: 0 10px 26px -10px rgba(59,130,246,.8);
+  }
+  .btn.primary.on {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 10px 26px -10px rgba(239,68,68,.8);
+  }
+  .hint { font-size: 12px; color: var(--text-3); }
+
+  /* ============ 下半区：大咖条 ============ */
+  .board {
+    flex: 1 1 35%;
+    display: flex; flex-direction: column;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    min-height: 0;
+  }
+  .board-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px; flex: 0 0 auto;
+  }
+  .board-head h2 { font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+  .board-head .count {
+    font-size: 12px; color: var(--text-2);
+    background: var(--glass-strong); border: 1px solid var(--border-soft);
+    padding: 2px 10px; border-radius: 999px;
+  }
+  .board-head .sub { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+  .cards {
+    flex: 1 1 auto; min-height: 0;
+    display: flex; gap: 14px;
+    overflow-x: auto; overflow-y: hidden;
+    padding: 4px 2px 10px;
+    scroll-snap-type: x proximity;
+  }
+  .cards::-webkit-scrollbar { height: 8px; }
+  .cards::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 8px; }
+
+  .card {
+    flex: 0 0 188px;
+    scroll-snap-align: start;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+    padding: 16px 14px 14px;
+    background: var(--glass);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    position: relative;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, border-color .25s;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px -16px rgba(0,0,0,.6); border-color: var(--cardc, var(--accent)); }
+
+  .avatar-ring {
+    width: 74px; height: 74px; border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, var(--cardc, #3b82f6), transparent 70%);
+    margin-bottom: 10px;
+    transition: box-shadow .3s;
+  }
+  .avatar {
+    width: 100%; height: 100%; border-radius: 50%;
+    object-fit: cover;
+    background: #1c2752;
+    display: block;
+  }
+  .avatar-fallback {
+    width: 100%; height: 100%; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 700; color: #fff;
+    background: var(--cardc, #3b82f6);
+  }
+  .name { font-size: 15px; font-weight: 700; }
+  .title { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+  .status {
+    margin-top: 9px;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.08); color: var(--text-2);
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: all .3s;
+  }
+  .status::before { content:""; width:6px; height:6px; border-radius:50%; background: var(--text-3); }
+  .card.speaking .status {
+    background: color-mix(in srgb, var(--cardc, #3b82f6) 22%, transparent);
+    color: var(--cardc, #3b82f6);
+  }
+  .card.speaking .status::before { background: var(--cardc, #3b82f6); animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+
+  .opinion {
+    margin-top: 10px;
+    font-size: 12px; line-height: 1.5; color: var(--text-2);
+    height: 36px; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    text-align: left;
+  }
+
+  .speak-btn {
+    margin-top: 12px; width: 100%;
+    border: 1px solid var(--cardc, #3b82f6);
+    background: color-mix(in srgb, var(--cardc, #3b82f6) 16%, transparent);
+    color: var(--cardc, #3b82f6);
+    font-size: 13px; font-weight: 600;
+    padding: 8px 0; border-radius: 999px; cursor: pointer;
+    transition: background .2s, transform .15s, box-shadow .2s;
+  }
+  .speak-btn:hover { background: color-mix(in srgb, var(--cardc, #3b82f6) 30%, transparent); transform: translateY(-1px); }
+
+  /* 正在发言高亮 */
+  .card.speaking {
+    border-color: var(--cardc, #3b82f6);
+    box-shadow: 0 0 0 1px var(--cardc, #3b82f6), 0 0 28px -4px var(--cardc, #3b82f6);
+    animation: cardPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes cardPulse {
+    0%,100% { box-shadow: 0 0 0 1px var(--cardc,#3b82f6), 0 0 18px -6px var(--cardc,#3b82f6); }
+    50% { box-shadow: 0 0 0 1px var(--cardc,#3b82f6), 0 0 34px 0 var(--cardc,#3b82f6); }
+  }
+  .card.speaking .avatar-ring { box-shadow: 0 0 22px -2px var(--cardc, #3b82f6); }
+  .card .speak-btn.active { background: var(--cardc,#3b82f6); color:#fff; }
+
+  /* 新建卡 */
+  .card.new {
+    border-style: dashed; border-color: rgba(255,255,255,.28);
+    background: transparent; cursor: pointer; color: var(--text-2);
+    justify-content: center;
+  }
+  .card.new:hover { border-color: var(--accent); color: var(--text); }
+  .card.new .plus { font-size: 38px; font-weight: 300; line-height: 1; color: var(--accent); }
+  .card.new .nt { margin-top: 8px; font-size: 13px; }
+
+  /* 弹窗 */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(5,8,22,.6);
+    backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 50;
+  }
+  .overlay.show { display: flex; animation: fade .2s ease; }
+  @keyframes fade { from { opacity:0; } to { opacity:1; } }
+  .modal {
+    width: min(420px, 92vw);
+    background: linear-gradient(160deg, rgba(20,28,68,.96), rgba(12,18,44,.96));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    animation: pop .25s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes pop { from { transform: scale(.95); opacity:0; } to { transform: scale(1); opacity:1; } }
+  .modal h3 { font-size: 16px; margin-bottom: 4px; }
+  .modal p.tip { font-size: 12px; color: var(--text-3); margin-bottom: 16px; }
+  .field { margin-bottom: 13px; }
+  .field label { display:block; font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
+  .field input {
+    width: 100%; padding: 10px 12px; font-size: 14px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); outline: none;
+    transition: border-color .2s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .field input::placeholder { color: var(--text-3); }
+  .swatches { display:flex; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .swatch-pick { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition: transform .15s; }
+  .swatch-pick:hover { transform: scale(1.12); }
+  .swatch-pick.sel { border-color:#fff; }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; }
+  .btn.ghost { background: transparent; }
+
+  @media (max-width: 720px) {
+    .line .text { font-size: 17px; }
+    .card { flex-basis: 160px; }
+    .volume { width: 80px; }
+  }
+</style>
+</head>
+<body>
+  <!-- 上半区 -->
+  <section class="stage">
+    <div class="topbar">
+      <div class="mic-wrap">
+        <span class="mic-dot"></span>
+        <span class="mic-label" id="micLabel">麦克风已关闭</span>
+      </div>
+      <div class="volume" id="volume"></div>
+      <div class="session-pill" id="sessionPill" title="点击展开/收起项目简报">
+        <span class="title">星河智能 · A轮战略私董会</span>
+        <span class="live">LIVE</span>
+        <span class="chev">▾</span>
+      </div>
+    </div>
+
+    <div class="brief" id="brief">
+      <div class="brief-inner">
+        <b>项目简报：</b>星河智能（AI 教育 SaaS），本轮拟融资 1.2 亿人民币，用于大模型教研中台与渠道扩张。<br/>
+        <b>当前议题：</b>产品差异化定位、单位经济模型、以及是否应优先做重交付还是做轻平台。下方大咖可随时「发言」给出意见。
+      </div>
+    </div>
+
+    <div class="transcript" id="transcript"></div>
+
+    <div class="controls">
+      <button class="btn primary" id="listenBtn">🎙️ 开始收音</button>
+      <span class="hint" id="ctrlHint">点击开始，模拟实时语音转写将自动滚动</span>
+    </div>
+  </section>
+
+  <!-- 下半区 -->
+  <section class="board">
+    <div class="board-head">
+      <h2>大咖意见反馈</h2>
+      <span class="count" id="cardCount">0 位</span>
+      <span class="sub">点击「💬 发言」让大咖实时表态</span>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- 新建大咖弹窗 -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h3>新建大咖</h3>
+      <p class="tip">填写信息后，新卡将追加到下方大咖条。</p>
+      <div class="field">
+        <label>姓名</label>
+        <input id="fName" placeholder="如：张伟" />
+      </div>
+      <div class="field">
+        <label>头衔</label>
+        <input id="fTitle" placeholder="如：连续创业者" />
+      </div>
+      <div class="field">
+        <label>关注点（用逗号分隔）</label>
+        <input id="fFocus" placeholder="如：增长, 组织, 融资" />
+      </div>
+      <div class="field">
+        <label>头像 URL（可选，留空则用首字母占位）</label>
+        <input id="fAvatar" placeholder="https://..." />
+      </div>
+      <div class="field">
+        <label>主题色</label>
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="cancelBtn">取消</button>
+        <button class="btn primary" id="submitBtn">添加大咖</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===== 内联大咖角色库（来自 大咖角色库.json，20 位） ===== */
+const EXPERTS = [
+  {id:"steve_jobs",en:"Steve Jobs",cn:"乔布斯",title:"产品极致主义者",color:"#e8703a",initial:"乔",avatar:"../assets/avatars/Steve_Jobs.jpg",persona:"以用户痛点和体验极简为信仰，强调'科技与人文交叉'。发言偏犀利、直指本质。",focus:["用户体验","产品定位","痛点","极简","差异化","品牌"]},
+  {id:"elon_musk",en:"Elon Musk",cn:"马斯克",title:"第一性原理工程师",color:"#dc2626",initial:"马",avatar:"../assets/avatars/Elon_Musk.jpg",persona:"用物理思维拆解问题，关注本质成本与可规模化，推崇高密度执行。",focus:["第一性原理","成本","工程","规模化","执行","风险"]},
+  {id:"naval_ravikant",en:"Naval Ravikant",cn:"纳瓦尔",title:"杠杆与复利思考者",color:"#9333ea",initial:"纳",avatar:"../assets/avatars/Naval_Ravikant.jpg",persona:"推崇特定知识、杠杆与长期复利，关注边际成本趋近于零的增长。",focus:["杠杆","复利","长期主义","边际成本","特定知识"]},
+  {id:"peter_thiel",en:"Peter Thiel",cn:"蒂尔",title:"垄断式创新者",color:"#2563eb",initial:"蒂",avatar:"../assets/avatars/Peter_Thiel.jpg",persona:"寻找'秘密'与 contrarian 真理，反对同质化竞争，强调护城河。",focus:["护城河","秘密","垄断","反共识","小规模切入"]},
+  {id:"zhang_yiming",en:"Zhang Yiming",cn:"张一鸣",title:"算法理性派",color:"#0284c7",initial:"张",avatar:"../assets/avatars/Zhang_Yiming.jpg",persona:"数据驱动、延迟满足、理性决策，重视组织效率与 AB 测试。",focus:["数据驱动","AB测试","效率","延迟满足","组织"]},
+  {id:"wang_xing",en:"Wang Xing",cn:"王兴",title:"无限游戏操盘手",color:"#ea580c",initial:"王",avatar:"../assets/avatars/Wang_Xing.jpg",persona:"长于复盘与终局思考，强调战略定力与长期赛道。",focus:["战略","复盘","长期","赛道","终局"]},
+  {id:"jack_ma",en:"Jack Ma",cn:"马云",title:"价值观驱动者",color:"#ea580c",initial:"马",avatar:"../assets/avatars/Jack_Ma.jpg",persona:"使命/愿景/价值观先行，强调客户第一与组织文化。",focus:["文化","价值观","客户","团队","使命"]},
+  {id:"pony_ma",en:"Pony Ma",cn:"马化腾",title:"产品体验派",color:"#059669",initial:"马",avatar:"../assets/avatars/Pony_Ma.jpg",persona:"关注产品细节与用户导向，强调连接与克制。",focus:["用户体验","连接","细节","克制"]},
+  {id:"lei_jun",en:"Lei Jun",cn:"雷军",title:"极致性价比派",color:"#ea580c",initial:"雷",avatar:"../assets/avatars/Lei_Jun.jpg",persona:"顺势而为、口碑为王、重复盘，强调效率与粉丝运营。",focus:["性价比","口碑","效率","风口","复盘"]},
+  {id:"liu_qiangdong",en:"Liu Qiangdong",cn:"刘强东",title:"重资产执行派",color:"#dc2626",initial:"刘",avatar:"../assets/avatars/Liu_Qiangdong.jpg",persona:"关注供应链、物流与履约，强调成本与执行落地。",focus:["供应链","物流","成本","履约","执行"]},
+  {id:"huang_zheng",en:"Huang Zheng",cn:"黄峥",title:"反共识效率派",color:"#b45309",initial:"黄",avatar:"../assets/avatars/Huang_Zheng.jpg",persona:"强调差异化与模式创新（Costco+Disney），反共识思考。",focus:["模式创新","差异化","效率","反共识"]},
+  {id:"zhang_lei",en:"Zhang Lei",cn:"张磊",title:"长期价值投资者",color:"#0284c7",initial:"张",avatar:"../assets/avatars/Zhang_Lei.jpg",persona:"高瓴创始人，强调时间复利、护城河与企业家精神。",focus:["长期主义","复利","护城河","企业家"]},
+  {id:"shen_nanpeng",en:"Shen Nanpeng",cn:"沈南鹏",title:"赛道投资人",color:"#dc2626",initial:"沈",avatar:"../assets/avatars/Shen_Nanpeng.jpg",persona:"红杉中国，自上而下看赛道，重团队与规模化。",focus:["赛道","团队","规模化","投资"]},
+  {id:"li_bin",en:"Li Bin",cn:"李斌",title:"用户企业派",color:"#0284c7",initial:"李",avatar:"../assets/avatars/Li_Bin.jpg",persona:"蔚来，强调用户运营与服务体验。",focus:["用户运营","服务","体验","社区"]},
+  {id:"sam_altman",en:"Sam Altman",cn:"奥尔特曼",title:"指数技术派",color:"#9333ea",initial:"奥",avatar:"../assets/avatars/Sam_Altman.png",persona:"OpenAI，关注 AI 拐点、创业加速与成果分配。",focus:["AI","技术拐点","指数","创业","分配"]},
+  {id:"jeff_bezos",en:"Jeff Bezos",cn:"贝佐斯",title:"客户痴迷者",color:"#ea580c",initial:"贝",avatar:"../assets/avatars/Jeff_Bezos.jpg",persona:"强调客户至上、长期自由现金流与飞轮效应。",focus:["客户","飞轮","长期","现金流","规模"]},
+  {id:"reid_hoffman",en:"Reid Hoffman",cn:"霍夫曼",title:"网络效应派",color:"#0284c7",initial:"霍",avatar:"../assets/avatars/Reid_Hoffman.jpg",persona:"LinkedIn，推崇网络效应与闪电扩张。",focus:["网络效应","规模化","人脉","平台"]},
+  {id:"marc_andreessen",en:"Marc Andreessen",cn:"安德森",title:"软件颠覆者",color:"#ea580c",initial:"安",avatar:"../assets/avatars/Marc_Andreessen.jpg",persona:"a16z，信奉'软件正在吞噬世界'，关注平台与颠覆。",focus:["软件","平台","颠覆","投资"]},
+  {id:"ben_horowitz",en:"Ben Horowitz",cn:"霍洛维茨",title:"硬仗管理者",color:"#16a34a",initial:"霍",avatar:"../assets/avatars/Ben_Horowitz.jpg",persona:"强调危机管理、CEO 心理学与组织文化。",focus:["危机管理","组织","文化","领导力"]},
+  {id:"brian_chesky",en:"Brian Chesky",cn:"切斯基",title:"设计驱动者",color:"#dc2626",initial:"切",avatar:"../assets/avatars/Brian_Chesky.jpg",persona:"Airbnb，强调设计、信任与社区。",focus:["设计","信任","社区","体验"]}
+];
+
+/* ===== 每位大咖的模拟意见文案（基于人设/focus 生成） ===== */
+const OPINIONS = {
+  steve_jobs:["别给用户更多功能，给他们一个'啊哈'时刻。把复杂藏起来，只留那一刀切中要害的体验。","如果连你自己都不愿每天用，就别谈产品定位。极致，是砍掉 90% 后的那 10%。"],
+  elon_musk:["回到第一性原理：这东西的真实成本是多少？能规模化到什么量级？","别被行业惯例吓住，物理定律才是天花板，其余都是可以优化的工程问题。"],
+  naval_ravikant:["你卖的是一次性时间，还是可复制的杠杆？边际成本不趋零，就难有复利。","特定知识 + 长期主义，才是别人抢不走的护城河。"],
+  peter_thiel:["别在红海里卷，去找那个'大家都觉得不可能'的小秘密。","从小切口垄断，再向外扩展——先赢，再大。"],
+  zhang_yiming:["先定指标再谈方向。用 AB 测试说话，别用直觉开会。","延迟满足是组织的复利，今天少赚一点是为了明天跑得更稳。"],
+  wang_xing:["先想清楚终局长什么样，再决定今天这步怎么走。","无限游戏里，活下来、复盘、再来，比一城一池重要。"],
+  jack_ma:["使命和价值观不是墙上的字，是遇到两难时你怎么选。","客户第一，员工第二，股东第三——顺序对了，生意自然来。"],
+  pony_ma:["克制是一种能力。少做一点，但每一点都让用户舒服。","连接的价值在于细节，别为了增长牺牲体验。"],
+  lei_jun:["性价比是信仰，口碑是资产。把效率做到极致，粉丝会替你说话。","顺势而为，等风来；但风来之前，先把内功练好。"],
+  liu_qiangdong:["供应链和履约才是真正的护城河，别只看前端流量。","执行不到位，战略再好也是零。把成本结构打穿。"],
+  huang_zheng:["大家都往东走，你往西看看——反共识里藏着效率红利。","Costco 的便宜 + Disney 的快乐，组合本身就是壁垒。"],
+  zhang_lei:["做时间的朋友。短期波动不重要，重要的是复利的方向。","找有企业家精神的人，钱只是陪跑。"],
+  shen_nanpeng:["先看赛道天花板，再看团队能不能打到头部。","规模化不是结果，是团队从第一天就有的基因。"],
+  li_bin:["用户不是流量，是朋友。服务体验做到位，社区会自己长大。","别急着变现，先把用户当人而不是数字。"],
+  sam_altman:["AI 是这个时代最大的技术拐点，问题是你打算怎么乘上这波指数。","创业的速度正在被重新定义，分配机制想清楚，才能走远。"],
+  jeff_bezos:["永远从客户倒推，而不是从竞争对手。","飞轮转起来慢，但一旦转起来，自由现金流会自己说话。"],
+  reid_hoffman:["网络效应一旦成立，增长会自己加速——前提是先有对的双边。","闪电扩张要趁窗口，犹豫就会被别人先网络。"],
+  marc_andreessen:["软件正在吞噬世界，你所在的环节迟早被重写。","要么做平台，要么被平台吃掉，没有中间态。"],
+  ben_horowitz:["真正的硬仗是人心和组织的战役，CEO 得先稳住自己。","危机里最能看清文化，平时不练，战时必乱。"],
+  brian_chesky:["设计不是装饰，是信任的第一印象。","社区和体验做对了，增长会带着温度回来。"]
+};
+
+/* 模拟会议自动转写（旁白/无主题色条） */
+const TRANSCRIPTS = [
+  "（主持人）感谢各位大咖，今天我们讨论星河智能的 A 轮战略。先请创始人讲讲现状。",
+  "（创始人）目前我们 AI 教研中台已服务 300 所学校，月活教师 8 万，续费率 71%。",
+  "（创始人）但我们纠结：是继续做重交付、做深学校，还是做轻平台、铺开渠道？",
+  "（CFO）重交付毛利高但扩张慢，轻平台起量快但单位经济模型还没跑通。",
+  "（投资人代表）我关心的是——这个生意三年后的护城河到底是什么。",
+  "（产品负责人）我们在教研大模型上有一定积累，但竞品也在追，差异化在变弱。",
+  "（运营）渠道侧我们发现，区域代理的获客成本这两个月涨了 40%。",
+  "（创始人）所以今天想听听各位：定位、模型、节奏，三件事先抓哪件？",
+  "（战略顾问）建议先把单位经济模型算到能说服自己，再谈规模。",
+  "（市场）品牌侧我们做了点尝试，但声量还是太小，需要更聚焦的钩子。"
+];
+
+/* ===== 状态 ===== */
+let listening = false;
+let tIndex = 0;
+let listenTimer = null;
+let volTimer = null;
+let activeSpeaker = null;
+let cardSeq = 0;
+
+const $ = (s) => document.querySelector(s);
+const transcriptEl = $("#transcript");
+const cardsEl = $("#cards");
+const volumeEl = $("#volume");
+
+/* 音量条 */
+const VOL_BARS = 14;
+for (let i = 0; i < VOL_BARS; i++) volumeEl.appendChild(document.createElement("span"));
+const volBars = volumeEl.querySelectorAll("span");
+function animateVolume() {
+  volBars.forEach(b => {
+    const h = listening ? (15 + Math.random() * 85) : (10 + Math.random() * 12);
+    b.style.height = h + "%";
+  });
+}
+
+/* 字幕条目 */
+function addLine({ text, who, color, isSpeaker, visibleMeta = true }) {
+  const prevLatest = transcriptEl.querySelector(".line.latest");
+  if (prevLatest) prevLatest.classList.remove("latest");
+
+  const el = document.createElement("div");
+  el.className = "line" + (isSpeaker ? " speaker" : "") + " latest";
+  if (color) el.style.setProperty("--spk", color);
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  if (visibleMeta && who) {
+    meta.innerHTML = `<span class="who"><span class="swatch"></span>${who}</span>`;
+  } else {
+    meta.style.display = "none";
+  }
+  const txt = document.createElement("div");
+  txt.className = "text";
+  txt.textContent = text;
+
+  el.appendChild(meta);
+  el.appendChild(txt);
+  transcriptEl.appendChild(el);
+  transcriptEl.scrollTop = transcriptEl.scrollHeight;
+}
+
+/* 大咖卡 */
+function buildCard(exp, isNew) {
+  const card = document.createElement("div");
+  card.className = "card" + (isNew ? " new" : "");
+  card.style.setProperty("--cardc", exp.color || "#3b82f6");
+  card.dataset.id = exp.id || ("new_" + (++cardSeq));
+
+  if (isNew) {
+    card.innerHTML = `<div class="plus">+</div><div class="nt">新建大咖</div>`;
+    card.addEventListener("click", openModal);
+    return card;
+  }
+
+  const hasOpinion = OPINIONS[exp.id] && OPINIONS[exp.id].length;
+  card.innerHTML = `
+    <div class="avatar-ring">
+      <img class="avatar" src="${exp.avatar}" alt="${exp.cn}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+      <div class="avatar-fallback" style="display:none">${exp.initial || (exp.cn||'?').slice(0,1)}</div>
+    </div>
+    <div class="name">${exp.cn}</div>
+    <div class="title">${exp.title || exp.en || ''}</div>
+    <div class="status">旁听中</div>
+    <div class="opinion">${hasOpinion ? OPINIONS[exp.id][0] : '等待发言…'}</div>
+    <button class="speak-btn">💬 发言</button>
+  `;
+
+  const btn = card.querySelector(".speak-btn");
+  btn.addEventListener("click", (e) => { e.stopPropagation(); speak(card, exp); });
+  return card;
+}
+
+/* 渲染大咖条（20 张 + 新建卡） */
+function renderCards() {
+  cardsEl.innerHTML = "";
+  EXPERTS.forEach(exp => cardsEl.appendChild(buildCard(exp, false)));
+  cardsEl.appendChild(buildCard({}, true));
+  $("#cardCount").textContent = EXPERTS.length + " 位";
+}
+
+/* 发言 */
+function speak(card, exp) {
+  // 同一时间只允许一位"正在发言"高亮（避免视觉混乱），但可连续叠加意见
+  if (activeSpeaker && activeSpeaker !== card) {
+    activeSpeaker.classList.remove("speaking");
+    const b = activeSpeaker.querySelector(".speak-btn"); if (b) b.classList.remove("active");
+    const s = activeSpeaker.querySelector(".status"); if (s) s.textContent = "旁听中";
+  }
+  card.classList.add("speaking");
+  const b = card.querySelector(".speak-btn"); if (b) { b.classList.add("active"); }
+  const s = card.querySelector(".status"); if (s) s.textContent = "正在发言";
+
+  const pool = OPINIONS[exp.id] || ["（暂无预设意见）"];
+  const msg = pool[Math.floor(Math.random() * pool.length)];
+  const opinionEl = card.querySelector(".opinion");
+  if (opinionEl) opinionEl.textContent = msg;
+
+  addLine({ text: msg, who: exp.cn, color: exp.color, isSpeaker: true });
+  activeSpeaker = card;
+
+  // 3 秒后自动恢复旁听（除非再次点击）
+  clearTimeout(card._t);
+  card._t = setTimeout(() => {
+    card.classList.remove("speaking");
+    b.classList.remove("active");
+    s.textContent = "旁听中";
+    if (activeSpeaker === card) activeSpeaker = null;
+  }, 3200);
+}
+
+/* 开始/停止收音 */
+function toggleListen() {
+  listening = !listening;
+  document.body.classList.toggle("listening", listening);
+  const btn = $("#listenBtn");
+  const label = $("#micLabel");
+  if (listening) {
+    btn.classList.add("on");
+    btn.textContent = "⏹ 停止收音";
+    label.textContent = "正在收音…";
+    $("#ctrlHint").textContent = "实时转写进行中，可随时点击大咖「发言」";
+    tick();
+    listenTimer = setInterval(tick, 4200);
+    volTimer = setInterval(animateVolume, 140);
+  } else {
+    btn.classList.remove("on");
+    btn.textContent = "🎙️ 开始收音";
+    label.textContent = "麦克风已关闭";
+    $("#ctrlHint").textContent = "已停止，点击开始可继续模拟转写";
+    clearInterval(listenTimer); clearInterval(volTimer);
+  }
+}
+function tick() {
+  if (tIndex >= TRANSCRIPTS.length) tIndex = 0; // 循环播放
+  addLine({ text: TRANSCRIPTS[tIndex], isSpeaker: false, visibleMeta: false });
+  tIndex++;
+}
+
+/* 弹窗：新建大咖 */
+const PALETTE = ["#3b82f6","#9333ea","#dc2626","#16a34a","#ea580c","#0284c7","#e8703a","#059669"];
+let pickedColor = PALETTE[0];
+function buildSwatches() {
+  const wrap = $("#swatches");
+  wrap.innerHTML = "";
+  PALETTE.forEach((c, i) => {
+    const s = document.createElement("div");
+    s.className = "swatch-pick" + (i === 0 ? " sel" : "");
+    s.style.background = c;
+    s.addEventListener("click", () => {
+      pickedColor = c;
+      wrap.querySelectorAll(".swatch-pick").forEach(x => x.classList.remove("sel"));
+      s.classList.add("sel");
+    });
+    wrap.appendChild(s);
+  });
+}
+function openModal() {
+  $("#overlay").classList.add("show");
+  $("#fName").focus();
+}
+function closeModal() {
+  $("#overlay").classList.remove("show");
+  ["fName","fTitle","fFocus","fAvatar"].forEach(id => $("#"+id).value = "");
+}
+function submitNew() {
+  const name = $("#fName").value.trim() || "新大咖";
+  const title = $("#fTitle").value.trim() || "特邀嘉宾";
+  const focusRaw = $("#fFocus").value.trim();
+  const avatar = $("#fAvatar").value.trim();
+  const id = "custom_" + (++cardSeq);
+  const initial = name.slice(0, 1);
+
+  // 生成一条基于关注点的人设化意见
+  const focusList = focusRaw ? focusRaw.split(/[,，]/).map(s=>s.trim()).filter(Boolean) : ["战略","增长"];
+  OPINIONS[id] = [
+    `关于「${focusList[0]}」，我的看法是先小步验证再放大，别一上来就 all-in。`,
+    `从「${focusList[focusList.length-1] || focusList[0]}」角度看，节奏比完美更重要，先把闭环跑通。`
+  ];
+
+  const exp = { id, cn: name, en: name, title, color: pickedColor, initial, avatar: avatar || "", persona: "", focus: focusList };
+
+  // 插到「新建卡」之前
+  const newCard = cardsEl.querySelector(".card.new");
+  const el = buildCard(exp, false);
+  cardsEl.insertBefore(el, newCard);
+  EXPERTS.push(exp);
+  $("#cardCount").textContent = EXPERTS.length + " 位";
+
+  closeModal();
+}
+
+/* 事件绑定 */
+$("#listenBtn").addEventListener("click", toggleListen);
+$("#sessionPill").addEventListener("click", () => document.body.classList.toggle("brief-open"));
+$("#cancelBtn").addEventListener("click", closeModal);
+$("#submitBtn").addEventListener("click", submitNew);
+$("#overlay").addEventListener("click", (e) => { if (e.target.id === "overlay") closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+/* 初始化 */
+renderCards();
+buildSwatches();
+animateVolume();
+addLine({ text: "（系统）虚拟私董会已就绪，点击下方「开始收音」模拟实时转写，或点击大咖「💬 发言」让其表态。", isSpeaker: false, visibleMeta: false });
+</script>
+</body>
+</html>

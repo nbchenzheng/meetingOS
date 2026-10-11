@@ -1,0 +1,54 @@
+%% 1) 标签切换：两 panel 同挂载，仅切 visibility/opacity，数据/本地态不丢
+sequenceDiagram
+    participant U as 用户
+    participant TB as tab-bar(button role=tab)
+    participant BR as BoardRoom
+    participant P1 as 发言区 tab-panel
+    participant P2 as 智能纪要 tab-panel
+
+    U->>TB: 点击 / 键盘 Arrow 选中
+    TB->>BR: setActiveTab('summary')
+    BR->>BR: 同一次渲染提交
+    BR-->>P1: 置 visibility:hidden / opacity:0 / inert
+    BR-->>P2: 置 visibility:visible / opacity:1
+    Note over P1,P2: 两者始终挂载，CommentaryPanel 的 pinned/ignored/seen/newIds 与滚动位置保留
+
+%% 2) 发言区渲染：TranscriptPanel(view=raw) 合并 speech+opinion
+sequenceDiagram
+    participant BR as BoardRoom
+    participant TP as TranscriptPanel(发言区)
+    participant E as entries(useBoard)
+
+    BR->>TP: view="raw", refinedText=null, entries, interim, anchorEntryIds, anchorTs
+    TP->>TP: buildParagraphs(entries) 合并 speech+opinion 按 ts 升序
+    TP-->>TP: 渲染段落流 + interim「正在识别…」(P0-3)
+    Note over TP: 锚点副作用：anchorEntryIds 变化 → scrollIntoView + .anchor-hl
+
+%% 3) 智能纪要三区块渲染：各自独立内部滚动（滚动模型 B）
+sequenceDiagram
+    participant BR as BoardRoom
+    participant SS as .smart-stack
+    participant RB as 整理版块(TranscriptPanel refined)
+    participant MM as 思维导图块(MindMap)
+    participant CP as 实时点评块(CommentaryPanel)
+
+    BR->>SS: 渲染竖向堆叠
+    SS->>RB: 状态条 + TranscriptPanel(view=refined, refinedText)
+    SS->>MM: 状态条 + MindMap(root=mindmap)
+    SS->>CP: CommentaryPanel(onAnchor=handleAnchor)
+    Note over RB,CP: 三块 flex:1 1 0; min-height:0，各自内部滚动，互不影响
+
+%% 4) 跨标签定位（P0-10）：智能纪要点击 @关联·定位 → 切到发言区并高亮
+sequenceDiagram
+    participant U as 用户
+    participant CP as CommentaryPanel(智能纪要)
+    participant BR as BoardRoom
+    participant SP as 发言区 tab-panel
+    participant TP as TranscriptPanel(发言区)
+
+    U->>CP: 点击「@关联·定位」
+    CP->>BR: onAnchor(c)
+    BR->>BR: handleAnchor(c): setAnchorEntryIds / setAnchorTs / setActiveTab('speech')
+    BR-->>SP: visibility:visible（发言区变为可见）
+    BR-->>TP: 同批提交 anchorEntryIds/anchorTs
+    TP->>TP: 锚点副作用 scrollIntoView + 加 .anchor-hl（2200ms 后移除）

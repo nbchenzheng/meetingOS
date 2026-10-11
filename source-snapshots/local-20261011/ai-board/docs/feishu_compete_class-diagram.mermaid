@@ -1,0 +1,181 @@
+classDiagram
+    direction TB
+
+    %% ===== 既有核心类型（复用，补充扩展字段）=====
+    class TranscriptEntry {
+        <<existing + extended>>
+        +string id
+        +TranscriptType type
+        +string text
+        +string ts
+        +string roleId
+        +string speaker
+        +string color
+    }
+
+    class MindMapNode {
+        <<existing + extended>>
+        +string title
+        +MindMapNode[] children
+        +string[] entryIds
+    }
+
+    class Role {
+        <<existing + extended>>
+        +string id
+        +string cn
+        +string color
+        +boolean isBigShot
+    }
+
+    class Commentary {
+        <<existing>>
+        +string id
+        +CommentarySource source
+        +string text
+        +string[] anchorEntryIds
+    }
+
+    %% ===== 新增：后端结构化纪要契约 =====
+    class StructuredMinutes {
+        +MinutesChapter[] chapters
+        +Keyword[] keywords
+        +string plainText
+    }
+    class MinutesChapter {
+        +string id
+        +string title
+        +MinutesParagraph[] paragraphs
+        +ActionItem[] actionItems
+    }
+    class MinutesParagraph {
+        +string id
+        +string text
+        +"conclusion"|"normal" type
+        +string sourceEntryId
+        +string sourceTs
+        +boolean aiSupplement
+    }
+    class ActionItem {
+        +string id
+        +string text
+        +string owner
+        +string due
+        +string sourceEntryId
+        +string sourceTs
+    }
+    class Keyword {
+        +string word
+        +number count
+    }
+    class RefineEntryInput {
+        +string id
+        +string ts
+        +"speech"|"opinion" type
+        +string text
+        +string roleId
+        +string speaker
+        +string color
+    }
+
+    %% ===== 新增：前端状态/搜索/标签 =====
+    class UseBoardEnhancements {
+        <<hook: 跨面板状态层>>
+        -query / searchResults / activeSearchIdx
+        -roleLabels : Record~string,string~
+        -entryTags : Record~string,TagKey[]~
+        -entryEdits : Record~string,string~
+        -highlights : {id,text,color}[]
+        -selectedEntryIds : Set~string~
+        -activeTagFilter : "all"|TagKey
+        -activeRoleFilter : string|null
+        -userCommentaries : Commentary[]
+        -minutesScrollTarget / mindmapScrollTarget : string
+        +jumpToEntry(id) : void
+        +jumpToRole(id) : void
+    }
+    class SearchResult {
+        +"entry"|"minutes-paragraph"|"mindmap-node"|"commentary" kind
+        +string label
+        +string targetId
+        +string snippet
+        +string ts
+    }
+    class TagKey {
+        <<type>>
+        'conclusion' | 'todo' | 'question' | 'highlight'
+    }
+
+    %% ===== 组件（复用 + 新增）=====
+    class BoardRoom {
+        +activeTab : 'speech'|'smart'
+        +handleAnchor(c) : void
+        +jumpToEntry(id) : void
+        +jumpToRole(id) : void
+        -renderTopbar() : SearchBar + SpeechQuotaBar + ExportMenu
+        -renderSpeechPanel() : TagFilterBar + TranscriptPanel(decorations)
+        -renderSummaryStack() : StructuredMinutes + MindMap + CommentaryPanel
+    }
+    class TranscriptPanel {
+        <<reused + optional props>>
+        +entries / interim / anchorEntryIds / anchorTs
+        +decorations?(entry) : TranscriptDecoration|null
+        +onRename? / onTag? / onEdit? / onToggleSelect?
+    }
+    class StructuredMinutes {
+        +StructuredMinutes data
+        +string highlightTerm
+        +string scrollTargetId
+        +onJumpToEntry(id) : void
+    }
+    class MindMap {
+        <<reused, unchanged>>
+        +root : MindMapNode
+    }
+    class CommentaryPanel {
+        <<reused + optional prop>>
+        +commentaries / onAnchor
+        +Commentary[] extraCommentaries
+    }
+    class SearchBar
+    class SpeechQuotaBar
+    class ExportMenu
+    class TagFilterBar
+    class MindMapDrill
+    class SelectionToolbar
+    class ExcerptCard
+    class RoleDot
+    class RenamePopover
+    class TagMenu
+    class InlineEditor
+
+    %% ===== 关系 =====
+    StructuredMinutes "1" *-- "0..*" MinutesChapter
+    MinutesChapter "1" *-- "0..*" MinutesParagraph
+    MinutesChapter "1" *-- "0..*" ActionItem
+    StructuredMinutes "1" *-- "0..*" Keyword
+    MinutesParagraph --> TranscriptEntry : sourceEntryId
+    ActionItem --> TranscriptEntry : sourceEntryId
+    MindMapNode --> TranscriptEntry : entryIds
+
+    BoardRoom *-- TranscriptPanel : 发言区(decorations)
+    BoardRoom *-- StructuredMinutes : 整理版块
+    BoardRoom *-- MindMap : 思维导图块
+    BoardRoom *-- CommentaryPanel : 实时点评块(extraCommentaries)
+    BoardRoom *-- SearchBar
+    BoardRoom *-- SpeechQuotaBar
+    BoardRoom *-- ExportMenu
+    BoardRoom *-- TagFilterBar
+    BoardRoom *-- MindMapDrill : 外层 DOM 委托
+    BoardRoom *-- SelectionToolbar
+    BoardRoom *-- ExcerptCard
+    BoardRoom ..> UseBoardEnhancements : 状态来源
+    BoardRoom ..> SearchResult : useBoardSearch 产出
+
+    TranscriptPanel ..> RoleDot : decorations.dot
+    TranscriptPanel ..> TagMenu : decorations.hoverActions
+    TranscriptPanel ..> InlineEditor : onEdit
+    TranscriptPanel ..> RenamePopover : onRename
+    StructuredMinutes --> Commentary : AI补充/来源可跳
+    UseBoardEnhancements ..> TagKey : entryTags
+    UseBoardEnhancements ..> Commentary : userCommentaries

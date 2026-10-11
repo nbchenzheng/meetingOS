@@ -1,0 +1,104 @@
+classDiagram
+    %% —— 新增后端服务 ——
+    class SummaryService {
+      +Map~string,StagedSend~ ctkStore
+      +stageSend(req) SendResponse
+      +confirmSend(req) SendResponse
+      -validateEmail(email) bool
+      -estimateBytes(html) number
+      -buildMail(summary, transcript) Mail
+    }
+    class MailCli {
+      +runAgentlySend(opts) CliResult
+      -mapExitCode(code) SummarySendErrorCode
+    }
+    class Quota {
+      -count number
+      -date string
+      +checkAndInc() bool
+      +remaining() number
+    }
+    class TranscriptService {
+      <<existing>>
+      +refine(rawText, signal)
+      +mindmap(rawText, title, signal)
+      +normalizeMindmap(node, depth)
+      +summarize(entries, meta, signal) SummaryResult
+    }
+    class ApiServer {
+      <<existing>>
+      +route /api/summary/generate
+      +route /api/summary/send
+      +route /api/summary/send/confirm
+    }
+
+    %% —— 数据契约（src/types.ts）——
+    class SummaryResult {
+      +SummaryLevel level
+      +string subject
+      +string occurredAt
+      +SummaryElement[] elements
+      +SummaryBigShotView[] bigShots
+    }
+    class SummaryElement {
+      +SummaryElementKey key
+      +string title
+      +string content
+      +bool collapsed
+    }
+    class SummaryBigShotView {
+      +string roleId
+      +string cn
+      +string title
+      +string viewpoint
+    }
+    class MeetingMeta {
+      +string meetingId
+      +string title
+      +string createdAt
+      +BigShotRef[] bigShots
+    }
+    class GenerateSummaryRequest
+    class GenerateSummaryResponse
+    class SendRequest
+    class SendConfirmRequest
+    class SendResponse
+    class SendPreview
+    class SummarySendErrorCode
+
+    %% —— 前端 ——
+    class useSummary {
+      +SummaryState state
+      +SummaryResult summary
+      +string confirmationRef
+      +generate() void
+      +send(email) void
+      +confirm() void
+      +cancel() void
+      +copy() void
+      +download() void
+    }
+    class SummaryRoom
+    class SummaryPanel
+    class EmailConfirmDialog
+    class ApiClient {
+      <<existing lib/api.ts>>
+      +generateSummary(req) GenerateSummaryResponse
+      +sendSummary(req) SendResponse
+      +confirmSendSummary(req) SendResponse
+    }
+
+    SummaryService ..> MailCli : 调用(spawn)
+    SummaryService ..> Quota : 配额校验
+    SummaryService ..> SummaryResult : 承载/产出
+    ApiServer ..> SummaryService : 路由转发
+    ApiServer ..> TranscriptService : generate 路由
+    TranscriptService ..> SummaryResult : 返回
+    SummaryService ..> MeetingMeta : 取元信息
+    SendResponse *-- SendPreview
+    SummaryResult *-- SummaryElement
+    SummaryResult *-- SummaryBigShotView
+    useSummary ..> ApiClient : 调用
+    SummaryRoom *-- SummaryPanel
+    SummaryRoom *-- EmailConfirmDialog
+    useSummary ..> SummaryRoom : 驱动渲染

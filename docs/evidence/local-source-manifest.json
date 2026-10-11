@@ -1,0 +1,1030 @@
+{
+  "archive_sha256": "c71d87fe22cb6d25ced5798adea391d7f67b05eb5dc5f417a5f1e05bf5c607f4",
+  "files": [
+    {
+      "path": "ai-board/.gitignore",
+      "size": 238,
+      "sha256": "0b7da6d9bc25c37bad9fd19637ed4a217a37893e03ca9c376fe65b98ce1577bf"
+    },
+    {
+      "path": "ai-board/.oxlintrc.json",
+      "size": 71,
+      "sha256": "7e2adabd6bb7051e4a1775a80d6c1f75531be2b50b7b90177dfa5c7e9a9475a1"
+    },
+    {
+      "path": "ai-board/_aliyun_smoke.mjs",
+      "size": 1620,
+      "sha256": "1fdb920dcbaf87bfde27889fd1edd25a7e833e2f2bc73907bb237e676c7bfc12"
+    },
+    {
+      "path": "ai-board/_speak_test.mjs",
+      "size": 2742,
+      "sha256": "6f1c40a17cd293a21141390d7e62233145e297314b08c05ed7f429634edb402a"
+    },
+    {
+      "path": "ai-board/_verify.mjs",
+      "size": 962,
+      "sha256": "b6b89e1ce07cbed661a976fa0c919d44e084fecae6cb28ea2738cf1aeb306b8e"
+    },
+    {
+      "path": "ai-board/deploy/README.md",
+      "size": 4743,
+      "sha256": "0a8650af21aadd744c4b1ed85ac5e5839f24813901088e0c2d50003fc5abf1cf"
+    },
+    {
+      "path": "ai-board/deploy/_caddy_add.py",
+      "size": 2897,
+      "sha256": "003cdac3c496b1704a70cf42c72abfca50cac263db0423e52664ebf5fb4e2727"
+    },
+    {
+      "path": "ai-board/deploy/_caddy_add_cn.py",
+      "size": 3559,
+      "sha256": "3107cff5e6e079fc8c719583be04f09dde1ec6f12003077a31af357f84a5a9ee"
+    },
+    {
+      "path": "ai-board/deploy/_caddy_inspect.py",
+      "size": 1798,
+      "sha256": "d9e170b4222ef9532b59ca592632d024f75b66e6d64daec4a0dcc8516cb8f882"
+    },
+    {
+      "path": "ai-board/deploy/_caddy_read.py",
+      "size": 492,
+      "sha256": "449180ba7bbac611009a5b010b44597c36de0825933e87cabf9231f1933fe3ae"
+    },
+    {
+      "path": "ai-board/deploy/_deploy_remote.py",
+      "size": 4673,
+      "sha256": "2ff3b00cce0e4b1646909fb3a657a702c44215bf331353f19736fda15e4c5db2"
+    },
+    {
+      "path": "ai-board/deploy/_diag_remote.py",
+      "size": 1781,
+      "sha256": "ca03b4a6f92971921f0b8ad3c6830b9189aa011989a502f44cae41b3ffa67a33"
+    },
+    {
+      "path": "ai-board/deploy/_fix_data.py",
+      "size": 1690,
+      "sha256": "5d7f9e8a83d501b9ed6ac4e3fa845cf9386cbcf366b6f700279014948a7ffd58"
+    },
+    {
+      "path": "ai-board/deploy/_redeploy_out.py",
+      "size": 1664,
+      "sha256": "5a1f90cc44867a126e79f14bb24be4646d53403c12200d04970845ff5c2b8a21"
+    },
+    {
+      "path": "ai-board/deploy/_verify.py",
+      "size": 771,
+      "sha256": "71f7b65f08aebbeb7d668b66e750af800ce93191056aa1f29bf9f863c5140e10"
+    },
+    {
+      "path": "ai-board/deploy/aiboard.http.conf",
+      "size": 1598,
+      "sha256": "6bbd4cab78bf23ac884019ca8ffc54bfba3bbf77d8919107aae2b8433937ebc8"
+    },
+    {
+      "path": "ai-board/deploy/aiboard.service",
+      "size": 501,
+      "sha256": "30ec73bc56e851e5dc705c8f6528d012709614b07752070f42ad76190b7f72c3"
+    },
+    {
+      "path": "ai-board/deploy/nginx-meeting.conf",
+      "size": 1981,
+      "sha256": "09af5fb46aef0d17c8b1d19fe34a8134d5ae1c140fc742f9f28bc9d8a9ece0ff"
+    },
+    {
+      "path": "ai-board/deploy/start.sh",
+      "size": 269,
+      "sha256": "838b1997ec24e394c952e144b058b3e08483d4a365d6d1297626c78f2c1e88af"
+    },
+    {
+      "path": "ai-board/docs/class-diagram.mermaid",
+      "size": 2846,
+      "sha256": "837b9e9aa16da2c29c9a0b24bfc2ceececcef3423550185669784c5eac2ccc9d"
+    },
+    {
+      "path": "ai-board/docs/design-transcript-mindmap.md",
+      "size": 17026,
+      "sha256": "935b6fe2d8d41af15e46f720bc71eb75cbc6c9056b60082eb7848d742563704d"
+    },
+    {
+      "path": "ai-board/docs/feishu_compete_class-diagram.mermaid",
+      "size": 5270,
+      "sha256": "034626e7e668bc4d91a5e166512aee93d0c4d23ea2b78095cb9fa402921b6ea7"
+    },
+    {
+      "path": "ai-board/docs/feishu_compete_sequence-diagram.mermaid",
+      "size": 4360,
+      "sha256": "f3197826f60e27cdbf1185d69433e55843dbd558d334c683978ec5be32e72df0"
+    },
+    {
+      "path": "ai-board/docs/incremental_design_feishu_compete.md",
+      "size": 33096,
+      "sha256": "974fd19724e7f58d7604a4e56ec0eb1dd38c718255f0df0f7e88bbd31a432229"
+    },
+    {
+      "path": "ai-board/docs/incremental_design_live_commentary.md",
+      "size": 30791,
+      "sha256": "bceb8f92d52458b9d341ea65682ea9200d167f8de7d690e72022f39734bb0345"
+    },
+    {
+      "path": "ai-board/docs/incremental_design_meeting_summary_email.md",
+      "size": 27551,
+      "sha256": "a3c2e5e391824175065d94fcfaac22d4e89f2d92423ef6cacbbf1388beeae0c0"
+    },
+    {
+      "path": "ai-board/docs/incremental_design_two_tab.md",
+      "size": 18320,
+      "sha256": "b6845d6bba6cdf9c7b9a918f6b92ec4f6a3326472e6f1b94c26d9ffe6cd26212"
+    },
+    {
+      "path": "ai-board/docs/prd-live-commentary.md",
+      "size": 18826,
+      "sha256": "7cb595238712dd4ef801e8ee57238e0a12315aec59346aa6ad861f2bc358b905"
+    },
+    {
+      "path": "ai-board/docs/prd-live-transcript-mindmap.md",
+      "size": 11876,
+      "sha256": "f60022b133059b76b4321ec38b68025d7b69a7f232a76f39a762568ec569e30e"
+    },
+    {
+      "path": "ai-board/docs/qa_incremental_p0p1p2_report.md",
+      "size": 8154,
+      "sha256": "0343c1047f75b51f31b282741ee24d4208311bb3078656ae614fbf2e58d4c997"
+    },
+    {
+      "path": "ai-board/docs/sequence-diagram.mermaid",
+      "size": 4185,
+      "sha256": "9c431fde45a0de8072a4997126514fae4df30ece4e93580754f9fd2e54dc52b5"
+    },
+    {
+      "path": "ai-board/docs/system_design.md",
+      "size": 27456,
+      "sha256": "7ca9b88140dbb321426bb5bc323268edfc1946c87adf50c7c26b36987531cb02"
+    },
+    {
+      "path": "ai-board/docs/two-tab-class-diagram.mermaid",
+      "size": 1485,
+      "sha256": "1f3065e4a22cd59b88dd023e33438cb1ee5aacd8ea753db73fb39c3066998f7b"
+    },
+    {
+      "path": "ai-board/docs/two-tab-sequence-diagram.mermaid",
+      "size": 2443,
+      "sha256": "ac82dd2569516256b35cfb81a62cd3f4955a0c0bd47e4475f42f5b021f39df41"
+    },
+    {
+      "path": "ai-board/dossiers/README.md",
+      "size": 614,
+      "sha256": "eb1317065f59820e0e4fa68457b22ad1da115ce4ab3e9223f8b9d5cdc745eff9"
+    },
+    {
+      "path": "ai-board/dossiers/ben_horowitz.md",
+      "size": 5653,
+      "sha256": "e30ed5416d7d3cc130e061887ec121983a66e44635026e3a3ab10e699e90f2bb"
+    },
+    {
+      "path": "ai-board/dossiers/brian_chesky.md",
+      "size": 5613,
+      "sha256": "0db4998ba6cd57c2d2b3f37b5e7b3d5430b397ff2cb466d90e63b627c334f4db"
+    },
+    {
+      "path": "ai-board/dossiers/claude.md",
+      "size": 5781,
+      "sha256": "1e161b14c0b9875b40b02bb4ae8bf44e171343ab22cda8106a296c4838907255"
+    },
+    {
+      "path": "ai-board/dossiers/elon_musk.md",
+      "size": 5606,
+      "sha256": "6a799fc560e498a728d598d8925619991b7928dc3e1e7b760f116517b4ea3158"
+    },
+    {
+      "path": "ai-board/dossiers/gpt55.md",
+      "size": 5761,
+      "sha256": "37b0f65430516559a9a9f31d6a2ddd23ff285cf27559768aba60d2682f3bf3c1"
+    },
+    {
+      "path": "ai-board/dossiers/huang_zheng.md",
+      "size": 5641,
+      "sha256": "6b6562eb77f1a862c839f3f5226cbb462b688cfb83c481833935f222afd66a78"
+    },
+    {
+      "path": "ai-board/dossiers/jack_ma.md",
+      "size": 5578,
+      "sha256": "be920c386706aa9895155897aebb904829d9db9386a1fceed9915f84381e17a2"
+    },
+    {
+      "path": "ai-board/dossiers/jeff_bezos.md",
+      "size": 5648,
+      "sha256": "cca71fcc3f2139b51460312e86cf82840fe2a539406a3df7662db11c3e5dc45c"
+    },
+    {
+      "path": "ai-board/dossiers/lei_jun.md",
+      "size": 5488,
+      "sha256": "a732f53e4f07421244bd2d81f5842b9fae44bbeff132e7379ed91fd6f6953f72"
+    },
+    {
+      "path": "ai-board/dossiers/li_bin.md",
+      "size": 5666,
+      "sha256": "9727f2bb214901439c64e407ff7754119519b62317ecf5582729891de48c81a3"
+    },
+    {
+      "path": "ai-board/dossiers/liu_qiangdong.md",
+      "size": 5548,
+      "sha256": "9f9c44c3cde0411bc23380d2ae8613004bcfa94b8bea919d55171cfbfba56f10"
+    },
+    {
+      "path": "ai-board/dossiers/marc_andreessen.md",
+      "size": 5593,
+      "sha256": "bdb61ffaa61ac1cc97a3d19d69c49bb86130ad493300261a7770254e94915075"
+    },
+    {
+      "path": "ai-board/dossiers/naval_ravikant.md",
+      "size": 5879,
+      "sha256": "f08fbcd6a10c9c3af73e759130a26366879ec273c6a0601c0219724d85bda7fb"
+    },
+    {
+      "path": "ai-board/dossiers/peter_thiel.md",
+      "size": 5636,
+      "sha256": "1941f11f03645483faa2dea1fc66bf8ec60af1cf14fe887271c07efc0d6ac90c"
+    },
+    {
+      "path": "ai-board/dossiers/pony_ma.md",
+      "size": 5589,
+      "sha256": "2974668b196103cd2d0a2098f4fffee1c2a2dc88cb5762490c3d502e165e27dd"
+    },
+    {
+      "path": "ai-board/dossiers/reid_hoffman.md",
+      "size": 5665,
+      "sha256": "1e42e22855048efa1e6a1a4932e009792c4abdd5afb849e834d914c884caa532"
+    },
+    {
+      "path": "ai-board/dossiers/sam_altman.md",
+      "size": 5584,
+      "sha256": "ba688f04e46fee2215c7a2626455de94c2c8693fa6353813bc706a42e1134c34"
+    },
+    {
+      "path": "ai-board/dossiers/shen_nanpeng.md",
+      "size": 5611,
+      "sha256": "5a291d07f5f8d9afdc2b2d19eb68f5f39d744bc5bd905d1611c066b494785269"
+    },
+    {
+      "path": "ai-board/dossiers/steve_jobs.md",
+      "size": 5541,
+      "sha256": "d284c3050b9d479620fa6088c94f91e6fb78eeead6fa159963073cbba41d8b2b"
+    },
+    {
+      "path": "ai-board/dossiers/wang_xing.md",
+      "size": 5540,
+      "sha256": "01b27b3f4b7ae216233edbb9e26769989cd64e30d5a4154c8fcf8733b32f7f41"
+    },
+    {
+      "path": "ai-board/dossiers/zhang_lei.md",
+      "size": 5507,
+      "sha256": "9b6b9029aa57c5eb0270ab045ca0f00e0044289f5f3296b3932d67f12f4c76f0"
+    },
+    {
+      "path": "ai-board/dossiers/zhang_yiming.md",
+      "size": 5667,
+      "sha256": "fbe0bb1c1b87d75df4ad40e7e34a4ce94a9ee5d0dc326b0cfacf1af9ad1c3114"
+    },
+    {
+      "path": "ai-board/index.html",
+      "size": 375,
+      "sha256": "9407f708ef0fb1be80ada7576de00ef171ba905cd6698b7ad5715b5ab997854b"
+    },
+    {
+      "path": "ai-board/package-lock.json",
+      "size": 40609,
+      "sha256": "91e5fd55242c12bcd056bd8c836a4f8ea27c9cd591e8879bc2da7017ce48da7c"
+    },
+    {
+      "path": "ai-board/package.json",
+      "size": 901,
+      "sha256": "40c3b6798e065153e7dc5b110e1d9f5ecf98d77ac6a0de0e32cb929416ebadc3"
+    },
+    {
+      "path": "ai-board/prd_boardroom_two_tab.md",
+      "size": 14838,
+      "sha256": "5ce2db1ff939cd9b37c9be7011b6721d111b4a614fc4ea2a2ec8e40b12693067"
+    },
+    {
+      "path": "ai-board/public/avatars/Ben_Horowitz.jpg",
+      "size": 12706,
+      "sha256": "1113aeea02cbd696327769c0acbcb3022e7afc4e87ad529dd7825f896b1d6441"
+    },
+    {
+      "path": "ai-board/public/avatars/Brian_Chesky.jpg",
+      "size": 8796,
+      "sha256": "0b686aae6396f236756e36aef2883f12598536184faee50a98c9f19decf0a189"
+    },
+    {
+      "path": "ai-board/public/avatars/Elon_Musk.jpg",
+      "size": 15479,
+      "sha256": "6beb59155434f898ba869dc986ef3df2af134d86805981655894bc97f2af43aa"
+    },
+    {
+      "path": "ai-board/public/avatars/Huang_Zheng.jpg",
+      "size": 855730,
+      "sha256": "794b3562c510e905d4420498d1f23d0c00e54cc8667a0de9d98009baeb05ecce"
+    },
+    {
+      "path": "ai-board/public/avatars/Jack_Ma.jpg",
+      "size": 11183,
+      "sha256": "7b0a3353d252c94d46892c03ee7cdd0b3ef3d0544b0baedef5345b7993947f3d"
+    },
+    {
+      "path": "ai-board/public/avatars/Jeff_Bezos.jpg",
+      "size": 27651,
+      "sha256": "fedb00e0ea0c143210ce84f3f8249ad36eb1f821b90d9862d66e62d28675a1d6"
+    },
+    {
+      "path": "ai-board/public/avatars/Lei_Jun.jpg",
+      "size": 15863,
+      "sha256": "27f5bc44386b05dddcc905089b68e441d7cc24ecefdd963bc157782bb21ed419"
+    },
+    {
+      "path": "ai-board/public/avatars/Li_Bin.jpg",
+      "size": 12965,
+      "sha256": "1516482a2b47a3353ecbc3296bd37833ca5938a124135d668f13804e8f4ffe2f"
+    },
+    {
+      "path": "ai-board/public/avatars/Liu_Qiangdong.jpg",
+      "size": 15583,
+      "sha256": "79c21df1ed1f0f9d2e77c7e0bd1e1d04b69f9839f2f5a01e9cf46591f5de1f38"
+    },
+    {
+      "path": "ai-board/public/avatars/Marc_Andreessen.jpg",
+      "size": 17170,
+      "sha256": "577212de94c58151060e40ff30c56225e9620807c9efa8a7ff28067b3dcc7e77"
+    },
+    {
+      "path": "ai-board/public/avatars/Naval_Ravikant.jpg",
+      "size": 22258,
+      "sha256": "df6708096b5f8f49d3d92e9941d1e962b065e0ba7f243a0f20d639fdf720a155"
+    },
+    {
+      "path": "ai-board/public/avatars/Peter_Thiel.jpg",
+      "size": 14135,
+      "sha256": "bedb3274ccaca0a7fc46716501dfbbdc93b35f60fc51f566bad5cd5b9437f60d"
+    },
+    {
+      "path": "ai-board/public/avatars/Pony_Ma.jpg",
+      "size": 15042,
+      "sha256": "5d33f6e2d7e70098b207a70fea2347bdd705a3a9b15d6801bdaf0559eb5a4876"
+    },
+    {
+      "path": "ai-board/public/avatars/Reid_Hoffman.jpg",
+      "size": 109010,
+      "sha256": "89e26bacf3daf168ae5d42b2fe50dcf4ebdcf919b0c7aefe7f26288c7445b0bf"
+    },
+    {
+      "path": "ai-board/public/avatars/Sam_Altman.png",
+      "size": 813968,
+      "sha256": "15e0ccc5637e7812b5a43e05cba8a56ab0a828df1900071ef9353879ff1783a1"
+    },
+    {
+      "path": "ai-board/public/avatars/Shen_Nanpeng.jpg",
+      "size": 10702,
+      "sha256": "9a1ad630f3f2362939c8fcb4027a7577182ffbd690469a30fb7826d70b7f3d70"
+    },
+    {
+      "path": "ai-board/public/avatars/Steve_Jobs.jpg",
+      "size": 17392,
+      "sha256": "b6f67b556564f117e4ff064e8988e7d70d1d0465964624dff47ce06bf6694fbf"
+    },
+    {
+      "path": "ai-board/public/avatars/Wang_Xing.jpg",
+      "size": 12736,
+      "sha256": "50cb30e94c474e6a5cd323dbc3a8b16d08c474a5ca6393470c5cbf77df20805f"
+    },
+    {
+      "path": "ai-board/public/avatars/Zhang_Lei.jpg",
+      "size": 15750,
+      "sha256": "e9c0c73d9518b7d0a370d4920cea00b4ff93fd982b7a48990d6b72fc5665e1c6"
+    },
+    {
+      "path": "ai-board/public/avatars/Zhang_Yiming.jpg",
+      "size": 12801,
+      "sha256": "c58bcad441c37473c460e7720ad7f83352a18f1f42ba22b422d740d8e1038bf8"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-1-handbook.docx",
+      "size": 61030,
+      "sha256": "72ac738543d6537051afccc3ae37839f6f574c6d489b47ed57e939eae5f8490b"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-1-training.pptx",
+      "size": 356260,
+      "sha256": "d9aa04caba78c53d3fa8827432997f915dd881589cc423ecc8df9b0062609533"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-2-handbook.docx",
+      "size": 82941,
+      "sha256": "8acc5f09a2e62b7b2f54c5a05327c0cded607915c72476295d40c78457451c27"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-2-training.pptx",
+      "size": 414672,
+      "sha256": "d7368f6df2133d832da47d633614748a861dd6b61eb66eba6a10cc6d54165a78"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-3-handbook.docx",
+      "size": 68173,
+      "sha256": "732e50474bd0f7eb84dede383a976ca12778519b237b0a9b861b0e624d4ba7ab"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-3-training.pptx",
+      "size": 379220,
+      "sha256": "175ed1028b5ee904d1f6afd7dffb71836d0391fe5c4354a801c9b6b64a52e8a7"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-4-handbook.docx",
+      "size": 67539,
+      "sha256": "6e56c4015730169af2c32607489345aec1bd914d704d6c2e61bee9d996ce9670"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-4-training.pptx",
+      "size": 374328,
+      "sha256": "fa8ebb343a0ffe2cfe9669e6a2747fd41a03c814ed05ac6f0416f51b4fe885be"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-5-handbook.docx",
+      "size": 66617,
+      "sha256": "37b9792753e65fd31473cfa48c5663ca73101c84e96314c56961cb2afbe89a28"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-5-training.pptx",
+      "size": 365988,
+      "sha256": "132252bbfbd11ae573c93d583cfd8885b0ba4c07fa371c834aa53f3233d83aef"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-6-handbook.docx",
+      "size": 60399,
+      "sha256": "ba6d4fd3e92d1d0f69ac505f1a95943e4a138c2996d08f3a4a422f2e69cb4f14"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-6-training.pptx",
+      "size": 372594,
+      "sha256": "ecff04f604433191d65debaddec93f8844c72ff17bfd077475aa21a39dc5b248"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-7-handbook.docx",
+      "size": 59315,
+      "sha256": "4ea3327c5a6bfda76ea6e610375084821c4f8070bcbf3b322ce93f45360eb050"
+    },
+    {
+      "path": "ai-board/public/course-assets/fde-chapter-7-training.pptx",
+      "size": 405266,
+      "sha256": "8c7872644ba9b9ce062484f6851e6acc4ba64f701485fb9da448c049325d176b"
+    },
+    {
+      "path": "ai-board/public/favicon.svg",
+      "size": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "ai-board/public/icons.svg",
+      "size": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "ai-board/scripts/dev.mjs",
+      "size": 1313,
+      "sha256": "8abf3a0b0704979e5e65593103dd486145aaa2953f98238e203319246af11cf4"
+    },
+    {
+      "path": "ai-board/scripts/smoke.mjs",
+      "size": 4193,
+      "sha256": "38d4ab1e5415c0791d96d84a57abd8ac34c1418cc4a2da214b4628550b11db07"
+    },
+    {
+      "path": "ai-board/scripts/ts-resolve-loader.mjs",
+      "size": 686,
+      "sha256": "cde7ba010e9fbe06012020c945801394a91a88247429f7a0a1c9abf25159809e"
+    },
+    {
+      "path": "ai-board/server/api-server.mjs",
+      "size": 24954,
+      "sha256": "a6a5d6ba9ae6d659f0e4241c46f3cdecdfecdd5fc2caeccce6c26266bda88349"
+    },
+    {
+      "path": "ai-board/server/asr-service.mjs",
+      "size": 9005,
+      "sha256": "5308e9190257938e19fc79ac6acb5081e5633f43b7b35e33f53b7593ee171494"
+    },
+    {
+      "path": "ai-board/server/board-service.mjs",
+      "size": 3981,
+      "sha256": "ab83362a858cf958d1144399964abc430e336fd00386e20df7e23fc65c5cad89"
+    },
+    {
+      "path": "ai-board/server/commentary-service.mjs",
+      "size": 10371,
+      "sha256": "2d4fe5a5a6ed582ce8fd3b8104487106ccce477736c069dfac931d3e13efa34c"
+    },
+    {
+      "path": "ai-board/server/data/大咖角色库.json",
+      "size": 9136,
+      "sha256": "f34f35e836189ed222990aadd35fa4152a51defce3c3b66eda87340b88da41aa"
+    },
+    {
+      "path": "ai-board/server/data-store.mjs",
+      "size": 27397,
+      "sha256": "f96e0f424258ed7d34e16e3a9030b245778fb96bb87b0b0e383c34da67baa6b4"
+    },
+    {
+      "path": "ai-board/server/llm-router.mjs",
+      "size": 5687,
+      "sha256": "e5e4aacdeeb592fdd1aca8f4de7f5b941355e5db7999de806847033ccdc64ca2"
+    },
+    {
+      "path": "ai-board/server/mail-cli.mjs",
+      "size": 7315,
+      "sha256": "241e884fc5a741feb4025973a2f211d11923cd97d6a55885b519c58c0ffa03c3"
+    },
+    {
+      "path": "ai-board/server/material-service.mjs",
+      "size": 7736,
+      "sha256": "9f0dfd2328c927576e757431405af8a854caeeffaa3d9ad856f791d79e4d0695"
+    },
+    {
+      "path": "ai-board/server/meeting-service.mjs",
+      "size": 7806,
+      "sha256": "52139a67fe83c49a804f09840769d35d75e9611cdee99afcddf55ebe10d4c75a"
+    },
+    {
+      "path": "ai-board/server/quota.mjs",
+      "size": 1241,
+      "sha256": "f56dcd464d08f26b460fadd537e8f764cba1e4cc54028adc44461a57c375b830"
+    },
+    {
+      "path": "ai-board/server/role-service.mjs",
+      "size": 5160,
+      "sha256": "b78fda76fbe9ffdd608114d0ed21fa25e41265dfbd81b8ff38f6ae8d28aaa33a"
+    },
+    {
+      "path": "ai-board/server/summary-service.mjs",
+      "size": 9460,
+      "sha256": "859c9fa0bfd4c82c0eafddeeef9b73f49fa764158a53fe5d4ab0c9238550443a"
+    },
+    {
+      "path": "ai-board/server/test_commentary.mjs",
+      "size": 6210,
+      "sha256": "7c1d378581cc34f2fc74f0bab83cd6379a4277b9f2a7addc43e7514412ae5f76"
+    },
+    {
+      "path": "ai-board/server/test_mail.mjs",
+      "size": 8231,
+      "sha256": "941e7f5865565d017eddc68b52330527763f581ae6fafb87df11c1480bdcb7ee"
+    },
+    {
+      "path": "ai-board/server/test_summary.mjs",
+      "size": 7985,
+      "sha256": "7a67b237e1ed6591d0b4952bc58e358a20e7becbc1b77ce27ff40d8988b68387"
+    },
+    {
+      "path": "ai-board/server/test_wshub.mjs",
+      "size": 1772,
+      "sha256": "3792a600a85f090c27d3405f7f9fbfe40726f973d9e69b3ed5d01ae185e3020e"
+    },
+    {
+      "path": "ai-board/server/transcript-service.mjs",
+      "size": 24261,
+      "sha256": "53e0dcba981fe62912d5cd589164fa4592849ef04fcd7fa5eed4355c8e0d9217"
+    },
+    {
+      "path": "ai-board/server/ws-hub.mjs",
+      "size": 1585,
+      "sha256": "4ed2560b59981105e70ed9818081a43d4deca080d186b181daebfd5a34e4e2fd"
+    },
+    {
+      "path": "ai-board/src/App.tsx",
+      "size": 3349,
+      "sha256": "6a85b2ddc227b7327d94bcf4982b5d942103c6584c94b6993e8828a73638ff1b"
+    },
+    {
+      "path": "ai-board/src/assets/hero.png",
+      "size": 13057,
+      "sha256": "881ffbcaafc212e49addad08846a5b82761355fa20624253af3477ba33262c5c"
+    },
+    {
+      "path": "ai-board/src/assets/react.svg",
+      "size": 4126,
+      "sha256": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5"
+    },
+    {
+      "path": "ai-board/src/assets/vite.svg",
+      "size": 8709,
+      "sha256": "5be21acd42eb7b896e517f4e0f0f11eb5c5d9e54fbbcebe9453f033008fcca6f"
+    },
+    {
+      "path": "ai-board/src/components/BigShotBar.tsx",
+      "size": 1184,
+      "sha256": "67fb9334a9479ed5b90f4267acdb6fe9d971bdec8d8c87598cb444cdd45033be"
+    },
+    {
+      "path": "ai-board/src/components/BigShotCard.tsx",
+      "size": 1153,
+      "sha256": "049c70b42fd190d67d6e0c71894d1f127fab0c5c854e52c944081ca5d207a9f2"
+    },
+    {
+      "path": "ai-board/src/components/BoardRoom.tsx",
+      "size": 19925,
+      "sha256": "18b5390a4f574f1ba494b7fc355a371c5328c4c9b960a316e3b9093b2f4189e3"
+    },
+    {
+      "path": "ai-board/src/components/BriefPill.tsx",
+      "size": 1495,
+      "sha256": "b55c0edca26994a9a93d9effe2c2e95e9b72cee941d7e7b52568ba7bd5f3d88b"
+    },
+    {
+      "path": "ai-board/src/components/CommentaryCard.tsx",
+      "size": 4286,
+      "sha256": "faea5bbf95119632652561b825362622e9752c65b7b87cf979483759ebbc5aa2"
+    },
+    {
+      "path": "ai-board/src/components/CommentaryPanel.tsx",
+      "size": 5445,
+      "sha256": "14aae3ce7941db3ecc880cf2f38290ec1652210c19cac8d02c16389da6be3ca0"
+    },
+    {
+      "path": "ai-board/src/components/EmailConfirmDialog.tsx",
+      "size": 3888,
+      "sha256": "cf350f39c662f8a3ec604d7d8f8e8a6cf6e94da72631d5a4fefb0983df1e2f53"
+    },
+    {
+      "path": "ai-board/src/components/ExcerptCard.tsx",
+      "size": 2772,
+      "sha256": "8b445406c370a0dd04fa54713d1152e376accf41627a0ec90eacafcaf8f9c882"
+    },
+    {
+      "path": "ai-board/src/components/ExportMenu.tsx",
+      "size": 4136,
+      "sha256": "78f2687118344016a3893ea09918d708e870470acabe6e6a7a0701b4557aecf9"
+    },
+    {
+      "path": "ai-board/src/components/InlineEditor.tsx",
+      "size": 1313,
+      "sha256": "a81ab5ec85be889670afee1f68ea80eed2ca339549f62c8cb6d30bbb8fcb0fa6"
+    },
+    {
+      "path": "ai-board/src/components/MaterialUpload.tsx",
+      "size": 2323,
+      "sha256": "695781e7b0ad999593a6a84ebd1069aee67114ef0c6c4c369dd852b557f8ba6e"
+    },
+    {
+      "path": "ai-board/src/components/MeetingPrep.tsx",
+      "size": 5658,
+      "sha256": "e3c915c941099bfc594faea10343a9771264e2fb42e8d1cedc65943c7eeb673c"
+    },
+    {
+      "path": "ai-board/src/components/MicControls.tsx",
+      "size": 2620,
+      "sha256": "ffc52152083fc8c0027a1b41ae89ea72117445ee629b832905e988ab7f1c8469"
+    },
+    {
+      "path": "ai-board/src/components/MindMap.tsx",
+      "size": 1606,
+      "sha256": "6f542b96d37c0d0167a4caa61fad843a4425963d50c97aff20bab3fd445a8524"
+    },
+    {
+      "path": "ai-board/src/components/MindMapDrill.tsx",
+      "size": 3283,
+      "sha256": "5145734b350fa32eddd74afe1fd0e96b0c14b02f01299f1d3d767de6e8441cee"
+    },
+    {
+      "path": "ai-board/src/components/NewBigShotModal.tsx",
+      "size": 3140,
+      "sha256": "ea862723310676fac5b060f7114b6ebcce98cddc772de52ab89ee31c5592e8e4"
+    },
+    {
+      "path": "ai-board/src/components/RenamePopover.tsx",
+      "size": 1172,
+      "sha256": "bac2d9419aa542e66087a9be0323ba19fca702862a7d2413086ad4093a34287f"
+    },
+    {
+      "path": "ai-board/src/components/RoleDot.tsx",
+      "size": 633,
+      "sha256": "79fabf152f8d1421e928b30872298a65adfd859e615ca09f7df268c6ddf0dd97"
+    },
+    {
+      "path": "ai-board/src/components/SearchBar.tsx",
+      "size": 3129,
+      "sha256": "84c5ad355da054418c9a869f75935e97f59556ba0f3b922fe3e8a5c4a6216b49"
+    },
+    {
+      "path": "ai-board/src/components/SelectionToolbar.tsx",
+      "size": 883,
+      "sha256": "e00229040edcec0f429c0fed6bc359a6f7e6a1b6d789949575c3c96cd89cc319"
+    },
+    {
+      "path": "ai-board/src/components/SpeechQuotaBar.tsx",
+      "size": 2926,
+      "sha256": "583668ea215b03aee85fe7d51b9825b83996a4971418ba5ab5bfb8a1cb2019b0"
+    },
+    {
+      "path": "ai-board/src/components/StructuredMinutes.tsx",
+      "size": 6949,
+      "sha256": "0581478ce5ad4f16561ec69b503fce79a3f7a5b1f2a9e93998c810633d9af21b"
+    },
+    {
+      "path": "ai-board/src/components/SummaryPanel.tsx",
+      "size": 3893,
+      "sha256": "bb9a313f2ed884f47e5be8aa428039d6b15db403992e4519ac74a92c85b0cc2e"
+    },
+    {
+      "path": "ai-board/src/components/SummaryRoom.tsx",
+      "size": 2913,
+      "sha256": "548e022ecec312d711ca8eeb9594e9550f7dad585e9f52e30575cc2f9ea401f1"
+    },
+    {
+      "path": "ai-board/src/components/TagFilterBar.tsx",
+      "size": 1229,
+      "sha256": "bf7995137218af6f70ad10358130445eb5b4c562f289dab786995fdc15a3d081"
+    },
+    {
+      "path": "ai-board/src/components/TagMenu.tsx",
+      "size": 940,
+      "sha256": "03264230a60e0fabc199a8bc2de5d3d9f97c5b1cbefaa0fbcdae30fab210f114"
+    },
+    {
+      "path": "ai-board/src/components/TranscriptPanel.tsx",
+      "size": 11680,
+      "sha256": "811a1d51290fbcfef2d02846e94b473de2ee0c5d7d88aa2833d82c2ecb2a6f69"
+    },
+    {
+      "path": "ai-board/src/hooks/useBoard.ts",
+      "size": 8093,
+      "sha256": "d261232d8f915515d60b87629984aac808701eb98c02750bc55a6ae1eb87a088"
+    },
+    {
+      "path": "ai-board/src/hooks/useBoardEnhancements.ts",
+      "size": 8189,
+      "sha256": "7cf36a2532525aced52c9e876aa8a72a47398ecf8ce7de38fd457a23726ea65f"
+    },
+    {
+      "path": "ai-board/src/hooks/useBoardSearch.ts",
+      "size": 2980,
+      "sha256": "5e6011872011fc0192c4027f7165e61ab598a2a35702e19682eabe289fe5afb6"
+    },
+    {
+      "path": "ai-board/src/hooks/useKeywordHighlight.ts",
+      "size": 2087,
+      "sha256": "9bbfa8040e9546ebafd478b202aaac80859c4dae78290398ae71f2f72496c182"
+    },
+    {
+      "path": "ai-board/src/hooks/useLiveCommentary.ts",
+      "size": 6429,
+      "sha256": "d8b88b85c4c3f961338acacca9de63b0d5bab95376256b9f2189fa945b65e535"
+    },
+    {
+      "path": "ai-board/src/hooks/useMeeting.ts",
+      "size": 1219,
+      "sha256": "ba21cc30dc365fde59f8f3c9832f32b1813eefee1cd0ac10df33598a78eee2fc"
+    },
+    {
+      "path": "ai-board/src/hooks/useMindMapDrill.ts",
+      "size": 1490,
+      "sha256": "cb8a7e9f39072979d708eabcb9aba59c08af11e86e51d6c1e70146b257ed1192"
+    },
+    {
+      "path": "ai-board/src/hooks/useSummary.ts",
+      "size": 8034,
+      "sha256": "c254a26788f3db2d9c79ac86366d59c1dbe0cdd685bc53a2cfbc6d1b6afe8afb"
+    },
+    {
+      "path": "ai-board/src/hooks/useTranscriptEnhance.ts",
+      "size": 6645,
+      "sha256": "3c6c1b149a6f8675d59a5f2601896f4a7e367ee232f0e64546adf6e025a08160"
+    },
+    {
+      "path": "ai-board/src/index.css",
+      "size": 49090,
+      "sha256": "d451eeecce97eee8662d3667e535c00f3e6d60f37668fc09d2cfe34145d33d38"
+    },
+    {
+      "path": "ai-board/src/lib/api.test.ts",
+      "size": 3588,
+      "sha256": "82a4ab6a81d71ff5b61a5a55000fbdc1319f3443f3157de197ca9332e8fbe2e3"
+    },
+    {
+      "path": "ai-board/src/lib/api.ts",
+      "size": 15684,
+      "sha256": "5ae8bfd9aee067fc173b9e32fa4b96dccbdf3588c8607f5db7a438a86d252bc7"
+    },
+    {
+      "path": "ai-board/src/lib/email.test.ts",
+      "size": 1105,
+      "sha256": "44d0f714aebd3a2750986f2e8e6cd8df406d683cf62b40ad0640a3f645ab0c45"
+    },
+    {
+      "path": "ai-board/src/lib/email.ts",
+      "size": 804,
+      "sha256": "453101cd791b63d34344d90f0645f924e9813a373e07d698be00a01dcdc1f7ba"
+    },
+    {
+      "path": "ai-board/src/lib/format.ts",
+      "size": 928,
+      "sha256": "4692f07e4c38d802874dd5198187869784cc5a851c6ed65821ea792b93f8a100"
+    },
+    {
+      "path": "ai-board/src/lib/highlight.tsx",
+      "size": 1270,
+      "sha256": "9f204cd77751743cf570287162c260a7ce0f9175aa234a0e94e1d7960917adbd"
+    },
+    {
+      "path": "ai-board/src/lib/limits.ts",
+      "size": 1794,
+      "sha256": "e313792840d727a63746d1a86dbd7a4f80798a79ef443d80e0dea770cd706e7b"
+    },
+    {
+      "path": "ai-board/src/lib/speaker.ts",
+      "size": 1255,
+      "sha256": "5a51f6fa21462783febb0f725c3070c5ed941d248511cf08625ecf335e4dd5d3"
+    },
+    {
+      "path": "ai-board/src/lib/sse.ts",
+      "size": 1741,
+      "sha256": "6b8b9e3eb3153283e44b85ace0937c75ccdfc649c03aec384a6426779933798c"
+    },
+    {
+      "path": "ai-board/src/lib/transcription.ts",
+      "size": 7038,
+      "sha256": "739025608b84149a981c6b1b91f2bd4764dca2699f2e90a43576d0926344f5b6"
+    },
+    {
+      "path": "ai-board/src/lib/uid.ts",
+      "size": 224,
+      "sha256": "b8cfd7b61b2dbb7eccef25929ce9f714f10c489c70bd54607d292c658bbd5ba9"
+    },
+    {
+      "path": "ai-board/src/main.tsx",
+      "size": 226,
+      "sha256": "c89383baab814e1388ba5d9aa211b237ba9a35bf0a07ef3e73364a7fff84361b"
+    },
+    {
+      "path": "ai-board/src/types.ts",
+      "size": 10805,
+      "sha256": "329ae4d5ab9449f1feab4fcaded2d66a00d9f9fcba58c17bdc1f7ed13dc15c59"
+    },
+    {
+      "path": "ai-board/tsconfig.app.json",
+      "size": 673,
+      "sha256": "dc8a7456fda2377bb5c8b59fe78b0716b0ee492ea894b3e4291499d2ebce4c62"
+    },
+    {
+      "path": "ai-board/tsconfig.json",
+      "size": 119,
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    {
+      "path": "ai-board/tsconfig.node.json",
+      "size": 558,
+      "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8"
+    },
+    {
+      "path": "ai-board/vite.config.ts",
+      "size": 1079,
+      "sha256": "ba9389ee6fd0803f5381f9a0f83b830759b247fb1155ac1715cee9567d87eca6"
+    },
+    {
+      "path": "ai-board/架构设计.md",
+      "size": 28668,
+      "sha256": "6dae6cad3e93c6b8bfe2074565bde4147c11fa724e56ec9356923f805b8df93e"
+    },
+    {
+      "path": "ai-board-incremental-prd.md",
+      "size": 15057,
+      "sha256": "eb27b06a7319ff9f4030d35243bc40fe3a1f71c313348187eb24c747b71d2253"
+    },
+    {
+      "path": "app.css",
+      "size": 13749,
+      "sha256": "9a771ec84877dded715710dbb78cd3dfe28ed515e6d5ea33001e5328c5729acb"
+    },
+    {
+      "path": "app.js",
+      "size": 212359,
+      "sha256": "46c6473a4576b32db257ea33d7a8d1446cf78685e37b50d98c2c8987517afce6"
+    },
+    {
+      "path": "assets/avatars/Ben_Horowitz.jpg",
+      "size": 12706,
+      "sha256": "1113aeea02cbd696327769c0acbcb3022e7afc4e87ad529dd7825f896b1d6441"
+    },
+    {
+      "path": "assets/avatars/Brian_Chesky.jpg",
+      "size": 8796,
+      "sha256": "0b686aae6396f236756e36aef2883f12598536184faee50a98c9f19decf0a189"
+    },
+    {
+      "path": "assets/avatars/Elon_Musk.jpg",
+      "size": 15479,
+      "sha256": "6beb59155434f898ba869dc986ef3df2af134d86805981655894bc97f2af43aa"
+    },
+    {
+      "path": "assets/avatars/Huang_Zheng.jpg",
+      "size": 855730,
+      "sha256": "794b3562c510e905d4420498d1f23d0c00e54cc8667a0de9d98009baeb05ecce"
+    },
+    {
+      "path": "assets/avatars/Jack_Ma.jpg",
+      "size": 11183,
+      "sha256": "7b0a3353d252c94d46892c03ee7cdd0b3ef3d0544b0baedef5345b7993947f3d"
+    },
+    {
+      "path": "assets/avatars/Jeff_Bezos.jpg",
+      "size": 27651,
+      "sha256": "fedb00e0ea0c143210ce84f3f8249ad36eb1f821b90d9862d66e62d28675a1d6"
+    },
+    {
+      "path": "assets/avatars/Lei_Jun.jpg",
+      "size": 15863,
+      "sha256": "27f5bc44386b05dddcc905089b68e441d7cc24ecefdd963bc157782bb21ed419"
+    },
+    {
+      "path": "assets/avatars/Li_Bin.jpg",
+      "size": 12965,
+      "sha256": "1516482a2b47a3353ecbc3296bd37833ca5938a124135d668f13804e8f4ffe2f"
+    },
+    {
+      "path": "assets/avatars/Liu_Qiangdong.jpg",
+      "size": 15583,
+      "sha256": "79c21df1ed1f0f9d2e77c7e0bd1e1d04b69f9839f2f5a01e9cf46591f5de1f38"
+    },
+    {
+      "path": "assets/avatars/Marc_Andreessen.jpg",
+      "size": 17170,
+      "sha256": "577212de94c58151060e40ff30c56225e9620807c9efa8a7ff28067b3dcc7e77"
+    },
+    {
+      "path": "assets/avatars/Naval_Ravikant.jpg",
+      "size": 22258,
+      "sha256": "df6708096b5f8f49d3d92e9941d1e962b065e0ba7f243a0f20d639fdf720a155"
+    },
+    {
+      "path": "assets/avatars/Peter_Thiel.jpg",
+      "size": 14135,
+      "sha256": "bedb3274ccaca0a7fc46716501dfbbdc93b35f60fc51f566bad5cd5b9437f60d"
+    },
+    {
+      "path": "assets/avatars/Pony_Ma.jpg",
+      "size": 15042,
+      "sha256": "5d33f6e2d7e70098b207a70fea2347bdd705a3a9b15d6801bdaf0559eb5a4876"
+    },
+    {
+      "path": "assets/avatars/Reid_Hoffman.jpg",
+      "size": 109010,
+      "sha256": "89e26bacf3daf168ae5d42b2fe50dcf4ebdcf919b0c7aefe7f26288c7445b0bf"
+    },
+    {
+      "path": "assets/avatars/Sam_Altman.png",
+      "size": 813968,
+      "sha256": "15e0ccc5637e7812b5a43e05cba8a56ab0a828df1900071ef9353879ff1783a1"
+    },
+    {
+      "path": "assets/avatars/Shen_Nanpeng.jpg",
+      "size": 10702,
+      "sha256": "9a1ad630f3f2362939c8fcb4027a7577182ffbd690469a30fb7826d70b7f3d70"
+    },
+    {
+      "path": "assets/avatars/Steve_Jobs.jpg",
+      "size": 17392,
+      "sha256": "b6f67b556564f117e4ff064e8988e7d70d1d0465964624dff47ce06bf6694fbf"
+    },
+    {
+      "path": "assets/avatars/Wang_Xing.jpg",
+      "size": 12736,
+      "sha256": "50cb30e94c474e6a5cd323dbc3a8b16d08c474a5ca6393470c5cbf77df20805f"
+    },
+    {
+      "path": "assets/avatars/Zhang_Lei.jpg",
+      "size": 15750,
+      "sha256": "e9c0c73d9518b7d0a370d4920cea00b4ff93fd982b7a48990d6b72fc5665e1c6"
+    },
+    {
+      "path": "assets/avatars/Zhang_Yiming.jpg",
+      "size": 12801,
+      "sha256": "c58bcad441c37473c460e7720ad7f83352a18f1f42ba22b422d740d8e1038bf8"
+    },
+    {
+      "path": "homepage.html",
+      "size": 470,
+      "sha256": "46327b1a2f52c50afa91b7abee0b2f95cbc02605be28aa9b14d1126e756e3438"
+    },
+    {
+      "path": "prototype/index.html",
+      "size": 34593,
+      "sha256": "9ccfe5567b573441da16cfd7490019758bcef15fd63a53948e1b4c395e358a1c"
+    },
+    {
+      "path": "大咖角色库.json",
+      "size": 9136,
+      "sha256": "f34f35e836189ed222990aadd35fa4152a51defce3c3b66eda87340b88da41aa"
+    },
+    {
+      "path": "虚拟私董会-方案设计.md",
+      "size": 11075,
+      "sha256": "8f27f3d6d85caee612852d4b899878c27767c0f6a6fd27febce8108d0846873d"
+    }
+  ]
+}

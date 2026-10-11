@@ -1,0 +1,11 @@
+{
+  "healthy": true,
+  "roles_count": 22,
+  "built_homepage_served": true,
+  "javascript": "/assets/index-BRK4FwEI.js",
+  "javascript_bytes": 269784,
+  "business_data_imported": false,
+  "model_calls_made": false,
+  "browser_interactions_tested": false,
+  "checked_directory": "source-snapshots/local-20261011/ai-board"
+}
