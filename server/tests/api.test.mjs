@@ -283,6 +283,8 @@ test("人工求助调用网关、完整读取简报/资料/修订/前文建议�
     "EARLIER_ADVICE_MARKER",
   ])
     assert.ok(prompt.includes(marker), marker);
+  assert.ok(prompt.includes("记录类型=speech；写入来源=human；修订版本=2"));
+  assert.ok(prompt.includes("记录类型=advice；写入来源=human"));
   assert.ok(!prompt.includes("OLD_MARKER"));
   assert.ok(prompts.at(-1).messages[0].content.includes("当前承诺合理吗"));
 });

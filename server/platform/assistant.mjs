@@ -95,13 +95,14 @@ export function meetingContext(
       id: "event:" + event.id,
       label: `${event.speaker} · ${event.createdAt}`,
       type: event.type,
+      provenance: `记录类型=${event.type}；写入来源=${event.source}；修订版本=${event.revision}`,
       text: event.text,
     });
   const content = [
     `会议：${meeting.title}\n场景：${meeting.mode === "customer" ? "客户辅助" : "内部决策评审"}\n记录版本：${meeting.version}`,
     ...sources.map(
       (source) =>
-        `[${source.id}] ${source.label}\n${source.text || "（未填写）"}`,
+        `[${source.id}] ${source.label}${source.provenance ? "\n" + source.provenance : ""}\n${source.text || "（未填写）"}`,
     ),
   ].join("\n\n");
   // 全量原文始终留在数据库；超出单次请求预算时明确拒绝，不伪称读取了全部上下文。
