@@ -29,6 +29,6 @@ LinkHarbor 的 `/models` 鉴权成功。通过 MeetingOS 真实的创建会议�
 
 ## 未打通部分
 
-`api.wei.run` 和 `llm-h7f12a4pszr0zn4n.cn-beijing.maas.aliyuncs.com` 的 HTTPS CONNECT 被当前云代理返回403，未到达接口，不能据此判断 Key 有效性。这两个域名及凭证需求已添加到云环境草稿，保留原有域名；草稿保存不等于运行策略已应用。环境设置需要审核、保存并发布后才能继续验证。上传文件的值没有自动导入环境密钥库；当前工具只支持声明凭证需求，未来环境应使用受保护绑定。
+`api.wei.run` 和 `llm-h7f12a4pszr0zn4n.cn-beijing.maas.aliyuncs.com` 的 HTTPS CONNECT 被当前云代理返回403，未到达接口，不能据此判断 Key 有效性。这两个域名及凭证需求已添加到云环境草稿，保留原有域名；草稿保存不等于运行策略已应用。环境设置需要审核、保存并发布后才能继续验证。上传文件的值没有自动导入环境密钥库；当前工具只支持声明凭证需求，未来环境应使用受保护绑定。现有 DEEPSEEK_API_KEY 需求限定 api.deepseek.com；改用本次 LinkHarbor 路由时，需要在环境设置将该绑定目标改为 api.linkharbor.ai，不能直接向错误域名发送同一凭证。
 
 当前已有真实 GPT/Claude/DeepSeek 调用证据，但首字仍需约8–18秒，不能称作即时耳边答复。需继续做上下文预算、自动触发节奏和快慢模型路由。真实麦克风/云ASR与多次稳定性、成本尚未验收，用户提供的阿里云地址是 LLM 接口，不当作 ASR 凭证使用。
