@@ -16,3 +16,7 @@ server/data/*
 **/server/data/meetings.json
 source-snapshots/**/out/
 source-snapshots/**/dist/
+
+/out/
+*.tsbuildinfo
+__pycache__/

@@ -1,0 +1,26 @@
+[
+  {
+    "port": 3168,
+    "health": true,
+    "homepage": true,
+    "scripts": true,
+    "anonymous_denied": true,
+    "vite_cookie_proxy": false
+  },
+  {
+    "port": 5178,
+    "health": true,
+    "homepage": true,
+    "scripts": true,
+    "anonymous_denied": true,
+    "vite_cookie_proxy": true
+  },
+  {
+    "port": 3170,
+    "node_use_env_proxy": true,
+    "health": true,
+    "homepage": true,
+    "scripts": true,
+    "anonymous_denied": true
+  }
+]

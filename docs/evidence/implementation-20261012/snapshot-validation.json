@@ -1,0 +1,14 @@
+[
+  {
+    "snapshot": "server",
+    "files": 91,
+    "byte_identical": true,
+    "mismatches": []
+  },
+  {
+    "snapshot": "local",
+    "files": 205,
+    "byte_identical": true,
+    "mismatches": []
+  }
+]

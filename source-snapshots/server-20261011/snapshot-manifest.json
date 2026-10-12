@@ -1,0 +1,461 @@
+{
+  "source": "User-uploaded /opt/aiboard deployment archive plus restored original static role seed",
+  "archive_sha256": "67131669416d278b1ed4a3a0fe4ba62d9bb2d766f37a3989d211623a69633b8a",
+  "files": [
+    {
+      "path": ".env.example",
+      "size": 450,
+      "sha256": "08221782619e916af377a88fc19ca7b62d4cc146b16ecb9219baafabae8567a4"
+    },
+    {
+      "path": "deploy/README.md",
+      "size": 4743,
+      "sha256": "0a8650af21aadd744c4b1ed85ac5e5839f24813901088e0c2d50003fc5abf1cf"
+    },
+    {
+      "path": "deploy/aiboard.service",
+      "size": 429,
+      "sha256": "79997701508ea8cb05bfb6e93b8725396496907d4fec3639c1d9b744f031be15"
+    },
+    {
+      "path": "deploy/nginx-meeting.conf",
+      "size": 1981,
+      "sha256": "09af5fb46aef0d17c8b1d19fe34a8134d5ae1c140fc742f9f28bc9d8a9ece0ff"
+    },
+    {
+      "path": "deploy/start.sh",
+      "size": 269,
+      "sha256": "838b1997ec24e394c952e144b058b3e08483d4a365d6d1297626c78f2c1e88af"
+    },
+    {
+      "path": "dossiers/README.md",
+      "size": 614,
+      "sha256": "eb1317065f59820e0e4fa68457b22ad1da115ce4ab3e9223f8b9d5cdc745eff9"
+    },
+    {
+      "path": "dossiers/ben_horowitz.md",
+      "size": 5653,
+      "sha256": "e30ed5416d7d3cc130e061887ec121983a66e44635026e3a3ab10e699e90f2bb"
+    },
+    {
+      "path": "dossiers/brian_chesky.md",
+      "size": 5613,
+      "sha256": "0db4998ba6cd57c2d2b3f37b5e7b3d5430b397ff2cb466d90e63b627c334f4db"
+    },
+    {
+      "path": "dossiers/charlie_munger.md",
+      "size": 18909,
+      "sha256": "4ccf2c41889ea1b6ea6a549d54a5d960e4781552aeedf546aa4f4de85c773dbc"
+    },
+    {
+      "path": "dossiers/claude.md",
+      "size": 5781,
+      "sha256": "1e161b14c0b9875b40b02bb4ae8bf44e171343ab22cda8106a296c4838907255"
+    },
+    {
+      "path": "dossiers/elon_musk.md",
+      "size": 5606,
+      "sha256": "6a799fc560e498a728d598d8925619991b7928dc3e1e7b760f116517b4ea3158"
+    },
+    {
+      "path": "dossiers/gpt55.md",
+      "size": 5761,
+      "sha256": "37b0f65430516559a9a9f31d6a2ddd23ff285cf27559768aba60d2682f3bf3c1"
+    },
+    {
+      "path": "dossiers/huang_zheng.md",
+      "size": 5641,
+      "sha256": "6b6562eb77f1a862c839f3f5226cbb462b688cfb83c481833935f222afd66a78"
+    },
+    {
+      "path": "dossiers/jack_ma.md",
+      "size": 5578,
+      "sha256": "be920c386706aa9895155897aebb904829d9db9386a1fceed9915f84381e17a2"
+    },
+    {
+      "path": "dossiers/jeff_bezos.md",
+      "size": 5648,
+      "sha256": "cca71fcc3f2139b51460312e86cf82840fe2a539406a3df7662db11c3e5dc45c"
+    },
+    {
+      "path": "dossiers/lei_jun.md",
+      "size": 5488,
+      "sha256": "a732f53e4f07421244bd2d81f5842b9fae44bbeff132e7379ed91fd6f6953f72"
+    },
+    {
+      "path": "dossiers/li_bin.md",
+      "size": 5666,
+      "sha256": "9727f2bb214901439c64e407ff7754119519b62317ecf5582729891de48c81a3"
+    },
+    {
+      "path": "dossiers/liu_qiangdong.md",
+      "size": 5548,
+      "sha256": "9f9c44c3cde0411bc23380d2ae8613004bcfa94b8bea919d55171cfbfba56f10"
+    },
+    {
+      "path": "dossiers/marc_andreessen.md",
+      "size": 5593,
+      "sha256": "bdb61ffaa61ac1cc97a3d19d69c49bb86130ad493300261a7770254e94915075"
+    },
+    {
+      "path": "dossiers/nassim_taleb.md",
+      "size": 21860,
+      "sha256": "e961c4fb38076501064908e456b296b06b33fa9670cc6ab76c86181e87f90460"
+    },
+    {
+      "path": "dossiers/naval_ravikant.md",
+      "size": 5879,
+      "sha256": "f08fbcd6a10c9c3af73e759130a26366879ec273c6a0601c0219724d85bda7fb"
+    },
+    {
+      "path": "dossiers/peter_thiel.md",
+      "size": 5636,
+      "sha256": "1941f11f03645483faa2dea1fc66bf8ec60af1cf14fe887271c07efc0d6ac90c"
+    },
+    {
+      "path": "dossiers/pony_ma.md",
+      "size": 5589,
+      "sha256": "2974668b196103cd2d0a2098f4fffee1c2a2dc88cb5762490c3d502e165e27dd"
+    },
+    {
+      "path": "dossiers/ray_dalio.md",
+      "size": 19481,
+      "sha256": "c7168fb3b9169609a02ad245652021ed700ab4b8f28710a7cf009afaa40129c6"
+    },
+    {
+      "path": "dossiers/reid_hoffman.md",
+      "size": 5665,
+      "sha256": "1e42e22855048efa1e6a1a4932e009792c4abdd5afb849e834d914c884caa532"
+    },
+    {
+      "path": "dossiers/sam_altman.md",
+      "size": 5584,
+      "sha256": "ba688f04e46fee2215c7a2626455de94c2c8693fa6353813bc706a42e1134c34"
+    },
+    {
+      "path": "dossiers/shen_nanpeng.md",
+      "size": 5611,
+      "sha256": "5a291d07f5f8d9afdc2b2d19eb68f5f39d744bc5bd905d1611c066b494785269"
+    },
+    {
+      "path": "dossiers/steve_jobs.md",
+      "size": 5541,
+      "sha256": "d284c3050b9d479620fa6088c94f91e6fb78eeead6fa159963073cbba41d8b2b"
+    },
+    {
+      "path": "dossiers/wang_xing.md",
+      "size": 5540,
+      "sha256": "01b27b3f4b7ae216233edbb9e26769989cd64e30d5a4154c8fcf8733b32f7f41"
+    },
+    {
+      "path": "dossiers/zhang_lei.md",
+      "size": 5507,
+      "sha256": "9b6b9029aa57c5eb0270ab045ca0f00e0044289f5f3296b3932d67f12f4c76f0"
+    },
+    {
+      "path": "dossiers/zhang_yiming.md",
+      "size": 5667,
+      "sha256": "fbe0bb1c1b87d75df4ad40e7e34a4ce94a9ee5d0dc326b0cfacf1af9ad1c3114"
+    },
+    {
+      "path": "out/assets/index-DmMj09aq.css",
+      "size": 38372,
+      "sha256": "07c39fc262464a7ee3ce7017d9fd6ac009e0112985b521ab5c9966bd60e78bf1"
+    },
+    {
+      "path": "out/assets/index-IY8oToRr.js",
+      "size": 274722,
+      "sha256": "a6e1b68aec2b5eaca41582e61355a233a0b97c123ba2e0b0bd25e4aaa6b936d6"
+    },
+    {
+      "path": "out/avatars/Ben_Horowitz.jpg",
+      "size": 12706,
+      "sha256": "1113aeea02cbd696327769c0acbcb3022e7afc4e87ad529dd7825f896b1d6441"
+    },
+    {
+      "path": "out/avatars/Brian_Chesky.jpg",
+      "size": 8796,
+      "sha256": "0b686aae6396f236756e36aef2883f12598536184faee50a98c9f19decf0a189"
+    },
+    {
+      "path": "out/avatars/Charlie_Munger.png",
+      "size": 1360916,
+      "sha256": "717975fa001776137d4f79eecadcdc1dc2deaa26a4e2d2221405a2d1b60e1c18"
+    },
+    {
+      "path": "out/avatars/Elon_Musk.jpg",
+      "size": 15479,
+      "sha256": "6beb59155434f898ba869dc986ef3df2af134d86805981655894bc97f2af43aa"
+    },
+    {
+      "path": "out/avatars/Huang_Zheng.jpg",
+      "size": 855730,
+      "sha256": "794b3562c510e905d4420498d1f23d0c00e54cc8667a0de9d98009baeb05ecce"
+    },
+    {
+      "path": "out/avatars/Jack_Ma.jpg",
+      "size": 11183,
+      "sha256": "7b0a3353d252c94d46892c03ee7cdd0b3ef3d0544b0baedef5345b7993947f3d"
+    },
+    {
+      "path": "out/avatars/Jeff_Bezos.jpg",
+      "size": 27651,
+      "sha256": "fedb00e0ea0c143210ce84f3f8249ad36eb1f821b90d9862d66e62d28675a1d6"
+    },
+    {
+      "path": "out/avatars/Lei_Jun.jpg",
+      "size": 15863,
+      "sha256": "27f5bc44386b05dddcc905089b68e441d7cc24ecefdd963bc157782bb21ed419"
+    },
+    {
+      "path": "out/avatars/Li_Bin.jpg",
+      "size": 12965,
+      "sha256": "1516482a2b47a3353ecbc3296bd37833ca5938a124135d668f13804e8f4ffe2f"
+    },
+    {
+      "path": "out/avatars/Liu_Qiangdong.jpg",
+      "size": 15583,
+      "sha256": "79c21df1ed1f0f9d2e77c7e0bd1e1d04b69f9839f2f5a01e9cf46591f5de1f38"
+    },
+    {
+      "path": "out/avatars/Marc_Andreessen.jpg",
+      "size": 17170,
+      "sha256": "577212de94c58151060e40ff30c56225e9620807c9efa8a7ff28067b3dcc7e77"
+    },
+    {
+      "path": "out/avatars/Nassim_Taleb.png",
+      "size": 127121,
+      "sha256": "d4590dcbabf7d8edeb40092836d7c0eab6df2f62b19655d7c6a9858949b24ac4"
+    },
+    {
+      "path": "out/avatars/Naval_Ravikant.jpg",
+      "size": 22258,
+      "sha256": "df6708096b5f8f49d3d92e9941d1e962b065e0ba7f243a0f20d639fdf720a155"
+    },
+    {
+      "path": "out/avatars/Peter_Thiel.jpg",
+      "size": 14135,
+      "sha256": "bedb3274ccaca0a7fc46716501dfbbdc93b35f60fc51f566bad5cd5b9437f60d"
+    },
+    {
+      "path": "out/avatars/Pony_Ma.jpg",
+      "size": 15042,
+      "sha256": "5d33f6e2d7e70098b207a70fea2347bdd705a3a9b15d6801bdaf0559eb5a4876"
+    },
+    {
+      "path": "out/avatars/Ray_Dalio.jpg",
+      "size": 34424,
+      "sha256": "8c4d06bb67b3b637c807f26220ba901cf8efe81c9f937bc53b24a585d62509a6"
+    },
+    {
+      "path": "out/avatars/Reid_Hoffman.jpg",
+      "size": 109010,
+      "sha256": "89e26bacf3daf168ae5d42b2fe50dcf4ebdcf919b0c7aefe7f26288c7445b0bf"
+    },
+    {
+      "path": "out/avatars/Sam_Altman.png",
+      "size": 813968,
+      "sha256": "15e0ccc5637e7812b5a43e05cba8a56ab0a828df1900071ef9353879ff1783a1"
+    },
+    {
+      "path": "out/avatars/Shen_Nanpeng.jpg",
+      "size": 10702,
+      "sha256": "9a1ad630f3f2362939c8fcb4027a7577182ffbd690469a30fb7826d70b7f3d70"
+    },
+    {
+      "path": "out/avatars/Steve_Jobs.jpg",
+      "size": 17392,
+      "sha256": "b6f67b556564f117e4ff064e8988e7d70d1d0465964624dff47ce06bf6694fbf"
+    },
+    {
+      "path": "out/avatars/Wang_Xing.jpg",
+      "size": 12736,
+      "sha256": "50cb30e94c474e6a5cd323dbc3a8b16d08c474a5ca6393470c5cbf77df20805f"
+    },
+    {
+      "path": "out/avatars/Zhang_Lei.jpg",
+      "size": 15750,
+      "sha256": "e9c0c73d9518b7d0a370d4920cea00b4ff93fd982b7a48990d6b72fc5665e1c6"
+    },
+    {
+      "path": "out/avatars/Zhang_Yiming.jpg",
+      "size": 12801,
+      "sha256": "c58bcad441c37473c460e7720ad7f83352a18f1f42ba22b422d740d8e1038bf8"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-1-handbook.docx",
+      "size": 61030,
+      "sha256": "72ac738543d6537051afccc3ae37839f6f574c6d489b47ed57e939eae5f8490b"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-1-training.pptx",
+      "size": 356260,
+      "sha256": "d9aa04caba78c53d3fa8827432997f915dd881589cc423ecc8df9b0062609533"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-2-handbook.docx",
+      "size": 82941,
+      "sha256": "8acc5f09a2e62b7b2f54c5a05327c0cded607915c72476295d40c78457451c27"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-2-training.pptx",
+      "size": 414672,
+      "sha256": "d7368f6df2133d832da47d633614748a861dd6b61eb66eba6a10cc6d54165a78"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-3-handbook.docx",
+      "size": 68173,
+      "sha256": "732e50474bd0f7eb84dede383a976ca12778519b237b0a9b861b0e624d4ba7ab"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-3-training.pptx",
+      "size": 379220,
+      "sha256": "175ed1028b5ee904d1f6afd7dffb71836d0391fe5c4354a801c9b6b64a52e8a7"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-4-handbook.docx",
+      "size": 67539,
+      "sha256": "6e56c4015730169af2c32607489345aec1bd914d704d6c2e61bee9d996ce9670"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-4-training.pptx",
+      "size": 374328,
+      "sha256": "fa8ebb343a0ffe2cfe9669e6a2747fd41a03c814ed05ac6f0416f51b4fe885be"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-5-handbook.docx",
+      "size": 66617,
+      "sha256": "37b9792753e65fd31473cfa48c5663ca73101c84e96314c56961cb2afbe89a28"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-5-training.pptx",
+      "size": 365988,
+      "sha256": "132252bbfbd11ae573c93d583cfd8885b0ba4c07fa371c834aa53f3233d83aef"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-6-handbook.docx",
+      "size": 60399,
+      "sha256": "ba6d4fd3e92d1d0f69ac505f1a95943e4a138c2996d08f3a4a422f2e69cb4f14"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-6-training.pptx",
+      "size": 372594,
+      "sha256": "ecff04f604433191d65debaddec93f8844c72ff17bfd077475aa21a39dc5b248"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-7-handbook.docx",
+      "size": 59315,
+      "sha256": "4ea3327c5a6bfda76ea6e610375084821c4f8070bcbf3b322ce93f45360eb050"
+    },
+    {
+      "path": "out/course-assets/fde-chapter-7-training.pptx",
+      "size": 405266,
+      "sha256": "8c7872644ba9b9ce062484f6851e6acc4ba64f701485fb9da448c049325d176b"
+    },
+    {
+      "path": "out/favicon.svg",
+      "size": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "out/icons.svg",
+      "size": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "out/index.html",
+      "size": 473,
+      "sha256": "be008b9f0c39e98cd9ad5351cedab54e42b743a4689617d7db1c50a496d8cfe4"
+    },
+    {
+      "path": "package-lock.json",
+      "size": 40609,
+      "sha256": "91e5fd55242c12bcd056bd8c836a4f8ea27c9cd591e8879bc2da7017ce48da7c"
+    },
+    {
+      "path": "package.json",
+      "size": 901,
+      "sha256": "40c3b6798e065153e7dc5b110e1d9f5ecf98d77ac6a0de0e32cb929416ebadc3"
+    },
+    {
+      "path": "server/api-server.mjs",
+      "size": 27874,
+      "sha256": "2f405cd57d3cbb061657a97fcfef69ab63ec4fad2cd8f909998c6c824d8fba32"
+    },
+    {
+      "path": "server/asr-service.mjs",
+      "size": 9350,
+      "sha256": "4509af4e876a12adae008c25fdf107dae8534c4f3333b265d2579ad54d96b69c"
+    },
+    {
+      "path": "server/board-service.mjs",
+      "size": 4564,
+      "sha256": "6e52bc5cb24fc49216d7e31b4af3cca3dc2f7cacbfb1845bf41ddb1cd195be05"
+    },
+    {
+      "path": "server/commentary-service.mjs",
+      "size": 10371,
+      "sha256": "6da59819df9a0e73dfe04126b56de7b4139d6747a681a494c087533db488e426"
+    },
+    {
+      "path": "server/data-store.mjs",
+      "size": 27397,
+      "sha256": "f96e0f424258ed7d34e16e3a9030b245778fb96bb87b0b0e383c34da67baa6b4"
+    },
+    {
+      "path": "server/data/大咖角色库.json",
+      "size": 11301,
+      "sha256": "a7cace365f1125fefdef3fd0e7810e50ea07251ba92a2ecf8c80aa3b45bee5fc"
+    },
+    {
+      "path": "server/llm-router.mjs",
+      "size": 5687,
+      "sha256": "e5e4aacdeeb592fdd1aca8f4de7f5b941355e5db7999de806847033ccdc64ca2"
+    },
+    {
+      "path": "server/mail-cli.mjs",
+      "size": 7315,
+      "sha256": "241e884fc5a741feb4025973a2f211d11923cd97d6a55885b519c58c0ffa03c3"
+    },
+    {
+      "path": "server/material-service.mjs",
+      "size": 7736,
+      "sha256": "9f0dfd2328c927576e757431405af8a854caeeffaa3d9ad856f791d79e4d0695"
+    },
+    {
+      "path": "server/meeting-service.mjs",
+      "size": 11775,
+      "sha256": "eaa1e3cda9b15596e8aa17ab49cb176200d0e7b23ba8c83a87198acc781aa0b8"
+    },
+    {
+      "path": "server/quota.mjs",
+      "size": 1241,
+      "sha256": "f56dcd464d08f26b460fadd537e8f764cba1e4cc54028adc44461a57c375b830"
+    },
+    {
+      "path": "server/role-service.mjs",
+      "size": 5297,
+      "sha256": "63727a6c98d1c885d1c7854b3ad82653a7ab1b0353c035f75c1e24456ca253d4"
+    },
+    {
+      "path": "server/summary-service.mjs",
+      "size": 9460,
+      "sha256": "859c9fa0bfd4c82c0eafddeeef9b73f49fa764158a53fe5d4ab0c9238550443a"
+    },
+    {
+      "path": "server/transcribe-persist.mjs",
+      "size": 1289,
+      "sha256": "c61bccc9a08901928fb34746cb4d085c7a667f1a60671daa603fee68a9badd49"
+    },
+    {
+      "path": "server/transcript-service.mjs",
+      "size": 17412,
+      "sha256": "cab0394cfc5829cf9888c4d606d64e0e0765ad4165b3c12188adcf3d13db0472"
+    },
+    {
+      "path": "server/ws-hub.mjs",
+      "size": 1585,
+      "sha256": "4ed2560b59981105e70ed9818081a43d4deca080d186b181daebfd5a34e4e2fd"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "ai-board",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI 大咖会议私董会 · 虚拟董事会实时会议系统",
+  "scripts": {
+    "api": "node server/api-server.mjs",
+    "web": "vite",
+    "dev": "node scripts/dev.mjs",
+    "build": "node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build",
+    "preview": "vite preview",
+    "start": "node server/api-server.mjs",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^6.2.5",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.21.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "oxlint": "^1.69.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.0"
+  }
+}

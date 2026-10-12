@@ -55,8 +55,11 @@ function readZipEntries(buffer) {
   }
   if (eocdOffset < 0) return entries
   const entryCount = buffer.readUInt16LE(eocdOffset + 10)
+  if (entryCount > 10000) throw new Error('archive_entry_limit')
   let centralOffset = buffer.readUInt32LE(eocdOffset + 16)
+  let expandedBytes = 0
   for (let index = 0; index < entryCount; index += 1) {
+    if (centralOffset + 46 > buffer.length) throw new Error('invalid_archive')
     if (buffer.readUInt32LE(centralOffset) !== 0x02014b50) break
     const method = buffer.readUInt16LE(centralOffset + 10)
     const compressedSize = buffer.readUInt32LE(centralOffset + 20)
@@ -65,14 +68,21 @@ function readZipEntries(buffer) {
     const commentLength = buffer.readUInt16LE(centralOffset + 32)
     const localOffset = buffer.readUInt32LE(centralOffset + 42)
     const name = buffer.slice(centralOffset + 46, centralOffset + 46 + nameLength).toString('utf8')
+    if (localOffset + 30 > buffer.length) throw new Error('invalid_archive')
     const localNameLength = buffer.readUInt16LE(localOffset + 26)
     const localExtraLength = buffer.readUInt16LE(localOffset + 28)
     const dataStart = localOffset + 30 + localNameLength + localExtraLength
+    if (dataStart + compressedSize > buffer.length) throw new Error('invalid_archive')
     const compressed = buffer.slice(dataStart, dataStart + compressedSize)
     let data
-    if (method === 0) data = compressed
-    if (method === 8) data = inflateRawSync(compressed)
-    if (data) entries.set(name, data)
+    const relevant = /^(word\/(document|header\d+|footer\d+)|ppt\/slides\/slide\d+)\.xml$/.test(name)
+    if (relevant && method === 0) data = compressed
+    if (relevant && method === 8) data = inflateRawSync(compressed, { maxOutputLength: 5 * 1024 * 1024 })
+    if (data) {
+      expandedBytes += data.length
+      if (expandedBytes > 16 * 1024 * 1024) throw new Error('archive_expansion_limit')
+      entries.set(name, data)
+    }
     centralOffset += 46 + nameLength + extraLength + commentLength
   }
   return entries
@@ -109,7 +119,7 @@ function decodePdfLiteral(value) {
 function extractPdfText(buffer) {
   const raw = buffer.toString('latin1')
   const literalMatches = Array.from(raw.matchAll(/\(([^()]{2,500})\)\s*Tj/g)).map((match) => decodePdfLiteral(match[1]))
-  const arrayMatches = Array.from(raw.matchAll(/\[((?:\([^()]{1,500}\)|\s|-?\d+)+)\]\s*TJ/g)).map((match) => {
+  const arrayMatches = Array.from(raw.matchAll(/\[([^\[\]]{1,20000})\]\s*TJ/g)).map((match) => {
     return Array.from(match[1].matchAll(/\(([^()]{1,500})\)/g)).map((item) => decodePdfLiteral(item[1])).join('')
   })
   const hexMatches = Array.from(raw.matchAll(/<([0-9A-Fa-f]{4,})>\s*Tj/g)).map((match) => {

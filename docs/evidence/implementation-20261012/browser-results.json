@@ -1,0 +1,85 @@
+{
+  "controlled_model_fixture": true,
+  "real_models_tested": false,
+  "real_speech_tested": false,
+  "checks": [
+    {
+      "name": "网页注册与登录会话",
+      "passed": true
+    },
+    {
+      "name": "人工求助流式回复并保存引用",
+      "passed": true
+    },
+    {
+      "name": "网页纠错与并发版本修订",
+      "passed": true
+    },
+    {
+      "name": "网页上传原文件和提取文字",
+      "passed": true
+    },
+    {
+      "name": "网页开启自动建议，新发言触发并显示回复",
+      "passed": true
+    },
+    {
+      "name": "AI建议经人工确认形成共享决定",
+      "passed": true
+    },
+    {
+      "name": "外部Agent写入即时显示，无需刷新",
+      "passed": true
+    },
+    {
+      "name": "刷新恢复记录、修订、建议和资料",
+      "passed": true
+    },
+    {
+      "name": "生成并保存总结",
+      "passed": true
+    },
+    {
+      "name": "麦克风被拒后可重新收音、手动输入仍可用",
+      "passed": true
+    },
+    {
+      "name": "弹窗键盘焦点限制和Tab操作",
+      "passed": true
+    },
+    {
+      "name": "网页查看并撤销授权",
+      "passed": true
+    },
+    {
+      "name": "网页创建范围令牌，仅首次显示",
+      "passed": true
+    },
+    {
+      "name": "下载的Hermes Skill可用",
+      "passed": true
+    },
+    {
+      "name": "客户展示DOM及API响应均排除私有约束与建议",
+      "passed": true
+    },
+    {
+      "name": "390px移动端无横向溢出，记录与求助均可达",
+      "passed": true
+    },
+    {
+      "name": "768px平板布局无横向溢出",
+      "passed": true
+    },
+    {
+      "name": "客户模式提供私有建议回答、依据和待核实事项",
+      "passed": true
+    },
+    {
+      "name": "浏览器运行无未捕获JS错误",
+      "passed": true
+    }
+  ],
+  "uncaught_errors": [],
+  "unexpected_console_errors": []
+}

@@ -1,0 +1,18 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 1024,
+    "dpr": 1,
+    "body": 1440
+  },
+  "title_platform_fonts": [
+    {
+      "familyName": "Noto Sans CJK SC",
+      "postScriptName": "NotoSansCJKsc-Bold",
+      "isCustomFont": false,
+      "glyphCount": 8
+    }
+  ],
+  "text_contrast_failures": [],
+  "method": "Computed foreground/background WCAG ratio; readable text only, current desktop customer-coach state."
+}
