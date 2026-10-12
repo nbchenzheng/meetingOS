@@ -18,3 +18,20 @@ jobs:
       - run: npm test
       - run: npm run lint
       - run: npm run build
+
+  windows-script:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse local startup script with Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $scriptPath = Join-Path $env:GITHUB_WORKSPACE 'scripts/local-dev.ps1'
+          $null = [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors)
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          Write-Host "Windows PowerShell $($PSVersionTable.PSVersion): local-dev.ps1 parsed successfully."

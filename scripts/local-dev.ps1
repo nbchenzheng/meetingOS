@@ -9,23 +9,23 @@ $ErrorActionPreference = 'Stop'
 $meetingRepo = Split-Path -Parent $PSScriptRoot
 if (-not (Get-Command node -ErrorAction SilentlyContinue) -or
     -not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
-    throw '请先安装 Node.js 24 或更高版本，然后重新打开 PowerShell。'
+    throw 'Install Node.js 24 or newer, then reopen PowerShell.'
 }
 $meetingNodeMajor = & node -p "Number(process.versions.node.split('.')[0])"
-if ($LASTEXITCODE -ne 0 -or [int]$meetingNodeMajor -lt 24) { throw 'MeetingOS 需要 Node.js 24 或更高版本。' }
+if ($LASTEXITCODE -ne 0 -or [int]$meetingNodeMajor -lt 24) { throw 'MeetingOS requires Node.js 24 or newer.' }
 foreach ($meetingPort in @($ApiPort, $WebPort)) {
-    if ($meetingPort -lt 1024 -or $meetingPort -gt 65535) { throw '端口必须在 1024 到 65535 之间。' }
+    if ($meetingPort -lt 1024 -or $meetingPort -gt 65535) { throw 'Ports must be between 1024 and 65535.' }
     $meetingProbe = New-Object System.Net.Sockets.TcpClient
     try {
         $meetingConnect = $meetingProbe.ConnectAsync('127.0.0.1', $meetingPort)
         if ($meetingConnect.Wait(300) -and $meetingProbe.Connected) {
-            throw "端口 $meetingPort 已被占用；请用 -ApiPort 或 -WebPort 选择其他端口，不要停止未知进程。"
+            throw "Port $meetingPort is occupied. Select another -ApiPort or -WebPort; do not stop unknown processes."
         }
     } catch [System.AggregateException] {
         # Connection refused means the port is available.
     } finally { $meetingProbe.Dispose() }
 }
-if ($ApiPort -eq $WebPort) { throw 'API 与网页需要使用不同端口。' }
+if ($ApiPort -eq $WebPort) { throw 'API and web ports must be different.' }
 $meetingNames = @('PORT', 'VITE_PORT', 'NODE_ENV', 'MEETINGOS_PUBLIC_URL', 'AI_BOARD_DATA_DIR',
     'LINKHARBOR_API_KEY', 'LINKHARBOR_BASE_URL', 'WEI_LLM_API_KEY', 'WEI_LLM_BASE_URL',
     'MEETINGOS_GPT_MODEL', 'MEETINGOS_CLAUDE_MODEL', 'MEETINGOS_GEMINI_MODEL', 'MEETINGOS_DEEPSEEK_MODEL',
@@ -41,7 +41,7 @@ try {
             $meetingUrl = $meetingLines[$meetingIndex]
             if ($meetingUrl -notmatch '^https://') { continue }
             if ($meetingIndex + 1 -ge $meetingLines.Count -or $meetingLines[$meetingIndex + 1] -match '^https://') {
-                throw '凭证文档需要每个 URL 的下一行为对应 Key。'
+                throw 'Each URL in the credential file must be followed by its key.'
             }
             $meetingSecret = $meetingLines[$meetingIndex + 1]
             if ($meetingUrl.TrimEnd('/') -eq 'https://api.wei.run/v1') { $env:WEI_LLM_API_KEY = $meetingSecret }
@@ -57,7 +57,7 @@ try {
     $env:VITE_PORT = [string]$WebPort
     $env:NODE_ENV = 'development'
     $env:MEETINGOS_PUBLIC_URL = ''
-    if (-not $env:LOCALAPPDATA) { throw '缺少 Windows LOCALAPPDATA 目录。' }
+    if (-not $env:LOCALAPPDATA) { throw 'Windows LOCALAPPDATA is unavailable.' }
     $env:AI_BOARD_DATA_DIR = Join-Path $env:LOCALAPPDATA 'MeetingOS\development'
     $env:WEI_LLM_BASE_URL = 'https://api.wei.run/v1'
     $env:MEETINGOS_DEEPSEEK_MODEL = 'deepseek-v4-flash'
@@ -71,13 +71,13 @@ try {
     $env:ALIYUN_ASR_REGION = 'cn-beijing'
     if ($Install -or -not (Test-Path -LiteralPath (Join-Path $meetingRepo 'node_modules'))) {
         & npm.cmd ci --ignore-scripts --no-audit --no-fund
-        if ($LASTEXITCODE -ne 0) { throw '依赖安装失败。' }
+        if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
     }
-    Write-Host "本地开发：网页端口 $WebPort，API 端口 $ApiPort。Ctrl+C 停止。"
-    Write-Host '默认 DeepSeek Flash 走 wei.run；国外模型走 LinkHarbor；语音走阿里百炼。'
-    Write-Host 'Key 仅载入进程环境，不写入 .env 或 Git。'
+    Write-Host "Local development: web port $WebPort, API port $ApiPort. Press Ctrl+C to stop."
+    Write-Host 'DeepSeek Flash: wei.run. GPT/Claude/Gemini: LinkHarbor. ASR: Aliyun Bailian.'
+    Write-Host 'Keys are loaded into the process environment only, never .env or Git.'
     & npm.cmd run dev
-    if ($LASTEXITCODE -ne 0) { throw '本地服务未正常启动，请查看上面的错误。' }
+    if ($LASTEXITCODE -ne 0) { throw 'Local startup failed. Check the errors above.' }
 } finally {
     foreach ($meetingName in $meetingNames) { [Environment]::SetEnvironmentVariable($meetingName, $meetingPrevious[$meetingName], 'Process') }
     Pop-Location

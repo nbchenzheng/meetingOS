@@ -38,3 +38,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\local-dev.ps1 -Cre
 - 运行 `npm.cmd test`、`npm.cmd run lint`、`npm.cmd run build`。新增路由测试使用两个独立受控网关，检查日常模型、国外三模型、不跨网关兜底；ASR 测试使用本地假服务器，不能冒充真实识别质量验收。
 - 下一阶段：多人同会成员权限，长会议检索/压缩，离线幂等队列；后续再做 Agent 双向同步与旧数据迁移。用户已授权开发，不重复询问设计方向。
 - 生产部署、SSH 暂停。凭证、真实会议、上传、音频、令牌不得进入提交；历史 source-snapshots 的字节保持原样。
+
+## Windows PowerShell 5.1 编码修复（2026-10-13）
+
+原启动脚本的无 BOM UTF-8 中文在 Windows PowerShell 5.1 中被按本机 ANSI 编码误读，出现 ParserError，尚未执行到读取凭证。现将脚本的提示文字改为纯 ASCII，兼容 5.1 与新版 PowerShell，并加入真实 Windows runner 的 5.1 ParseFile 检查。
+
+已经克隆的用户运行 `git pull --ff-only` 后重试即可，不需要重新克隆或更改 Key 文件。完整 Windows 服务启动仍由本地验证，不以解析通过替代。
