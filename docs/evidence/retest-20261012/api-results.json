@@ -1,0 +1,268 @@
+{
+  "date": "2026-10-12",
+  "target": "source-snapshots/local-20261011/ai-board",
+  "source_commit": "d8a0f4538cacb4de79fba75036869a9d4ac04a89",
+  "real_model_calls": false,
+  "gateway": "loopback synthetic SSE only",
+  "production_accessed": false,
+  "checks": [
+    {
+      "name": "匿名创建会议",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "meeting_has_owner_or_workspace": false
+      }
+    },
+    {
+      "name": "另一无凭据客户端读取会议",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "brief_visible": true
+      }
+    },
+    {
+      "name": "匿名修改会议",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "changed": true
+      }
+    },
+    {
+      "name": "会议列表",
+      "goal_met": false,
+      "observed": {
+        "status": 404,
+        "top_level_keys": [
+          "ok",
+          "message"
+        ],
+        "expected_commentaries_present": null
+      }
+    },
+    {
+      "name": "转写独立读取",
+      "goal_met": false,
+      "observed": {
+        "status": 404,
+        "top_level_keys": [
+          "ok",
+          "message"
+        ],
+        "expected_commentaries_present": null
+      }
+    },
+    {
+      "name": "点评恢复路由",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "top_level_keys": [
+          "ok",
+          "meeting"
+        ],
+        "expected_commentaries_present": false
+      }
+    },
+    {
+      "name": "资料上传解析",
+      "goal_met": true,
+      "observed": {
+        "status": 200,
+        "exact_text_retained": true
+      }
+    },
+    {
+      "name": "转写类型和说话人保存",
+      "goal_met": false,
+      "observed": {
+        "saved_keys": [
+          "id",
+          "text",
+          "final",
+          "ts"
+        ]
+      }
+    },
+    {
+      "name": "角色流式请求 claude",
+      "goal_met": true,
+      "observed": {
+        "status": 200,
+        "mock_reply_received": true
+      }
+    },
+    {
+      "name": "角色流式请求 gpt55",
+      "goal_met": true,
+      "observed": {
+        "status": 200,
+        "mock_reply_received": true
+      }
+    },
+    {
+      "name": "角色上下文 claude-opus-4-8",
+      "goal_met": false,
+      "observed": {
+        "model_route": "claude-opus-4-8",
+        "brief_in_prompt": false,
+        "document_in_prompt": true,
+        "transcript_in_prompt": true,
+        "previous_opinion_in_prompt": false
+      }
+    },
+    {
+      "name": "角色上下文 gpt-5.5",
+      "goal_met": false,
+      "observed": {
+        "model_route": "gpt-5.5",
+        "brief_in_prompt": false,
+        "document_in_prompt": true,
+        "transcript_in_prompt": true,
+        "previous_opinion_in_prompt": false
+      }
+    },
+    {
+      "name": "重复转写幂等",
+      "goal_met": false,
+      "observed": {
+        "before": 1,
+        "after": 2
+      }
+    },
+    {
+      "name": "空转写拒绝",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "response": {
+          "ok": true,
+          "entry": null
+        }
+      }
+    },
+    {
+      "name": "服务端记录进入总结",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "ok": true,
+        "transcript_marker_in_prompt": false,
+        "has_no_transcript_placeholder": true
+      }
+    },
+    {
+      "name": "补齐类型后总结上下文",
+      "goal_met": true,
+      "observed": {
+        "ok": true,
+        "transcript_marker_in_prompt": true,
+        "independent_meeting_avoids_cached_result": true
+      }
+    },
+    {
+      "name": "修订后总结缓存失效",
+      "goal_met": false,
+      "observed": {
+        "cached": true,
+        "new_gateway_call": false
+      }
+    },
+    {
+      "name": "结构化纪要和来源校验",
+      "goal_met": true,
+      "observed": {
+        "ok": true,
+        "valid_source_retained": true,
+        "invented_source_removed": true
+      }
+    },
+    {
+      "name": "导图响应",
+      "goal_met": true,
+      "observed": {
+        "ok": true,
+        "leaf_entryIds": null
+      }
+    },
+    {
+      "name": "导图保留有效来源锚点",
+      "goal_met": false,
+      "observed": {
+        "valid_id_sent": "audit_e1",
+        "returned_entryIds": null
+      }
+    },
+    {
+      "name": "轻量点评包含会前约束和资料",
+      "goal_met": false,
+      "observed": {
+        "ok": true,
+        "brief_in_prompt": false,
+        "document_in_prompt": false,
+        "after_count": 0,
+        "before_count": 0
+      }
+    },
+    {
+      "name": "长会议保留全部原稿",
+      "goal_met": false,
+      "observed": {
+        "submitted": 201,
+        "retained": 200,
+        "first_retained_id": "long1"
+      }
+    },
+    {
+      "name": "纯转写重启持久化",
+      "goal_met": false,
+      "observed": {
+        "before_restart": 1,
+        "after_restart": 0,
+        "no_other_write_after_transcript": true
+      }
+    },
+    {
+      "name": "会议更新顺带保存转写",
+      "goal_met": true,
+      "observed": {
+        "after_restart": 1
+      }
+    },
+    {
+      "name": "后端自动点评路径",
+      "goal_met": true,
+      "observed": {
+        "commentaries_generated": 1,
+        "mock_gateway_only": true
+      }
+    },
+    {
+      "name": "每次客户提问都有自动回复",
+      "goal_met": false,
+      "observed": {
+        "before_second_question": 1,
+        "after_second_question": 1,
+        "cooldown_ms_from_source": 60000
+      }
+    },
+    {
+      "name": "发言角色属于该会议",
+      "goal_met": false,
+      "observed": {
+        "status": 200,
+        "role_was_selected": false
+      }
+    },
+    {
+      "name": "Markdown 导出",
+      "goal_met": true,
+      "observed": {
+        "status": 200,
+        "transcript_in_export": true
+      }
+    }
+  ]
+}

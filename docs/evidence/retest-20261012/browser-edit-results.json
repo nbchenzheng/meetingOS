@@ -1,0 +1,9 @@
+{
+  "synthetic_speech_only": true,
+  "real_audio_recognized": false,
+  "ui_corrected_text": true,
+  "stored_original": true,
+  "stored_corrected": false,
+  "export_original": true,
+  "export_corrected": false
+}

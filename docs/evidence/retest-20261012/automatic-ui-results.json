@@ -1,0 +1,33 @@
+{
+  "synthetic_recognition": true,
+  "real_audio_or_model_quality_tested": false,
+  "first_question_requests": [
+    {
+      "path": "/api/meetings/f1f29639/auto-speakers",
+      "body": {
+        "transcriptText": ""
+      }
+    }
+  ],
+  "all_requests": [
+    {
+      "path": "/api/meetings/f1f29639/auto-speakers",
+      "body": {
+        "transcriptText": ""
+      }
+    },
+    {
+      "path": "/api/meetings/f1f29639/auto-speakers",
+      "body": {
+        "transcriptText": "方案问题 FIRST_AUTO_QUESTION：能否一周交付？"
+      }
+    },
+    {
+      "path": "/api/meetings/f1f29639/speak",
+      "body": {
+        "roleId": "gpt55",
+        "trigger": "auto"
+      }
+    }
+  ]
+}

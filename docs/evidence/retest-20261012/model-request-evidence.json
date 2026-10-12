@@ -1,0 +1,115 @@
+{
+  "real_models_called": false,
+  "all_payloads_are_synthetic": true,
+  "captured_at": "local loopback gateway",
+  "requests": [
+    {
+      "kind": "opinion",
+      "model": "claude-opus-4-8",
+      "user_message": "【实时会议转录】\nTRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\n\n【背景资料】\n【资料：合成产品资料.txt】\nDOC_ONLY_DEPLOY_3W：部署最短三周，产品不支持离线识别。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": true,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "opinion",
+      "model": "gpt-5.5",
+      "user_message": "【实时会议转录】\nTRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\n\n【背景资料】\n【资料：合成产品资料.txt】\nDOC_ONLY_DEPLOY_3W：部署最短三周，产品不支持离线识别。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": true,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "summary",
+      "model": "deepseek-v4-pro",
+      "user_message": "会议标题：另一个匿名客户端改名\n会议时间：\n\n转录内容：\n（无转录内容）",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": false,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "summary",
+      "model": "deepseek-v4-pro",
+      "user_message": "会议标题：补齐类型的独立总结\n会议时间：\n\n转录内容：\n[客户] TRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\n[客户] TRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "refine",
+      "model": "deepseek-v4-pro",
+      "user_message": "- [id=audit_e1] [2026-10-12T06:04:43.780Z] [客户] TRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\n- [id=audit_e1] [2026-10-12T06:04:43.805Z] [客户] TRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "mindmap",
+      "model": "deepseek-v4-pro",
+      "user_message": "TRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "commentary",
+      "model": "deepseek-v4-pro",
+      "user_message": "会议主题：客户会谈\n转录片段：\nTRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "opinion",
+      "model": "claude-opus-4-8",
+      "user_message": "【实时会议转录】\n风险、安全、合规问题需要及时分析。\n\n【背景资料】\n（无上传资料）",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": false,
+        "TRANSCRIPT_ONLY_PROMISE_14W": false,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    },
+    {
+      "kind": "opinion",
+      "model": "deepseek-v4-pro",
+      "user_message": "【实时会议转录】\nTRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\nTRANSCRIPT_ONLY_PROMISE_14W：我们准备承诺一周上线，成本14万元。\n\n【背景资料】\n【资料：合成产品资料.txt】\nDOC_ONLY_DEPLOY_3W：部署最短三周，产品不支持离线识别。",
+      "markers": {
+        "BRIEF_ONLY_LIMIT_120K": false,
+        "DOC_ONLY_DEPLOY_3W": true,
+        "TRANSCRIPT_ONLY_PROMISE_14W": true,
+        "LOCAL_OPINION_MARK": false,
+        "EDITED_ONLY_BUDGET_11W": false
+      }
+    }
+  ]
+}

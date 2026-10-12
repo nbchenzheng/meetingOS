@@ -46,6 +46,8 @@ npm run dev
 
 服务器备份来源与验证见 [docs/backup.md](docs/backup.md)，本地工程恢复与差异见 [docs/source-recovery.md](docs/source-recovery.md)，功能分析见 [docs/product-audit.md](docs/product-audit.md)。构建和基础接口通过，不代表真实音频、模型、邮件或浏览器完整交互已经验收。
 
+2026-10-12 已对恢复的本地版本执行实际页面与接口复测，详见 [带截图的重新测试报告](docs/product-retest-20261012.md)。记录了 23 张截图、19 个现有单测和 28 项隔离接口检查；真实音频、模型质量和邮件发送仍未验收。
+
 ## SSH 与后续部署
 
 用户已从 Windows 成功执行 `ssh ubuntu@101.35.232.194 -p 22`。当前 Codex 云任务的 SSH 连接仍未成功；用户已决定暂缓 SSH 设置，待开发方案确定后继续。

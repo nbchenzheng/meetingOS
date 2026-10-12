@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-12",
+  "source_commit": "d8a0f4538cacb4de79fba75036869a9d4ac04a89",
+  "target": "source-snapshots/local-20261011/ai-board",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "browser": "Chromium via Python Playwright, isolated cloud browser profile",
+  "build_passed": true,
+  "artifacts": [
+    {
+      "path": "out/assets/index-BRK4FwEI.js",
+      "bytes": 269784,
+      "sha256": "91ed51298483af3475b1963d18b4642dce4edbaec479b38d568f415ddd87c687"
+    },
+    {
+      "path": "out/assets/index-_lfPI7VS.css",
+      "bytes": 39465,
+      "sha256": "88fef5732115337988b60c19f384bbdd808db4620ae813ed3789049ce86573e8"
+    }
+  ],
+  "existing_unit_tests": [
+    {
+      "command": "node --test src/lib/api.test.ts src/lib/email.test.ts",
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "command": "node --experimental-test-module-mocks --test server/test_commentary.mjs server/test_wshub.mjs",
+      "passed": 10,
+      "failed": 0
+    }
+  ],
+  "api_checks": 28,
+  "real_audio_recognized": false,
+  "real_models_called": false,
+  "external_email_sent": false,
+  "production_accessed": false,
+  "screen_reader_audit_completed": false,
+  "synthetic_speech_recognition_injected": true,
+  "upload_503_simulated": true,
+  "screenshots": [
+    {
+      "path": "screenshots/01-preparation-desktop.png",
+      "bytes": 634570,
+      "sha256": "ab15313436a9cd8dbeda3ca7ba782b7a6ca5907ed6ae500bc3b8d1658235c0cb",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/02-preparation-filled.png",
+      "bytes": 649150,
+      "sha256": "82fbc1a84ccb3e3a076a2a46d9cf8097eff5018efc9a408d434827994662401c",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/03-meeting-empty.png",
+      "bytes": 522277,
+      "sha256": "ca3b98a72739b90b687b53daeca7243fa9b96bfd358f19454328f067021d3b82",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/04-manual-ai-fallback.png",
+      "bytes": 536447,
+      "sha256": "8d525aed5e990e4b9ab0ae9d7395848b51d56832cd1c7796bf625e6609b8635d",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/05-microphone-denied.png",
+      "bytes": 605688,
+      "sha256": "0a8145145965f6bd754844fe6a586296cc5c9da8dd881a23b2408ac7f41c4daa",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/06-smart-minutes-empty.png",
+      "bytes": 600135,
+      "sha256": "3c08a26c198f418b9f0403b6b29cf9f5498ee76008ef7e361a04d2fd5d80934b",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/07-summary-before-generation.png",
+      "bytes": 446671,
+      "sha256": "ba6931e19c855fe429c9e9b01317f825940cca5af296f55d9d652b2f5a389136",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/08-summary-degraded.png",
+      "bytes": 451556,
+      "sha256": "9341389446aec187943bb2653ea7de2c20b123e310743113ba2059222ad77c3e",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/09-return-to-meeting-lost-timeline.png",
+      "bytes": 519120,
+      "sha256": "09fb04e48f2b93de0b9a3ca5acbc603b03eb903de560207c704fd7e951816b20",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/10-export-menu.png",
+      "bytes": 621579,
+      "sha256": "9cc26076b81b7626148ddc6ff8523c1e763dfc491a43128bd1f9d20c7909ccaf",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/11-meeting-mobile-overflow.png",
+      "bytes": 344674,
+      "sha256": "40347ee6e54972273539bcec8003ae99f9c0fe46ff793e5175239fc148f8a4ae",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/12-synthetic-human-transcript.png",
+      "bytes": 644815,
+      "sha256": "579ab1440cffade5341b93d085819e5ce2875630352ee3ed9e172d971e0689fc",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/13-transcript-inline-edit.png",
+      "bytes": 672362,
+      "sha256": "b6cd399ffee23de8d378dba467416e05c662c4b4a26caa203fee39286ddb0495",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/14-transcript-edited.png",
+      "bytes": 643779,
+      "sha256": "2f2ee4b752793d2273bc745dffec76fb76599d6aece0379f5e14a80ed7bc8df4",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/15-summary-with-transcript-no-model.png",
+      "bytes": 453364,
+      "sha256": "dde1177c93134bcae097797e545b20b5a0f0f9e6f1ebd0a79cf38c779679f128",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/16-meeting-mobile-without-error.png",
+      "bytes": 289303,
+      "sha256": "de7f344cf4551cb113f72a52d8db5b109b2f1d9d6de8f38eb80f010f8c64ba88",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/17-refresh-loses-meeting-mobile.png",
+      "bytes": 212134,
+      "sha256": "25f988568e18bd6876405737e06c8032ee87f1702667f17028414d3c2159d1cf",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/18-custom-role-dialog.png",
+      "bytes": 256157,
+      "sha256": "06ed8a3b8ce2e7a71e7afd08b1a8ef1767e85337ec4bd825e3caefd26b5d756d",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/19-custom-role-added.png",
+      "bytes": 504588,
+      "sha256": "1ea2977e6eab8439ff722d5072d138b3f16d9d63f16cf1e0df6f387aa1105478",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/20-automatic-ui-synthetic.png",
+      "bytes": 570269,
+      "sha256": "009e47144351ac79ebfc3baf33065737c7d0cc90883f081a3e8886359f01145b",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/21-oversized-file-blocked.png",
+      "bytes": 623953,
+      "sha256": "adec6d42a8b871a378c0f6dacc79809adf9de5e843f1436bb528968b532c2fc3",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/22-upload-failure.png",
+      "bytes": 621682,
+      "sha256": "3304b5f84278bfaca1bdcf6e1a9c5c5bd769903a6760a551944d7646075216dd",
+      "visually_inspected": true
+    },
+    {
+      "path": "screenshots/23-agent-write-not-visible-to-human.png",
+      "bytes": 497236,
+      "sha256": "77b722a645b7a7a264ff65e1317c127fab06825e63a3be816c0e94106554d8ec",
+      "visually_inspected": true
+    }
+  ]
+}

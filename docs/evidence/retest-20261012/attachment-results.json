@@ -1,0 +1,7 @@
+{
+  "oversize_blocked": true,
+  "oversize_error": "⚠️\n附件「超限合成资料.txt」过大（16.0 MB），单份资料上限 15.0 MB。建议压缩或拆分为多份后重试。",
+  "simulated_failure_creates_meeting_count": 1,
+  "failure_message": "⚠️\n部分资料解析失败：「合成故障资料.txt」：合成上传故障。会议已创建，可移除问题附件后重新进入。",
+  "after_retry_meeting_count": 2
+}

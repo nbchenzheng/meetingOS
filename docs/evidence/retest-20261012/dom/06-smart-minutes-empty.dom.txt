@@ -1,0 +1,28 @@
+- button "← 准备"
+- button "结束会议"
+- text: 麦克风已关闭
+- button "🎙️ 开始收音"
+- button "浏览器语音"
+- button "阿里云实时"
+- text: 自动发言 无法访问麦克风（需 HTTPS 或 localhost 安全上下文，并授予权限） 内部计划评审 · 合成测试 LIVE ▾ 会议标题：
+- textbox "会议标题": 内部计划评审 · 合成测试
+- text: 项目简报：
+- textbox "项目背景、当前议题、希望大咖聚焦的问题…": 预算上限12万元，交付不得晚于三周；BRIEF_ONLY_LIMIT_120K。请及时指出计划冲突。
+- text: 🔍
+- textbox "搜索发言 / 纪要 / 导图… (⌘K)":
+  - /placeholder: 搜索发言 / 纪要 / 导图…  (⌘K)
+- button "导出 ▾"
+- tablist "会议室视图切换":
+  - tab "发言区"
+  - tab "智能纪要" [selected]
+- tabpanel "智能纪要": 尚未整理 AI 整理版生成中… 暂无导图 （暂无思维导图，会议进行数分钟后将自动生成） 实时反馈 0 点评中 会议进行中，实时点评将自动出现在这里（点开关可静音）。
+- text: 点击「开始收音」用浏览器实时转写（Chrome/Edge）
+- heading "大咖意见反馈" [level=2]
+- text: 3 位 点击「💬 发言」让大咖实时表态（自动发言开关在上方） C Claude Anthropic 大模型 旁听中
+- button "💬 发言"
+- text: G GPT-5.5 OpenAI 大模型 旁听中
+- button "💬 发言"
+- img "乔布斯"
+- text: 乔布斯 产品极致主义者 旁听中
+- button "💬 发言"
+- text: + 新建大咖

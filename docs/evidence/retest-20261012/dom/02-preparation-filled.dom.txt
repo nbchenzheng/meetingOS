@@ -1,0 +1,53 @@
+- heading "AI 大咖会议私董会" [level=1]
+- paragraph: 把会议室变成虚拟董事会：自定义议题、上传资料、邀请大咖，进入会议后实时转写并收集董事式意见。
+- heading "① 会议标题" [level=3]
+- textbox "如：星河智能 · A轮战略私董会": 内部计划评审 · 合成测试
+- heading "② 项目简报（可选，将作为大咖发言的背景）" [level=3]
+- textbox "描述项目背景、当前议题、希望大咖聚焦的问题…": 预算上限12万元，交付不得晚于三周；BRIEF_ONLY_LIMIT_120K。请及时指出计划冲突。
+- heading "③ 参会大咖 3 / 22" [level=3]
+- text: C Claude Anthropic 大模型 ✓ G GPT-5.5 OpenAI 大模型 ✓
+- img "乔布斯"
+- text: 乔布斯 产品极致主义者 ✓
+- img "马斯克"
+- text: 马斯克 第一性原理工程师
+- img "纳瓦尔"
+- text: 纳瓦尔 杠杆与复利思考者
+- img "蒂尔"
+- text: 蒂尔 垄断式创新者
+- img "张一鸣"
+- text: 张一鸣 算法理性派
+- img "王兴"
+- text: 王兴 无限游戏操盘手
+- img "马云"
+- text: 马云 价值观驱动者
+- img "马化腾"
+- text: 马化腾 产品体验派
+- img "雷军"
+- text: 雷军 极致性价比派
+- img "刘强东"
+- text: 刘强东 重资产执行派
+- img "黄峥"
+- text: 黄峥 反共识效率派
+- img "张磊"
+- text: 张磊 长期价值投资者
+- img "沈南鹏"
+- text: 沈南鹏 赛道投资人
+- img "李斌"
+- text: 李斌 用户企业派
+- img "奥尔特曼"
+- text: 奥尔特曼 指数技术派
+- img "贝佐斯"
+- text: 贝佐斯 客户痴迷者
+- img "霍夫曼"
+- text: 霍夫曼 网络效应派
+- img "安德森"
+- text: 安德森 软件颠覆者
+- img "霍洛维茨"
+- text: 霍洛维茨 硬仗管理者
+- img "切斯基"
+- text: 切斯基 设计驱动者
+- heading "④ 会议资料上传" [level=3]
+- button "📎 选择资料文件"
+- text: 支持 .txt / .md / .pdf / .docx（单份 ≤ 15.0 MB） 📄 产品与客户背景.txt 114 B
+- button "移除"
+- button "进入会议 →"

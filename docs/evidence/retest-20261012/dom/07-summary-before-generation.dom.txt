@@ -1,0 +1,7 @@
+- button "← 会议"
+- text: 内部计划评审 · 合成测试 已生成会议总结 会议总结
+- button "获取总结报告"
+- text: 点击「获取总结报告」生成六要素会议总结。 发送会议总结到邮箱
+- textbox "发送会议总结到邮箱":
+  - /placeholder: boss@example.com
+- button "发送" [disabled]

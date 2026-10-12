@@ -1,0 +1,30 @@
+{
+  "roleChips": 22,
+  "keyboardRoleChips": 0,
+  "inputNames": [
+    {
+      "tag": "INPUT",
+      "associatedLabels": 0,
+      "ariaLabel": null,
+      "placeholder": "如：星河智能 · A轮战略私董会"
+    },
+    {
+      "tag": "TEXTAREA",
+      "associatedLabels": 0,
+      "ariaLabel": null,
+      "placeholder": "描述项目背景、当前议题、希望大咖聚焦的问题…"
+    }
+  ],
+  "auto_switch": {
+    "tag": "LABEL",
+    "tabIndex": -1,
+    "role": null,
+    "inputCount": 0
+  },
+  "collapsed_brief_fields": {
+    "maxHeight": "0px",
+    "inert": false,
+    "ariaHidden": null,
+    "focusableInputs": 2
+  }
+}

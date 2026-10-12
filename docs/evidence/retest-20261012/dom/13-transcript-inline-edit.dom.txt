@@ -1,0 +1,50 @@
+- button "← 准备"
+- button "结束会议"
+- text: 正在收音…
+- button "⏹ 停止收音"
+- button "浏览器语音" [disabled]
+- button "阿里云实时" [disabled]
+- text: 自动发言 无法访问麦克风（需 HTTPS 或 localhost 安全上下文，并授予权限） 内部计划评审 · 合成测试 LIVE ▾ 会议标题：
+- textbox "会议标题": 内部计划评审 · 合成测试
+- text: 项目简报：
+- textbox "项目背景、当前议题、希望大咖聚焦的问题…": 预算上限12万元，交付不得晚于三周；BRIEF_ONLY_LIMIT_120K。请及时指出计划冲突。
+- text: 🔍
+- textbox "搜索发言 / 纪要 / 导图… (⌘K)":
+  - /placeholder: 搜索发言 / 纪要 / 导图…  (⌘K)
+- button "Claude 100%"
+- button "导出 ▾"
+- tablist "会议室视图切换":
+  - tab "发言区" [selected]
+  - tab "智能纪要"
+- tabpanel "发言区":
+  - tablist "标签筛选":
+    - tab "全部 2" [selected]
+    - tab "结论 0"
+    - tab "待办 0"
+    - tab "疑问 0"
+    - tab "重点 0"
+  - checkbox "选择摘录"
+  - text: 💬 Claude
+  - button "重命名": ▾
+  - button "打标签": 🏷
+  - button "纠错": ✎
+  - text: （本地兜底模式）Claude：围绕「风险、合规、安全、伦理、结构化、权衡、责任」，我倾向先小步快跑验证假设，用真实数据替代直觉，再谈规模化。
+  - checkbox "选择摘录"
+  - text: 麦克风
+  - button "重命名": ▾
+  - button "打标签": 🏷
+  - button "纠错": ✎
+  - text: 客户：能否一周部署并支持离线语音？ HUMAN_ONLY_CLIENT_Q1。
+  - textbox: 客户：能否一周部署并支持离线语音？ HUMAN_ONLY_CLIENT_Q1。
+  - button "取消"
+  - button "保存"
+- text: 实时转写进行中，可随时点击大咖「💬 发言」
+- heading "大咖意见反馈" [level=2]
+- text: 3 位 点击「💬 发言」让大咖实时表态（自动发言开关在上方） C Claude Anthropic 大模型 旁听中
+- button "💬 发言"
+- text: G GPT-5.5 OpenAI 大模型 旁听中
+- button "💬 发言"
+- img "乔布斯"
+- text: 乔布斯 产品极致主义者 旁听中
+- button "💬 发言"
+- text: + 新建大咖
