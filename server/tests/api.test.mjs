@@ -433,6 +433,27 @@ test("过期授权拒绝；完整权限 Agent 也不能把私有记录公开或�
     403,
   );
   assert.equal((await request("/tokens", undefined, { headers })).status, 403);
+  assert.equal(
+    (
+      await request(
+        "/meetings/" + meeting.id + "/events",
+        { type: "decision", text: "未经确认的决定" },
+        { headers },
+      )
+    ).data.code,
+    "HUMAN_CONFIRMATION_REQUIRED",
+  );
+  const confirmed = await event("人类确认的决定", { type: "decision" });
+  assert.equal(
+    (
+      await request(
+        "/meetings/" + meeting.id + "/events/" + confirmed.id,
+        { revision: 1, text: "Agent覆盖决定" },
+        { method: "PATCH", headers },
+      )
+    ).data.code,
+    "HUMAN_CONFIRMATION_REQUIRED",
+  );
   app.store.db
     .prepare("UPDATE agent_tokens SET expires_at=? WHERE hash=?")
     .run(Date.now() - 1, digest(token.secret));

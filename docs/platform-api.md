@@ -23,7 +23,7 @@ Node24，单实例SQLite。前缀 `/api/v1`，JSON请求/响应。除注册/登�
 | `/meetings/{id}/assistant` | POST | advice/summary；支持Accept:text/event-stream |
 | `/meetings/{id}/export` | GET | Markdown导出；默认customer，internal需private:read |
 
-事件类型speech/note/decision/action/advice/summary。POST人工/Agent不能直接写summary；模型总结由助手接口生成。advice强制私有。相同ID与相同内容重试返回原记录，不追加；同ID不同内容409。修订需提供当前revision，过期409。
+事件类型speech/note/decision/action/advice/summary。POST人工/Agent不能直接写summary；模型总结由助手接口生成。advice强制私有。Agent不能直接创建或修改已确认决定/行动项，应先提交私有建议等待人类采纳。相同ID与相同内容重试返回原记录，不追加；同ID不同内容409。修订需提供当前revision，过期409。
 
 客户展示、事件分页、变化流可带 `audience=customer`。服务器排除私有事件/约束，并去掉原始旧文和附加引用元数据。共享改私有时发出 `event.removed`；重连按当前可见性投影，不重放已转为私有的旧公开文字。人类私有记录的公开转换必须显式操作；Agent不能执行该转换。
 

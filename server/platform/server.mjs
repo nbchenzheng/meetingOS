@@ -393,6 +393,15 @@ export function createMeetingServer({
       }
       if (method === "POST" && !item) {
         const input = await body(req);
+        if (
+          principal.kind === "agent" &&
+          ["decision", "action"].includes(input.type)
+        )
+          throw new ApiError(
+            403,
+            "HUMAN_CONFIRMATION_REQUIRED",
+            "已确认决定和行动项需要由人类确认；Agent 请提交私有建议",
+          );
         if (input.type === "advice") input.visibility = "private";
         if (input.visibility === "private" && !auth.canPrivateWrite(principal))
           throw new ApiError(
@@ -422,6 +431,15 @@ export function createMeetingServer({
         const previous = store.event(id, item);
         if (!previous || !visibleEvent(previous, principal))
           throw new ApiError(404, "EVENT_NOT_FOUND", "记录不存在或不可访问");
+        if (
+          principal.kind === "agent" &&
+          ["decision", "action"].includes(previous.type)
+        )
+          throw new ApiError(
+            403,
+            "HUMAN_CONFIRMATION_REQUIRED",
+            "Agent 不能修改已确认决定或行动项，请提交新的私有建议",
+          );
         const input = await body(req);
         if (
           (previous.visibility === "private" ||
