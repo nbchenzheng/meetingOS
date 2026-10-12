@@ -1,0 +1,84 @@
+{
+  "real_gateway": true,
+  "synthetic_meeting_inputs": true,
+  "real_audio_tested": false,
+  "initial_profile": [
+    {
+      "role": "gpt55",
+      "status": "failed",
+      "error": "MODEL_UPSTREAM_ERROR",
+      "firstTokenMs": null,
+      "elapsedMs": 2919,
+      "answer": "",
+      "privateSaved": false,
+      "sources": []
+    },
+    {
+      "role": "claude",
+      "model": "claude-opus-4-8-aws",
+      "status": "completed",
+      "error": null,
+      "firstTokenMs": 13977,
+      "elapsedMs": 14008,
+      "answer": "事实冲突 [brief]：\n- 预算：上限12万，报价14万，缺口2万。\n- 交期：标准部署≥三周，计划5天内交付，不可行。\n- 责任：负责人未定。\n\n建议：先定负责人，与供应商谈判降价或缩减范围至12万内；交期二选一——延期至三周，或拆分最小可用版本先交。\n追问：下周五是硬性截止，还是可协商？[brief]",
+      "privateSaved": true,
+      "sources": [
+        "brief"
+      ]
+    },
+    {
+      "role": "charlie_munger",
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "error": null,
+      "firstTokenMs": 17957,
+      "elapsedMs": 19117,
+      "answer": "事实：[brief] 显示预算上限12万 vs 报价14万，超2万；标准部署≥3周 vs 5天后交付，缺口≥16天；责任人未定。  \n推断：强行赶工可能推高成本并伤害质量。  \n建议：先不签约，指定唯一责任人，令其在“追加预算或延期交付”中书面二选一。  \n必要追问：销售承诺5天交付的证据是什么？谁有权批准变更？",
+      "privateSaved": true,
+      "sources": [
+        "brief"
+      ]
+    }
+  ],
+  "alternative_profile": [
+    {
+      "role": "gpt55",
+      "model": "gpt-5.6-sol-lh1",
+      "status": "completed",
+      "error": null,
+      "firstTokenMs": 8447,
+      "elapsedMs": 10008,
+      "answer": "事实：报价14万，超预算2万；部署至少3周，与5天后交付冲突；负责人未定，报价及工期依据待核实[brief]。推断：现方案无法兼顾预算与交期。建议：先确认决策人，再核价并拆分最小验收范围，协商分期交付或追加预算。必要追问：谁负责并有权批准预算或范围变更？",
+      "privateSaved": true,
+      "sources": [
+        "brief"
+      ]
+    },
+    {
+      "role": "claude",
+      "model": "claude-sonnet-5-aws",
+      "status": "completed",
+      "error": null,
+      "firstTokenMs": 14925,
+      "elapsedMs": 14946,
+      "answer": "冲突（事实）：预算上限12万元，供应商报价14万元，缺口2万元 [brief]；标准部署需三周，但销售承诺下周五交付，仅剩五天，工期压缩超80% [brief]；且负责人未确认 [brief]。\n\n推断：若强行按五天交付，大概率需跳过部分验收或测试环节，带来质量与安全风险；预算缺口若未解决，供应商可能缩减交付范围或后续追加费用。\n\n建议（下一步）：\n1. 立即指定项目负责人，明确责任链；\n2. 由负责人牵头，与销售、供应商三方核实：能否分阶段交付（先上线核心功能，后续补全），或申请预算追加/价格谈判；\n3. 若五天工期不可行，书面调整销售承诺的交付日期，避免对外违约。\n\n必要追问：销售对下周五交付的承诺是否已对客户/业务方正式确认？若无法如期，是否有可接受的延期或分阶段方案？\n\n待核实：供应商14万元报价是否包含三周工期内的全部交付内容，需与供应商确认 [brief]。",
+      "privateSaved": true,
+      "sources": [
+        "brief"
+      ]
+    },
+    {
+      "role": "charlie_munger",
+      "model": "deepseek-v4-flash",
+      "status": "completed",
+      "error": null,
+      "firstTokenMs": 9353,
+      "elapsedMs": 10660,
+      "answer": "根据[brief]：预算上限12万，供应商报价14万，超支2万；标准部署至少三周，销售计划下周五交付仅剩5天，时间缺口至少16天；且尚未确认负责人，责任悬空。事实已明确冲突，若硬推进，大概率验收失败。\n\n建议下一步：先指定唯一负责人，由其与供应商谈判压缩范围/价格，同时与销售重新协商可接受的最迟交付日。必要追问：当前谁有权批准追加预算或调整交期？未明确前，不要盲目安排工作。",
+      "privateSaved": true,
+      "sources": [
+        "brief"
+      ]
+    }
+  ]
+}

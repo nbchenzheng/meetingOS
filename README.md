@@ -67,3 +67,5 @@ PORT=3168 AI_BOARD_DATA_DIR=/tmp/meetingos-dev-data npm start
 本轮仅在开发分支工作，没有部署生产。SSH设置仍暂停；[SSH说明](deploy/SSH.md)只是此前保留的说明。后续发布必须先验证Node24、HTTPS来源设置、邀请码、模型、数据迁移与回滚，只操作会议项目，不覆盖共享Nginx或其他站点配置。
 
 2026-10-12 后续开发：新增附件隐私、参与分析开关、原文件删除与实时移除；连续发言自动建议最多等待八秒，会议结束停止自动分析。执行记录见 [后续开发验证](docs/development-validation-20261012.md)。
+
+用户提供凭证后的真实 GPT/Claude/DeepSeek 调用与延迟记录见 [模型接入验证](docs/model-validation-20261012.md)。凭证没有纳入仓库；另两组接口仍受云出站策略限制。
