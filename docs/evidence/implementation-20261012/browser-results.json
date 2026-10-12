@@ -76,6 +76,10 @@
       "passed": true
     },
     {
+      "name": "多标签退出和切换账号清除前一账号的记录、私有缓存和历史列表",
+      "passed": true
+    },
+    {
       "name": "浏览器运行无未捕获JS错误",
       "passed": true
     }

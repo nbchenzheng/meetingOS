@@ -96,6 +96,16 @@ with sync_playwright() as p:
     page.set_viewport_size({'width':1440,'height':1024});page.reload();page.get_by_role('heading',name='产品交付计划评审').wait_for();capture(page,'06-desktop-final')
     page.get_by_role('button',name='会议设置',exact=True).click();page.get_by_role('dialog').get_by_role('button',name='客户辅助',exact=False).click();page.get_by_role('button',name='保存设置').click()
     page.get_by_role('button',name='帮我回答',exact=True).click();page.get_by_role('heading',name='建议回答',exact=True).wait_for();capture(page,'07-customer-coach');passed('客户模式提供私有建议回答、依据和待核实事项')
+    json_request(context,path+'/events',{'type':'note','visibility':'private','text':'OWNER_A_PRIVATE_UI_MARKER'})
+    page.get_by_text('OWNER_A_PRIVATE_UI_MARKER',exact=True).wait_for()
+    other=context.new_page();other.set_viewport_size({'width':1440,'height':1024});other.goto(BASE);other.get_by_role('button',name='退出登录').click()
+    other.get_by_role('button',name='首次使用？创建账号').click()
+    other.get_by_label('账号',exact=True).fill('browser-b-'+secrets.token_hex(4));other.get_by_label('姓名',exact=True).fill('另一个账号 · 测试');other.get_by_label('密码',exact=True).fill(secrets.token_urlsafe(24));other.get_by_role('button',name='创建账号',exact=True).click()
+    other.get_by_role('button',name='新建会议',exact=True).wait_for()
+    page.get_by_text('另一个账号 · 测试',exact=True).wait_for()
+    assert 'OWNER_A_PRIVATE_UI_MARKER' not in page.locator('body').inner_text()
+    assert '产品交付计划评审' not in page.locator('body').inner_text()
+    capture(page,'08-account-switch-clears-records');other.close();passed('多标签退出和切换账号清除前一账号的记录、私有缓存和历史列表')
     assert not errors,errors
     assert not console_errors,console_errors
     passed('浏览器运行无未捕获JS错误')

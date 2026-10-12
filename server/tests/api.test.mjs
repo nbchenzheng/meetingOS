@@ -390,6 +390,22 @@ test("Agent 限会议/权限写入，人类实时接收；撤销关闭流并拒�
     ).status,
     403,
   );
+  for (const data of [
+    { question: { unexpected: "object" } },
+    { sources: "wrong-type" },
+    { sources: [{ id: "brief", label: {}, excerpt: "x" }] },
+  ]) {
+    assert.equal(
+      (
+        await request(
+          "/meetings/" + meeting.id + "/events",
+          { type: "note", text: "无效元数据", data },
+          { headers },
+        )
+      ).data.code,
+      "INVALID_METADATA",
+    );
+  }
   const human = await streamFor(),
     agent = await streamFor(headers);
   const added = await request(
@@ -416,6 +432,33 @@ test("Agent 限会议/权限写入，人类实时接收；撤销关闭流并拒�
   );
 });
 test("过期授权拒绝；完整权限 Agent 也不能把私有记录公开或管理他人令牌", async () => {
+  const settingToken = (
+    await request("/tokens", { scopes: ["meetings:read", "meetings:write"] })
+  ).data.token;
+  const settingHeaders = {
+    Authorization: "Bearer " + settingToken.secret,
+    Cookie: "",
+  };
+  assert.equal(
+    (
+      await request(
+        "/meetings/" + meeting.id,
+        { autoEnabled: true },
+        { method: "PATCH", headers: settingHeaders },
+      )
+    ).data.code,
+    "HUMAN_SETTINGS_REQUIRED",
+  );
+  assert.equal(
+    (
+      await request(
+        "/meetings/" + meeting.id,
+        { model: "claude" },
+        { method: "PATCH", headers: settingHeaders },
+      )
+    ).data.code,
+    "HUMAN_SETTINGS_REQUIRED",
+  );
   const issued = await request("/tokens", {
     scopes: ["meetings:read", "events:write", "private:read", "private:write"],
   });

@@ -24,7 +24,7 @@ Scopes:
 | `private:read` | Read internal constraints and private advice; internal export |
 | `private:write` | Add private advice/constraints; needed with `assistant:ask` for private model replies |
 
-Customer-facing content must use `audience=customer` or the customer export. Do not reveal private constraints or advice, including their source excerpts. An Agent cannot change a private record to shared, or create/edit confirmed decisions and action items. Present recommendations as advice; let a human confirm commitments, decisions and action owners in the website.
+Customer-facing content must use `audience=customer` or the customer export. Do not reveal private constraints or advice, including their source excerpts. An Agent cannot change a private record to shared, create/edit confirmed decisions and action items, or change the site model/automatic-assistance settings. Humans control those settings in the website; use assistant:ask for authorized model requests. Present recommendations as advice; let a human confirm commitments, decisions and action owners in the website.
 
 ## Workflow
 

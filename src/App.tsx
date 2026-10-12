@@ -21,7 +21,14 @@ import {
   ApiOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
-import { api, send, meetingPath, requestAssistant } from "./platform/client";
+import {
+  api,
+  send,
+  meetingPath,
+  requestAssistant,
+  RequestError,
+  announceAuthChange,
+} from "./platform/client";
 import type { User, Meeting, Entry, Assistant, Token } from "./platform/client";
 import { useMeeting } from "./platform/useMeeting";
 import { TranscriptionController } from "./lib/transcription";
@@ -1657,16 +1664,75 @@ function MainApp() {
     [agentMeeting, setAgentMeeting] = useState<Meeting | null>(null),
     [sidebar, setSidebar] = useState(false),
     [error, setError] = useState("");
+  const identity = useRef<User | null>(null),
+    authRequest = useRef(0);
+  function applyIdentity(next: User | null) {
+    if (identity.current && identity.current.id !== next?.id) {
+      setMeetings([]);
+      setActive("");
+      setSearch("");
+      setAgent(false);
+      setAgentMeeting(null);
+      setCreate(false);
+      setSidebar(false);
+      setError("");
+      history.replaceState(null, "", location.pathname);
+    }
+    identity.current = next;
+    setUser(next);
+  }
   const load = () => {
+    const expected = identity.current?.id;
+    if (!expected) return;
     void api<{ meetings: Meeting[] }>("/meetings")
-      .then((result) => setMeetings(result.meetings))
-      .catch((e) => setError(message(e)));
+      .then((result) => {
+        if (identity.current?.id === expected) setMeetings(result.meetings);
+      })
+      .catch((e) => {
+        if (identity.current?.id === expected) setError(message(e));
+      });
   };
   useEffect(() => {
-    void api<{ user: User }>("/auth/me")
-      .then((result) => setUser(result.user))
-      .catch(() => {})
-      .finally(() => setInitializing(false));
+    let alive = true;
+    const check = () => {
+      const ticket = ++authRequest.current;
+      void api<{ user: User }>("/auth/me")
+        .then((result) => {
+          if (alive && ticket === authRequest.current)
+            applyIdentity(result.user);
+        })
+        .catch((error) => {
+          if (
+            alive &&
+            ticket === authRequest.current &&
+            error instanceof RequestError &&
+            error.status === 401
+          )
+            applyIdentity(null);
+        })
+        .finally(() => {
+          if (alive && ticket === authRequest.current) setInitializing(false);
+        });
+    };
+    check();
+    const channel =
+      typeof BroadcastChannel !== "undefined"
+        ? new BroadcastChannel("meetingos-auth")
+        : null;
+    const changed = () => {
+      applyIdentity(null);
+      check();
+    };
+    if (channel) channel.onmessage = changed;
+    window.addEventListener("focus", check);
+    window.addEventListener("meetingos-auth-changed", changed);
+    return () => {
+      alive = false;
+      authRequest.current++;
+      channel?.close();
+      window.removeEventListener("focus", check);
+      window.removeEventListener("meetingos-auth-changed", changed);
+    };
   }, []);
   useEffect(() => {
     if (!user) return;
@@ -1683,16 +1749,26 @@ function MainApp() {
   async function logout() {
     try {
       await send("/auth/logout", {});
-      setUser(null);
-      setActive("");
-      history.replaceState(null, "", location.pathname);
+      authRequest.current++;
+      applyIdentity(null);
+      announceAuthChange(false);
     } catch (e) {
       setError(message(e));
     }
   }
   if (initializing)
     return <main className="workspace-loading">正在加载 MeetingOS…</main>;
-  if (!user) return <Login onLogin={setUser} />;
+  if (!user)
+    return (
+      <Login
+        onLogin={(next) => {
+          authRequest.current++;
+          applyIdentity(next);
+          setInitializing(false);
+          announceAuthChange(false);
+        }}
+      />
+    );
   return (
     <div className="app-shell">
       <button

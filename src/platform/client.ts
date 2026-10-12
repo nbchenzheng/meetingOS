@@ -1,6 +1,7 @@
 export type User = { id: string; name: string; login: string };
 export type Meeting = {
   id: string;
+  ownerId: string;
   title: string;
   mode: "internal" | "customer";
   brief: string;
@@ -99,6 +100,15 @@ export const send = <T>(path: string, value: unknown, method = "POST") =>
   api<T>(path, { method, body: JSON.stringify(value) });
 export const meetingPath = (id: string) =>
   "/meetings/" + encodeURIComponent(id);
+
+export function announceAuthChange(local = true) {
+  if (local) window.dispatchEvent(new Event("meetingos-auth-changed"));
+  if (typeof BroadcastChannel !== "undefined") {
+    const channel = new BroadcastChannel("meetingos-auth");
+    channel.postMessage("changed");
+    channel.close();
+  }
+}
 
 export async function requestAssistant(
   id: string,

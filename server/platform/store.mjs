@@ -30,6 +30,33 @@ const eventTypes = new Set([
   "advice",
   "summary",
 ]);
+function metadata(value) {
+  const data =
+    value && typeof value === "object" && !Array.isArray(value)
+      ? { ...value }
+      : {};
+  if (data.question === null) data.question = "";
+  if (data.sources === null) data.sources = [];
+  if (
+    (data.question !== undefined && typeof data.question !== "string") ||
+    (data.sources !== undefined &&
+      (!Array.isArray(data.sources) ||
+        data.sources.some(
+          (s) =>
+            !s ||
+            typeof s !== "object" ||
+            ["id", "label", "excerpt"].some(
+              (key) => typeof s[key] !== "string",
+            ),
+        )))
+  )
+    throw new ApiError(
+      400,
+      "INVALID_METADATA",
+      "问题应为文本；引用 sources 需要包含 id、label、excerpt 文本字段",
+    );
+  return data;
+}
 const string = (value, maximum = 50000) =>
   String(value ?? "")
     .trim()
@@ -429,10 +456,7 @@ export class MeetingStore extends EventEmitter {
       throw new ApiError(413, "TEXT_TOO_LARGE", "单条记录最多 50000 字符");
     const visibility = input.visibility === "private" ? "private" : "shared";
     const speaker = string(input.speaker, 80) || actor.name;
-    const data =
-      input.data && typeof input.data === "object" && !Array.isArray(input.data)
-        ? input.data
-        : {};
+    const data = metadata(input.data);
     if (json(data).length > 20000)
       throw new ApiError(413, "METADATA_TOO_LARGE", "记录附加信息过大");
     let emitted;
@@ -516,12 +540,13 @@ export class MeetingStore extends EventEmitter {
           : patch.visibility === "private"
             ? "private"
             : "shared";
-      const data =
+      const data = metadata(
         patch.data &&
-        typeof patch.data === "object" &&
-        !Array.isArray(patch.data)
+          typeof patch.data === "object" &&
+          !Array.isArray(patch.data)
           ? { ...old.data, ...patch.data }
-          : old.data;
+          : old.data,
+      );
       if (json(data).length > 20000)
         throw new ApiError(413, "METADATA_TOO_LARGE", "记录附加信息过大");
       this.db

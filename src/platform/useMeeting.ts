@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { api, meetingPath, RequestError } from "./client";
+import { api, meetingPath, RequestError, announceAuthChange } from "./client";
 import type { Meeting, Entry, Material, Change } from "./client";
 
 export function useMeeting(id: string, customer = false) {
@@ -106,19 +106,34 @@ export function useMeeting(id: string, customer = false) {
         });
         stream.onerror = () => {
           if (alive) setConnection("连接中断，正在重连");
-          void api("/auth/me").catch((error) => {
-            if (
-              alive &&
-              error instanceof RequestError &&
-              error.status === 401
-            ) {
-              stream?.close();
-              setConnection("需要重新登录");
-              setError(
-                "登录已到期，请刷新页面重新登录；已保存的记录不会丢失。",
-              );
-            }
-          });
+          const forget = () => {
+            stream?.close();
+            setMeeting(null);
+            setEntries([]);
+            setMaterials([]);
+            announceAuthChange();
+          };
+          void api<{ user: { id: string } }>("/auth/me")
+            .then((result) => {
+              if (alive && result.user.id !== detail.meeting.ownerId) {
+                forget();
+                setConnection("账号已切换");
+                setError("账号已切换，请返回当前账号的会议。");
+              }
+            })
+            .catch((error) => {
+              if (
+                alive &&
+                error instanceof RequestError &&
+                error.status === 401
+              ) {
+                forget();
+                setConnection("需要重新登录");
+                setError(
+                  "登录已到期，请刷新页面重新登录；已保存的记录不会丢失。",
+                );
+              }
+            });
         };
       } catch (e) {
         if (alive && !controller.signal.aborted) {
