@@ -104,6 +104,16 @@ function projectedChange(change, principal, customer, store) {
       ),
     };
   }
+  if (change.kind.startsWith("material.")) {
+    const current = store.material(change.meetingId, change.payload.id);
+    if (!current || !visibleEvent(current, principal, customer))
+      return {
+        ...change,
+        kind: "material.removed",
+        payload: { id: change.payload.id },
+      };
+    return { ...change, payload: current };
+  }
   return change.kind === "meeting.updated"
     ? {
         ...change,
@@ -354,7 +364,9 @@ export function createMeetingServer({
         const input = await body(req);
         if (
           principal.kind === "agent" &&
-          (input.autoEnabled !== undefined || input.model !== undefined)
+          (input.autoEnabled !== undefined ||
+            input.model !== undefined ||
+            input.status !== undefined)
         )
           throw new ApiError(
             403,
@@ -386,9 +398,12 @@ export function createMeetingServer({
             "MODEL_NOT_CONFIGURED",
             "请先连接会议助手，再开启自动建议",
           );
+        const updated = store.updateMeeting(id, input);
+        if (!updated.autoEnabled || updated.status !== "active")
+          assistant.pause(id);
         return apiJson(res, 200, {
           ok: true,
-          meeting: projectedMeeting(store.updateMeeting(id, input), principal),
+          meeting: projectedMeeting(updated, principal),
         });
       }
     }
@@ -474,10 +489,15 @@ export function createMeetingServer({
     }
     if (resource === "materials") {
       if (method === "GET" && !item)
-        return apiJson(res, 200, { ok: true, materials: store.materials(id) });
+        return apiJson(res, 200, {
+          ok: true,
+          materials: store
+            .materials(id)
+            .filter((m) => visibleEvent(m, principal, customer)),
+        });
       if (method === "GET" && item && file) {
         const material = store.materialFile(id, item);
-        if (!material?.raw)
+        if (!material?.raw || !visibleEvent(material, principal, customer))
           throw new ApiError(404, "FILE_NOT_FOUND", "原始文件不存在");
         res.writeHead(200, {
           "Content-Type": "application/octet-stream",
@@ -486,8 +506,63 @@ export function createMeetingServer({
         });
         return res.end(Buffer.from(material.raw));
       }
+      if (["PATCH", "DELETE"].includes(method) && item && !file) {
+        const current = store.material(id, item);
+        if (!current || !visibleEvent(current, principal, customer))
+          throw new ApiError(404, "FILE_NOT_FOUND", "资料不存在");
+        const input = await body(req);
+        if (
+          current.visibility === "private" &&
+          !auth.canPrivateWrite(principal)
+        )
+          throw new ApiError(
+            403,
+            "INSUFFICIENT_SCOPE",
+            "没有修改私有资料的权限",
+          );
+        if (method === "DELETE") {
+          auth.humanOnly(principal);
+          store.deleteMaterial(id, item, input.revision);
+          return apiJson(res, 200, { ok: true });
+        }
+        if (
+          input.visibility !== undefined &&
+          !["shared", "private"].includes(input.visibility)
+        )
+          throw new ApiError(400, "INVALID_VISIBILITY", "资料可见性无效");
+        if (input.included !== undefined && typeof input.included !== "boolean")
+          throw new ApiError(400, "INVALID_SELECTION", "资料选择需要是布尔值");
+        if (input.visibility === "private" && !auth.canPrivateWrite(principal))
+          throw new ApiError(
+            403,
+            "INSUFFICIENT_SCOPE",
+            "没有修改私有资料的权限",
+          );
+        if (input.visibility === "shared" && current.visibility === "private")
+          auth.humanOnly(principal);
+        const updated = store.updateMaterial(id, item, {
+          revision: input.revision,
+          visibility: input.visibility ?? current.visibility,
+          included: input.included ?? current.included,
+        });
+        return apiJson(res, 200, {
+          ok: true,
+          material: visibleEvent(updated, principal, customer)
+            ? updated
+            : { id: item },
+        });
+      }
       if (method === "POST" && !item) {
         const input = await body(req, 23 * 1024 * 1024);
+        const visibility = input.visibility ?? "shared";
+        if (!["shared", "private"].includes(visibility))
+          throw new ApiError(400, "INVALID_VISIBILITY", "资料可见性无效");
+        if (visibility === "private" && !auth.canPrivateWrite(principal))
+          throw new ApiError(
+            403,
+            "INSUFFICIENT_SCOPE",
+            "没有上传私有资料的权限",
+          );
         if (
           typeof input.base64 !== "string" ||
           !input.base64 ||
@@ -533,14 +608,18 @@ export function createMeetingServer({
             "EXTRACTED_TEXT_TOO_LARGE",
             "资料文字过多，请按议题拆分",
           );
+        const material = store.addMaterial(id, {
+          name: input.fileName,
+          text: extracted.extractedText,
+          bytes: raw.length,
+          raw,
+          visibility,
+        });
         return apiJson(res, 201, {
           ok: true,
-          material: store.addMaterial(id, {
-            name: input.fileName,
-            text: extracted.extractedText,
-            bytes: raw.length,
-            raw,
-          }),
+          material: visibleEvent(material, principal, customer)
+            ? material
+            : { id: material.id },
         });
       }
     }

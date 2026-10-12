@@ -37,7 +37,7 @@ function fixture(t) {
     meetingIds: [],
   };
   t.after(() => {
-    store.close();
+    if (store.db.isOpen) store.close();
     rmSync(dir, { recursive: true, force: true });
   });
   return { store, dir, owner, principal };
@@ -197,4 +197,47 @@ test("作用域令牌绑定账号和会议，撤销后立即拒绝；密码仅�
   assert.ok(
     !store.findUser("owner").password_hash.includes("fixture-password-only"),
   );
+});
+
+test("资料 schema 可从第一版升级并持久化私有/选择/修订状态", (t) => {
+  const { store, dir, owner } = fixture(t);
+  const meeting = store.createMeeting(owner.id, { title: "升级验收" });
+  // Recreate exactly the original eight-column material table, retaining a real row.
+  store.db.exec(
+    "DROP TABLE materials; CREATE TABLE materials (id TEXT PRIMARY KEY,meeting_id TEXT,name TEXT,text TEXT,bytes INTEGER,created_at TEXT,raw BLOB,digest TEXT)",
+  );
+  store.db
+    .prepare("INSERT INTO materials VALUES (?,?,?,?,?,?,?,?)")
+    .run(
+      "legacy-material",
+      meeting.id,
+      "历史资料.txt",
+      "历史文字",
+      12,
+      new Date().toISOString(),
+      Buffer.from("历史文字"),
+      null,
+    );
+  store.close();
+  const restored = new MeetingStore(join(dir, "db.sqlite"));
+  const legacy = restored.material(meeting.id, "legacy-material");
+  assert.equal(legacy.visibility, "shared");
+  assert.equal(legacy.included, true);
+  const edited = restored.updateMaterial(meeting.id, legacy.id, {
+    revision: 1,
+    visibility: "private",
+    included: false,
+  });
+  assert.equal(edited.revision, 2);
+  assert.ok(
+    !meetingContext(restored, restored.meeting(meeting.id)).content.includes(
+      "历史文字",
+    ),
+  );
+  assert.ok(restored.materialFile(meeting.id, legacy.id).raw);
+  restored.close();
+  const reopened = new MeetingStore(join(dir, "db.sqlite"));
+  assert.equal(reopened.material(meeting.id, legacy.id).visibility, "private");
+  assert.equal(reopened.material(meeting.id, legacy.id).revision, 2);
+  reopened.close();
 });

@@ -41,12 +41,24 @@ export function useMeeting(id: string, customer = false) {
         );
       }
       if (data.kind === "meeting.updated") setMeeting(data.payload as Meeting);
-      if (data.kind === "material.created") {
+      if (data.kind === "material.removed") {
+        setMaterials((prev) => prev.filter((m) => m.id !== data.payload.id));
+        return;
+      }
+      if (
+        data.kind === "material.created" ||
+        data.kind === "material.updated"
+      ) {
         const material = data.payload as Material;
-        setMaterials((prev) => [
-          ...prev.filter((m) => m.id !== material.id),
-          material,
-        ]);
+        setMaterials((prev) => {
+          if (
+            prev.some(
+              (m) => m.id === material.id && m.revision > material.revision,
+            )
+          )
+            return prev;
+          return [...prev.filter((m) => m.id !== material.id), material];
+        });
       }
     };
     void (async () => {
@@ -158,6 +170,7 @@ export function useMeeting(id: string, customer = false) {
     loading,
     refresh,
     setMeeting,
+    setMaterials,
     setError,
   };
 }

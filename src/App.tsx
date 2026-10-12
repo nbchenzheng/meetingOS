@@ -29,7 +29,14 @@ import {
   RequestError,
   announceAuthChange,
 } from "./platform/client";
-import type { User, Meeting, Entry, Assistant, Token } from "./platform/client";
+import type {
+  User,
+  Meeting,
+  Entry,
+  Assistant,
+  Token,
+  Material,
+} from "./platform/client";
 import { useMeeting } from "./platform/useMeeting";
 import { TranscriptionController } from "./lib/transcription";
 import type { AsrMode } from "./lib/transcription";
@@ -789,6 +796,7 @@ function Workbench({
     loading,
     refresh,
     setMeeting,
+    setMaterials,
     setError,
   } = useMeeting(id);
   const [tab, setTab] = useState("records"),
@@ -807,7 +815,11 @@ function Workbench({
     [streamText, setStreamText] = useState(""),
     [streamTask, setStreamTask] = useState("advice"),
     [modelGuide, setModelGuide] = useState(false),
-    [uploading, setUploading] = useState(false);
+    [uploading, setUploading] = useState(false),
+    [uploadPrivate, setUploadPrivate] = useState(true),
+    [materialBusy, setMaterialBusy] = useState<string | null>(null),
+    [deletingMaterial, setDeletingMaterial] = useState<Material | null>(null),
+    [ending, setEnding] = useState(false);
   const [listening, setListening] = useState(false),
     [interim, setInterim] = useState(""),
     [asrMode, setAsrMode] = useState<AsrMode>("webspeech"),
@@ -935,6 +947,7 @@ function Workbench({
       });
       await send(meetingPath(id) + "/materials", {
         fileName: input.name,
+        visibility: uploadPrivate ? "private" : "shared",
         mimeType: input.type,
         base64,
       });
@@ -943,6 +956,65 @@ function Workbench({
       setError(message(e));
     } finally {
       setUploading(false);
+    }
+  }
+  async function changeMaterial(
+    material: Material,
+    input: Record<string, unknown>,
+    method = "PATCH",
+  ) {
+    if (materialBusy) return;
+    setMaterialBusy(material.id);
+    setError("");
+    if (method === "PATCH")
+      setMaterials((prev) =>
+        prev.map((m) => (m.id === material.id ? { ...m, ...input } : m)),
+      );
+    try {
+      const result = await send<{ material?: Material }>(
+        meetingPath(id) + "/materials/" + material.id,
+        { revision: material.revision, ...input },
+        method,
+      );
+      if (method === "DELETE")
+        setMaterials((prev) => prev.filter((m) => m.id !== material.id));
+      else if (result.material)
+        setMaterials((prev) =>
+          prev.map((m) =>
+            m.id === material.id && m.revision <= result.material!.revision
+              ? result.material!
+              : m,
+          ),
+        );
+      setDeletingMaterial(null);
+      onListUpdate();
+    } catch (e) {
+      setMaterials((prev) =>
+        prev.map((m) =>
+          m.id === material.id && m.revision === material.revision
+            ? material
+            : m,
+        ),
+      );
+      setError(message(e));
+    } finally {
+      setMaterialBusy(null);
+    }
+  }
+  async function changeStatus() {
+    if (!meeting || ending) return;
+    setEnding(true);
+    try {
+      await patch({
+        status: meeting.status === "completed" ? "active" : "completed",
+      });
+      microphone.current?.stop();
+      microphone.current = null;
+      setListening(false);
+    } catch {
+      /* patch displays the error */
+    } finally {
+      setEnding(false);
     }
   }
   async function toggleMicrophone() {
@@ -1020,6 +1092,9 @@ function Workbench({
               {meeting.mode === "customer" ? "客户辅助" : "内部会议"}
             </span>
             <span>{date(meeting.createdAt)}</span>
+            {meeting.status === "completed" && (
+              <span className="tag">已结束</span>
+            )}
           </div>
           <h1>{meeting.title}</h1>
           <div className="save-status">
@@ -1033,6 +1108,9 @@ function Workbench({
           </div>
         </div>
         <div className="header-actions">
+          <button onClick={() => void changeStatus()} disabled={ending}>
+            {meeting.status === "completed" ? "继续会议" : "结束会议"}
+          </button>
           <button onClick={() => setSettings(true)} aria-label="会议设置">
             <SettingOutlined aria-hidden="true" />
             <span>设置</span>
@@ -1166,8 +1244,21 @@ function Workbench({
                   </button>
                 </div>
                 <p className="small muted">
-                  资料属于共享内容。支持 TXT、MD、PDF、DOCX、PPTX，每份
-                  15MB；扫描件请先转为文本。
+                  私有资料只供内部智囊使用，客户展示与客户版总结不会读取。支持
+                  TXT、MD、PDF、DOCX、PPTX，每份 15MB；扫描件请先转为文本。
+                </p>
+                <label className="material-option">
+                  <input
+                    type="checkbox"
+                    checked={uploadPrivate}
+                    disabled={uploading}
+                    onChange={(e) => setUploadPrivate(e.target.checked)}
+                  />
+                  新上传资料设为私有
+                </label>
+                <p className="small muted">
+                  仅勾选的资料进入下一次 AI
+                  分析。取消选择会保留文件，不会删除已有建议中的引用。
                 </p>
                 {materials.length ? (
                   materials.map((material) => (
@@ -1191,8 +1282,49 @@ function Workbench({
                       </header>
                       <p>
                         {Math.ceil(material.bytes / 1024)} KB ·{" "}
-                        {material.text.length} 字 · 已进入上下文
+                        {material.text.length} 字 ·{" "}
+                        {material.visibility === "private" ? "私有" : "共享"} ·{" "}
+                        {material.included ? "参与 AI 分析" : "暂不参与分析"}
                       </p>
+                      <div className="material-controls">
+                        <label className="material-option">
+                          <input
+                            type="checkbox"
+                            aria-label={"分析 " + material.name}
+                            checked={material.included}
+                            disabled={materialBusy !== null}
+                            onChange={(e) =>
+                              void changeMaterial(material, {
+                                included: e.target.checked,
+                              })
+                            }
+                          />
+                          参与 AI 分析
+                        </label>
+                        <label className="material-option">
+                          <input
+                            type="checkbox"
+                            aria-label={"私有 " + material.name}
+                            checked={material.visibility === "private"}
+                            disabled={materialBusy !== null}
+                            onChange={(e) =>
+                              void changeMaterial(material, {
+                                visibility: e.target.checked
+                                  ? "private"
+                                  : "shared",
+                              })
+                            }
+                          />
+                          私有资料
+                        </label>
+                        <button
+                          disabled={materialBusy !== null}
+                          aria-label={"删除 " + material.name}
+                          onClick={() => setDeletingMaterial(material)}
+                        >
+                          删除
+                        </button>
+                      </div>
                       <details>
                         <summary>查看提取文字</summary>
                         <Text text={material.text} />
@@ -1426,7 +1558,7 @@ function Workbench({
                 role="switch"
                 aria-label="实时自动建议"
                 checked={meeting.autoEnabled}
-                disabled={autoPending}
+                disabled={autoPending || meeting.status === "completed"}
                 onChange={(event) => void toggleAuto(event.target.checked)}
               />
             </label>
@@ -1600,6 +1732,21 @@ function Workbench({
             onListUpdate();
           }}
         />
+      )}
+      {deletingMaterial && (
+        <Modal title="删除资料" onClose={() => setDeletingMaterial(null)}>
+          <p>
+            删除「{deletingMaterial.name}
+            」的原文件与提取文字，后续分析不再读取。这不会移除已经保存的建议或其中的引用。
+          </p>
+          <button
+            className="primary"
+            disabled={materialBusy !== null}
+            onClick={() => void changeMaterial(deletingMaterial, {}, "DELETE")}
+          >
+            确认删除资料
+          </button>
+        </Modal>
       )}
       {approval && (
         <EditEntry

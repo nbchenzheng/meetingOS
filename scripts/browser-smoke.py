@@ -5,7 +5,7 @@ from playwright.sync_api import sync_playwright
 
 BASE=os.environ.get('MEETINGOS_TEST_URL','http://127.0.0.1:3165')
 CDP=os.environ.get('MEETINGOS_TEST_CDP','http://127.0.0.1:9235')
-OUT=Path('docs/evidence/implementation-20261012');OUT.mkdir(parents=True,exist_ok=True)
+OUT=Path(os.environ.get('MEETINGOS_TEST_EVIDENCE','docs/evidence/implementation-20261012'));OUT.mkdir(parents=True,exist_ok=True)
 checks=[];errors=[];console_errors=[]
 def passed(name): checks.append({'name':name,'passed':True})
 def capture(page,name):
@@ -20,7 +20,7 @@ def json_request(context,path,input=None,method=None,headers=None):
 
 with sync_playwright() as p:
     browser=p.chromium.connect_over_cdp(CDP)
-    context=browser.contexts[0];page=context.new_page();page.set_viewport_size({'width':1440,'height':1024})
+    context=browser.new_context();page=context.new_page();page.set_viewport_size({'width':1440,'height':1024})
     page.on('pageerror',lambda e:errors.append(str(e)))
     page.on('console',lambda msg:console_errors.append(msg.text) if msg.type=='error' and '401' not in msg.text else None)
     page.goto(BASE);page.get_by_role('button',name='首次使用？创建账号').click()
@@ -51,6 +51,36 @@ with sync_playwright() as p:
     page.get_by_role('tab',name='资料 0',exact=True).click()
     page.locator('input[type=file]').set_input_files({'name':'产品说明.txt','mimeType':'text/plain','buffer':'标准部署需要三周；定制接口需单独评估。'.encode()})
     page.get_by_text('产品说明.txt',exact=True).wait_for();passed('网页上传原文件和提取文字')
+    material=json_request(context,path+'/materials')['materials'][0]
+    assert material['visibility']=='private'
+    assert not json_request(context,path+'/materials?audience=customer')['materials']
+    passed('网页上传默认私有且客户资料接口不可见')
+    page.get_by_label('分析 产品说明.txt',exact=True).uncheck()
+    page.get_by_text('暂不参与分析',exact=False).wait_for()
+    assert not json_request(context,path+'/materials')['materials'][0]['included']
+    page.get_by_label('分析 产品说明.txt',exact=True).check()
+    page.get_by_label('私有 产品说明.txt',exact=True).uncheck()
+    assert json_request(context,path+'/materials?audience=customer')['materials'][0]['visibility']=='shared'
+    page.get_by_label('私有 产品说明.txt',exact=True).check()
+    capture(page,'09-private-material-controls');passed('网页可切换分析选择与资料共享，服务器状态同步')
+    page.set_viewport_size({'width':390,'height':844})
+    page.bring_to_front();page.wait_for_timeout(200)
+    page.locator('.mobile-panels').get_by_role('tab',name='会议记录',exact=True).click()
+    page.get_by_label('分析 产品说明.txt',exact=True).uncheck()
+    page.get_by_label('分析 产品说明.txt',exact=True).check()
+    assert page.get_by_role('button',name='删除 产品说明.txt',exact=True).is_visible()
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    capture(page,'10-mobile-material-controls');passed('390px手机资料管理无横向溢出，选择和删除操作可达')
+    page.set_viewport_size({'width':1440,'height':1024})
+
+    page.locator('input[type=file]').set_input_files({'name':'可删除资料.txt','mimeType':'text/plain','buffer':'仅作删除流程验收'.encode()})
+    page.get_by_text('可删除资料.txt',exact=True).wait_for()
+    page.get_by_role('button',name='删除 可删除资料.txt',exact=True).click()
+    page.get_by_role('button',name='确认删除资料',exact=True).click()
+    page.get_by_text('可删除资料.txt',exact=True).wait_for(state='detached')
+    assert len(json_request(context,path+'/materials')['materials'])==1
+    passed('网页确认删除资料并实时移除卡片')
+
     page.get_by_role('tab',name='会议记录',exact=True).click()
     capture(page,'01-desktop-workbench')
     page.get_by_role('switch',name='实时自动建议').check()
@@ -96,6 +126,14 @@ with sync_playwright() as p:
     page.set_viewport_size({'width':1440,'height':1024});page.reload();page.get_by_role('heading',name='产品交付计划评审').wait_for();capture(page,'06-desktop-final')
     page.get_by_role('button',name='会议设置',exact=True).click();page.get_by_role('dialog').get_by_role('button',name='客户辅助',exact=False).click();page.get_by_role('button',name='保存设置').click()
     page.get_by_role('button',name='帮我回答',exact=True).click();page.get_by_role('heading',name='建议回答',exact=True).wait_for();capture(page,'07-customer-coach');passed('客户模式提供私有建议回答、依据和待核实事项')
+
+    page.get_by_role('button',name='结束会议',exact=True).click()
+    page.get_by_role('button',name='继续会议',exact=True).wait_for()
+    assert not json_request(context,path)['meeting']['autoEnabled']
+    assert page.get_by_role('switch',name='实时自动建议').is_disabled()
+    page.get_by_role('button',name='继续会议',exact=True).click()
+    page.get_by_role('button',name='结束会议',exact=True).wait_for()
+    passed('网页结束会议关闭自动建议，继续会议恢复操作且不自动重启分析')
     json_request(context,path+'/events',{'type':'note','visibility':'private','text':'OWNER_A_PRIVATE_UI_MARKER'})
     page.get_by_text('OWNER_A_PRIVATE_UI_MARKER',exact=True).wait_for()
     other=context.new_page();other.set_viewport_size({'width':1440,'height':1024});other.goto(BASE);other.get_by_role('button',name='退出登录').click()
@@ -111,4 +149,4 @@ with sync_playwright() as p:
     passed('浏览器运行无未捕获JS错误')
     (OUT/'browser-results.json').write_text(json.dumps({'controlled_model_fixture':True,'real_models_tested':False,'real_speech_tested':False,'checks':checks,'uncaught_errors':errors,'unexpected_console_errors':console_errors},ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps({'passed':len(checks),'uncaught_errors':errors,'evidence':str(OUT)},ensure_ascii=False))
-    page.close()
+    context.close()

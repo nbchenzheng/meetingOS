@@ -72,7 +72,11 @@ export function meetingContext(
   const events = store
     .allEvents(meeting.id, privateAllowed)
     .filter((e) => e.type !== "summary");
-  const materials = store.materials(meeting.id);
+  const materials = store
+    .materials(meeting.id)
+    .filter(
+      (m) => m.included && (m.visibility !== "private" || privateAllowed),
+    );
   const sources = [
     { id: "brief", label: "会议简报", type: "brief", text: meeting.brief },
   ];
@@ -272,6 +276,7 @@ export class MeetingAssistant {
     this.store = store;
     this.active = new Map();
     this.autoTimers = new Map();
+    this.autoStarted = new Map();
   }
   async generate(
     meeting,
@@ -288,7 +293,11 @@ export class MeetingAssistant {
   ) {
     if (!["advice", "summary"].includes(kind))
       throw new ApiError(400, "INVALID_TASK", "不支持这个请求类型");
-    if (!automatic) clearTimeout(this.autoTimers.get(meeting.id));
+    if (!automatic) {
+      clearTimeout(this.autoTimers.get(meeting.id));
+      this.autoTimers.delete(meeting.id);
+      this.autoStarted.delete(meeting.id);
+    }
     const previous = this.active.get(meeting.id);
     if (previous) {
       if (!automatic && previous.automatic) {
@@ -405,6 +414,15 @@ export class MeetingAssistant {
         }));
       const visibility =
         kind === "summary" && audience === "customer" ? "shared" : "private";
+      if (
+        visibility === "shared" &&
+        this.store.meeting(meeting.id).version !== context.version
+      )
+        throw new ApiError(
+          409,
+          "CONTEXT_CHANGED",
+          "资料或记录在总结期间发生变化，请重新生成客户版总结",
+        );
       const name = config.role.id === "gpt55" ? "GPT" : config.role.cn;
       const event = this.store.addEvent(
         meeting.id,
@@ -438,6 +456,13 @@ export class MeetingAssistant {
     }
   }
 
+  pause(meetingId) {
+    clearTimeout(this.autoTimers.get(meetingId));
+    this.autoTimers.delete(meetingId);
+    this.autoStarted.delete(meetingId);
+    const active = this.active.get(meetingId);
+    if (active?.automatic) active.controller.abort();
+  }
   schedule(meetingId) {
     const meeting = this.store.meeting(meetingId);
     if (!meeting?.autoEnabled || meeting.status !== "active") return;
@@ -445,49 +470,64 @@ export class MeetingAssistant {
       !assistantCatalog().find((role) => role.id === meeting.model)?.configured
     )
       return;
+    const started = this.autoStarted.get(meetingId) ?? Date.now();
+    this.autoStarted.set(meetingId, started);
     clearTimeout(this.autoTimers.get(meetingId));
     this.autoTimers.set(
       meetingId,
-      setTimeout(async () => {
-        this.autoTimers.delete(meetingId);
-        if (this.active.has(meetingId)) {
-          this.schedule(meetingId);
-          return;
-        }
-        const current = this.store.meeting(meetingId);
-        if (!current?.autoEnabled || current.status !== "active") return;
-        const user = this.store.user(current.ownerId);
-        try {
-          await this.generate(
-            current,
-            {
-              kind: "human",
-              id: user.id,
-              name: user.name,
-              user,
-              scopes: ["private:read"],
-            },
-            {
-              automatic: true,
-              question:
-                "请就刚刚的发言给出一条最有用的建议，避免重复已有建议。",
-            },
-          );
-        } catch (error) {
-          if (!this.active.has(meetingId))
-            this.store.emit("assistant-error", {
-              meetingId,
-              code: error.code || "ASSISTANT_ERROR",
-              message:
-                error instanceof ApiError ? error.message : "会议助手暂不可用",
-            });
-        }
-      }, 1400),
+      setTimeout(
+        async () => {
+          this.autoTimers.delete(meetingId);
+          if (this.active.has(meetingId)) {
+            this.autoStarted.delete(meetingId);
+            this.schedule(meetingId);
+            return;
+          }
+          this.autoStarted.delete(meetingId);
+          const current = this.store.meeting(meetingId);
+          if (!current?.autoEnabled || current.status !== "active") return;
+          const user = this.store.user(current.ownerId);
+          try {
+            await this.generate(
+              current,
+              {
+                kind: "human",
+                id: user.id,
+                name: user.name,
+                user,
+                scopes: ["private:read"],
+              },
+              {
+                automatic: true,
+                question:
+                  "请就刚刚的发言给出一条最有用的建议，避免重复已有建议。",
+              },
+            );
+          } catch (error) {
+            const current = this.store.meeting(meetingId);
+            if (
+              !this.active.has(meetingId) &&
+              current?.autoEnabled &&
+              current.status === "active"
+            )
+              this.store.emit("assistant-error", {
+                meetingId,
+                code: error.code || "ASSISTANT_ERROR",
+                message:
+                  error instanceof ApiError
+                    ? error.message
+                    : "会议助手暂不可用",
+              });
+          }
+        },
+        Math.min(1400, Math.max(0, 8000 - (Date.now() - started))),
+      ),
     );
   }
   close() {
     for (const timer of this.autoTimers.values()) clearTimeout(timer);
     for (const active of this.active.values()) active.controller.abort();
     this.autoTimers.clear();
+    this.autoStarted.clear();
   }
 }

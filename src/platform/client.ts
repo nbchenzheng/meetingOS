@@ -40,6 +40,9 @@ export type Entry = {
   };
 };
 export type Material = {
+  visibility: "shared" | "private";
+  included: boolean;
+  revision: number;
   id: string;
   name: string;
   text: string;

@@ -120,6 +120,8 @@ before(async () => {
       res.write(": waiting\n\n");
       return;
     }
+    if (mode === "delayed")
+      await new Promise((resolve) => setTimeout(resolve, 150));
     res.writeHead(200, { "Content-Type": "text/event-stream" });
     const answer = payload.messages[0].content.includes("整理一份")
       ? "## 已确认决定\n只按确认记录整理 [brief]"
@@ -783,4 +785,264 @@ test("生产注册默认关闭，邀请码校验且HTTPS会话设置Secure", asy
       if (value === undefined) delete process.env[key];
       else process.env[key] = value;
   }
+});
+
+test("私有附件按权限隔离，选择影响模型上下文，修订和删除同步到回放", async () => {
+  const path = "/meetings/" + meeting.id;
+  const sharedToken = (
+    await request("/tokens", {
+      name: "共享资料测试",
+      scopes: ["meetings:read", "meetings:write"],
+      meetingIds: [meeting.id],
+    })
+  ).data.token.secret;
+  const headers = { Authorization: "Bearer " + sharedToken };
+  const upload = async (visibility) =>
+    request(path + "/materials", {
+      fileName: "内部报价.txt",
+      visibility,
+      base64: Buffer.from("PRIVATE_ATTACHMENT_MARKER 内部最低报价").toString(
+        "base64",
+      ),
+    });
+  const created = await upload("private");
+  assert.equal(created.status, 201);
+  let material = created.data.material;
+  assert.equal(material.visibility, "private");
+  assert.equal(
+    (await request(path + "/materials")).data.materials.some(
+      (m) => m.id === material.id,
+    ),
+    true,
+  );
+  for (const suffix of ["?audience=customer", ""]) {
+    const r = await request(
+      path + "/materials" + suffix,
+      undefined,
+      suffix ? {} : { headers },
+    );
+    assert.equal(
+      r.data.materials.some((m) => m.id === material.id),
+      false,
+    );
+  }
+  assert.equal(
+    (
+      await request(path + "/materials/" + material.id + "/file", undefined, {
+        headers,
+      })
+    ).status,
+    404,
+  );
+  assert.equal(
+    (
+      await request(
+        path + "/materials",
+        { fileName: "bad.txt", visibility: "private", base64: "eA==" },
+        { headers },
+      )
+    ).status,
+    403,
+  );
+  await request(path + "/assistant", { question: "内部附件验收" });
+  assert.ok(
+    prompts.at(-1).messages[1].content.includes("PRIVATE_ATTACHMENT_MARKER"),
+  );
+  await request(path + "/assistant", { kind: "summary", audience: "customer" });
+  assert.ok(
+    !prompts.at(-1).messages[1].content.includes("PRIVATE_ATTACHMENT_MARKER"),
+  );
+  material = (
+    await request(
+      path + "/materials/" + material.id,
+      { revision: material.revision, included: false },
+      { method: "PATCH" },
+    )
+  ).data.material;
+  await request(path + "/assistant", { question: "暂停附件验收" });
+  assert.ok(
+    !prompts.at(-1).messages[1].content.includes("PRIVATE_ATTACHMENT_MARKER"),
+  );
+  assert.equal(
+    (
+      await request(
+        path + "/materials/" + material.id,
+        { revision: 1, included: true },
+        { method: "PATCH" },
+      )
+    ).status,
+    409,
+  );
+  const deniedToken = (
+    await request("/tokens", {
+      name: "私有资料 Agent",
+      scopes: [
+        "meetings:read",
+        "meetings:write",
+        "private:read",
+        "private:write",
+      ],
+      meetingIds: [meeting.id],
+    })
+  ).data.token.secret;
+  assert.equal(
+    (
+      await request(
+        path + "/materials/" + material.id,
+        { revision: material.revision, visibility: "shared" },
+        {
+          method: "PATCH",
+          headers: { Authorization: "Bearer " + deniedToken },
+        },
+      )
+    ).status,
+    403,
+  );
+  material = (
+    await request(
+      path + "/materials/" + material.id,
+      { revision: material.revision, visibility: "shared" },
+      { method: "PATCH" },
+    )
+  ).data.material;
+  assert.ok(
+    (await request(path + "/materials?audience=customer")).data.materials.some(
+      (m) => m.id === material.id,
+    ),
+  );
+  material = (
+    await request(
+      path + "/materials/" + material.id,
+      { revision: material.revision, visibility: "private" },
+      { method: "PATCH" },
+    )
+  ).data.material;
+  const replay = await request(
+    path + "/changes?after=0&audience=customer&limit=500",
+  );
+  assert.ok(!JSON.stringify(replay.data).includes("PRIVATE_ATTACHMENT_MARKER"));
+  const stream = await streamFor();
+  assert.equal(
+    (
+      await request(
+        path + "/materials/" + material.id,
+        { revision: material.revision },
+        { method: "DELETE" },
+      )
+    ).status,
+    200,
+  );
+  const removed = await stream.until(
+    (c) => c.kind === "material.removed" && c.payload.id === material.id,
+  );
+  assert.ok(removed);
+  stream.controller.abort();
+  assert.equal(app.store.materialFile(meeting.id, material.id), undefined);
+  assert.ok(
+    !app.store
+      .changes(meeting.id, 0, 500)
+      .some(
+        (c) =>
+          c.kind.startsWith("material.") &&
+          JSON.stringify(c.payload).includes("PRIVATE_ATTACHMENT_MARKER"),
+      ),
+  );
+  // Identical bytes at different privacy levels are distinct; shared uploads cannot disclose private IDs.
+  const first = await upload("private"),
+    second = await upload("shared");
+  assert.notEqual(first.data.material.id, second.data.material.id);
+});
+
+test("连续发言的自动建议最多等待八秒；结束会议中止自动分析并保留记录", async () => {
+  const session = app.store.createMeeting(owner.id, { title: "持续发言验收" });
+  const path = "/meetings/" + session.id;
+  await request(path, { autoEnabled: true }, { method: "PATCH" });
+  const before = prompts.length;
+  const interval = setInterval(
+    () =>
+      app.store.addEvent(
+        session.id,
+        { type: "speech", text: "连续发言", id: crypto.randomUUID() },
+        { kind: "human", id: owner.id, name: owner.name },
+      ),
+    250,
+  );
+  // Route-independent store writes must explicitly schedule just as the HTTP/WS adapters do.
+  const scheduleInterval = setInterval(
+    () => app.assistant.schedule(session.id),
+    250,
+  );
+  try {
+    const until = Date.now() + 9500;
+    while (prompts.length === before && Date.now() < until)
+      await new Promise((r) => setTimeout(r, 100));
+    assert.ok(
+      prompts.length > before,
+      "continuous speech must not postpone analysis indefinitely",
+    );
+  } finally {
+    clearInterval(interval);
+    clearInterval(scheduleInterval);
+  }
+  app.assistant.pause(session.id);
+  mode = "blocked";
+  await request(path + "/events", { type: "speech", text: "结束前的发言" });
+  const until = Date.now() + 4000;
+  while (!app.assistant.active.get(session.id) && Date.now() < until)
+    await new Promise((r) => setTimeout(r, 50));
+  assert.ok(app.assistant.active.get(session.id)?.automatic);
+  const result = await request(
+    path,
+    { status: "completed" },
+    { method: "PATCH" },
+  );
+  assert.equal(result.data.meeting.status, "completed");
+  assert.equal(result.data.meeting.autoEnabled, false);
+  await new Promise((r) => setTimeout(r, 50));
+  assert.equal(app.assistant.active.has(session.id), false);
+  assert.ok(app.store.countEvents(session.id) > 20);
+  mode = "success";
+  const reopened = await request(
+    path,
+    { status: "active" },
+    { method: "PATCH" },
+  );
+  assert.equal(reopened.data.meeting.autoEnabled, false);
+});
+
+test("客户总结期间共享资料撤回后不发布旧上下文结果", async () => {
+  const session = app.store.createMeeting(owner.id, {
+    title: "在途客户总结验收",
+  });
+  const path = "/meetings/" + session.id;
+  const file = (
+    await request(path + "/materials", {
+      fileName: "可撤回.txt",
+      visibility: "shared",
+      base64: Buffer.from("撤回的共享资料").toString("base64"),
+    })
+  ).data.material;
+  mode = "delayed";
+  const before = prompts.length;
+  const pending = request(path + "/assistant", {
+    kind: "summary",
+    audience: "customer",
+  });
+  const until = Date.now() + 2000;
+  while (prompts.length === before && Date.now() < until)
+    await new Promise((r) => setTimeout(r, 5));
+  assert.ok(prompts.length > before);
+  await request(
+    path + "/materials/" + file.id,
+    { revision: file.revision, visibility: "private" },
+    { method: "PATCH" },
+  );
+  const result = await pending;
+  mode = "success";
+  assert.equal(result.status, 409);
+  assert.equal(result.data.code, "CONTEXT_CHANGED");
+  assert.equal(
+    app.store.allEvents(session.id).filter((e) => e.type === "summary").length,
+    0,
+  );
 });

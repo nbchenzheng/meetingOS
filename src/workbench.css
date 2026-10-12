@@ -1520,3 +1520,25 @@ fieldset label {
     top: 16px !important;
   }
 }
+
+.material-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+.material-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.material-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary, #2563eb);
+}
+.material-controls button {
+  margin-left: auto;
+}

@@ -141,6 +141,13 @@ export class MeetingStore extends EventEmitter {
       this.db.exec("ALTER TABLE materials ADD COLUMN raw BLOB");
     if (!materialColumns.has("digest"))
       this.db.exec("ALTER TABLE materials ADD COLUMN digest TEXT");
+    for (const [name, definition] of [
+      ["visibility", "TEXT NOT NULL DEFAULT 'shared'"],
+      ["included", "INTEGER NOT NULL DEFAULT 1"],
+      ["revision", "INTEGER NOT NULL DEFAULT 1"],
+    ])
+      if (!materialColumns.has(name))
+        this.db.exec(`ALTER TABLE materials ADD COLUMN ${name} ${definition}`);
   }
 
   transaction(callback) {
@@ -378,6 +385,7 @@ export class MeetingStore extends EventEmitter {
       next.autoEnabled = patch.autoEnabled;
     if (["active", "completed"].includes(patch.status))
       next.status = patch.status;
+    if (next.status === "completed") next.autoEnabled = false;
     const change = this.transaction(() => {
       this.db
         .prepare(
@@ -582,7 +590,7 @@ export class MeetingStore extends EventEmitter {
   materials(meetingId) {
     return this.db
       .prepare(
-        "SELECT id,name,text,bytes,created_at FROM materials WHERE meeting_id=? ORDER BY created_at",
+        "SELECT id,name,text,bytes,created_at,visibility,included,revision FROM materials WHERE meeting_id=? ORDER BY created_at",
       )
       .all(meetingId)
       .map((r) => ({
@@ -591,19 +599,32 @@ export class MeetingStore extends EventEmitter {
         text: r.text,
         bytes: r.bytes,
         createdAt: r.created_at,
+        visibility: r.visibility,
+        included: Boolean(r.included),
+        revision: r.revision,
       }));
+  }
+  material(meetingId, id) {
+    return this.materials(meetingId).find((m) => m.id === id);
   }
   materialFile(meetingId, id) {
     return this.db
-      .prepare("SELECT name,raw FROM materials WHERE meeting_id=? AND id=?")
+      .prepare(
+        "SELECT name,raw,visibility FROM materials WHERE meeting_id=? AND id=?",
+      )
       .get(meetingId, id);
   }
-  addMaterial(meetingId, { name, text, bytes, raw = null }) {
+  addMaterial(
+    meetingId,
+    { name, text, bytes, raw = null, visibility = "shared", included = true },
+  ) {
     const digest = raw ? createHash("sha256").update(raw).digest("hex") : null;
     if (digest) {
       const existing = this.db
-        .prepare("SELECT id FROM materials WHERE meeting_id=? AND digest=?")
-        .get(meetingId, digest);
+        .prepare(
+          "SELECT id FROM materials WHERE meeting_id=? AND digest=? AND visibility=?",
+        )
+        .get(meetingId, digest, visibility);
       if (existing)
         return this.materials(meetingId).find((m) => m.id === existing.id);
     }
@@ -612,11 +633,16 @@ export class MeetingStore extends EventEmitter {
       name: string(name, 180),
       text: String(text ?? ""),
       bytes,
+      visibility,
+      included,
+      revision: 1,
       createdAt: now(),
     };
     const change = this.transaction(() => {
       this.db
-        .prepare("INSERT INTO materials VALUES (?,?,?,?,?,?,?,?)")
+        .prepare(
+          "INSERT INTO materials (id,meeting_id,name,text,bytes,created_at,raw,digest,visibility,included,revision) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        )
         .run(
           material.id,
           meetingId,
@@ -626,12 +652,71 @@ export class MeetingStore extends EventEmitter {
           material.createdAt,
           raw,
           digest,
+          visibility,
+          Number(included),
+          1,
         );
       this.bump(meetingId);
       return this.change(meetingId, "material.created", material);
     });
     this.publish(change);
     return material;
+  }
+  updateMaterial(meetingId, id, patch) {
+    const previous = this.material(meetingId, id);
+    if (!previous) throw new ApiError(404, "FILE_NOT_FOUND", "资料不存在");
+    if (patch.revision !== previous.revision)
+      throw new ApiError(
+        409,
+        "REVISION_CONFLICT",
+        "资料已被修改，请刷新后重试",
+      );
+    const next = { ...previous, ...patch, id, revision: previous.revision + 1 };
+    const change = this.transaction(() => {
+      this.db
+        .prepare(
+          "UPDATE materials SET visibility=?,included=?,revision=? WHERE meeting_id=? AND id=?",
+        )
+        .run(
+          next.visibility,
+          Number(next.included),
+          next.revision,
+          meetingId,
+          id,
+        );
+      this.bump(meetingId);
+      return this.change(
+        meetingId,
+        "material.updated",
+        this.material(meetingId, id),
+      );
+    });
+    this.publish(change);
+    return this.material(meetingId, id);
+  }
+  deleteMaterial(meetingId, id, revision) {
+    const previous = this.material(meetingId, id);
+    if (!previous) throw new ApiError(404, "FILE_NOT_FOUND", "资料不存在");
+    if (revision !== previous.revision)
+      throw new ApiError(
+        409,
+        "REVISION_CONFLICT",
+        "资料已被修改，请刷新后重试",
+      );
+    const change = this.transaction(() => {
+      this.db
+        .prepare("DELETE FROM materials WHERE meeting_id=? AND id=?")
+        .run(meetingId, id);
+      // Clear extracted text from replay history as well as the original file.
+      this.db
+        .prepare(
+          "DELETE FROM changes WHERE meeting_id=? AND kind LIKE 'material.%' AND json_extract(payload,'$.id')=?",
+        )
+        .run(meetingId, id);
+      this.bump(meetingId);
+      return this.change(meetingId, "material.removed", { id });
+    });
+    this.publish(change);
   }
   cursor(id) {
     return this.db
