@@ -96,7 +96,10 @@ export function meetingContext(
       label: `${event.speaker} · ${event.createdAt}`,
       type: event.type,
       provenance: `记录类型=${event.type}；写入来源=${event.source}；修订版本=${event.revision}`,
-      text: event.text,
+      text:
+        privateAllowed && event.data.question
+          ? `先前提问：${event.data.question}\n回复/记录：${event.text}`
+          : event.text,
     });
   const content = [
     `会议：${meeting.title}\n场景：${meeting.mode === "customer" ? "客户辅助" : "内部决策评审"}\n记录版本：${meeting.version}`,
