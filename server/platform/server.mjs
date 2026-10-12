@@ -347,6 +347,15 @@ export function createMeetingServer({
       if (method === "PATCH") {
         const input = await body(req);
         if (
+          principal.kind === "agent" &&
+          (input.autoEnabled !== undefined || input.model !== undefined)
+        )
+          throw new ApiError(
+            403,
+            "HUMAN_SETTINGS_REQUIRED",
+            "模型选择与自动建议开关需要人类在网页中设置；Agent 可通过已授权的助手接口求助",
+          );
+        if (
           input.privateNotes !== undefined &&
           !auth.canPrivateWrite(principal)
         )
