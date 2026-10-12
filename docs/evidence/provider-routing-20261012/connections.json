@@ -1,0 +1,18 @@
+{
+  "wei_models": {
+    "status": 200,
+    "models": [
+      "deepseek-v4-pro",
+      "deepseek-v4-flash",
+      "deepseek-v4.1-flash",
+      "deepseek-v4-1-flash-260910"
+    ]
+  },
+  "aliyun_asr": {
+    "status": "task_started",
+    "elapsedMs": 2326,
+    "real_speech_tested": false
+  },
+  "wei_real_completion_tested": false,
+  "local_windows_start_tested": false
+}

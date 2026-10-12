@@ -1,57 +1,73 @@
-# meetingOS
+> 用户已决定转到 Windows 本地开发：见 [本地启动与接续说明](docs/local-handoff.md)。当前分工为 LinkHarbor 国外三模型、wei.run DeepSeek Flash、阿里百炼 ASR。
 
-AI 大咖会议私董会的服务器部署备份，以及从本地电脑恢复的可编辑工程。两份版本分别保存，原有 LICENSE 保留。
+# MeetingOS
 
-- 仓库根目录：`meeting.weispace.cloud` 的 `/opt/aiboard` 部署快照，取回日期 2026-10-11。包含后端、角色资料、静态角色配置、依赖锁文件和线上前端发布版本。
-- [source-snapshots/local-20261011/ai-board](source-snapshots/local-20261011/ai-board)：从 `D:\works\workbuddy\meetingOS` 上传的 ZIP 恢复的 React/TypeScript/Vite 工程，包含 54 个 `src` 文件，已通过构建与隔离启动检查。
+会中计划审查与客户会谈智囊。人类使用网页，Hermes等Agent通过作用域授权和Skill参与；没有个人Agent也可以使用。
 
-**本地工程与服务器版本不同步，不能认定为线上最新版的完整源码。** 服务器版有后续持久化、接口和缓存修正，以及 3 个新增角色；本地版另有结构化纪要和来源条目设计。两份版本未合并，服务器快照的原应用文件保持不变。详细差异见 [源码恢复报告](docs/source-recovery.md)。
+当前开发入口是仓库根目录。历史版本已分别保留在 `source-snapshots/server-20261011`（原部署91个文件）和 `source-snapshots/local-20261011`（本地恢复205个文件），两份快照保持原始字节。原服务器的前端源码未完全恢复，本轮新工作台是基于恢复工程和审计结论重新实现。
 
-## 运行现有发布版本
+## 本地开发
 
-使用 Node.js 24 和 npm，在仓库目录执行：
-
-```bash
-npm ci --omit=dev --ignore-scripts --no-audit --no-fund --cache /tmp/meetingos-npm-cache
-PORT=3001 AI_BOARD_DATA_DIR=/tmp/meetingos-dev-data npm start
-```
-
-Node 同时提供 `out/` 页面、REST API 和 WebSocket。基础检查为 `GET /api/health`、`GET /api/roles`（当前 25 个角色）和主页请求。
-
-需要真实 AI 调用时，按 `.env.example` 配置模型凭据，或从受保护的环境绑定注入。无凭据时角色发言会返回本地兜底；总结、整理等接口会降级。真实音频、国外模型和邮件发送没有在这个备份环境中验证。
-
-## 运行恢复的可编辑工程
-
-在 Node.js 24 环境中执行：
+需要 Node.js 24+、npm。
 
 ```bash
-cd source-snapshots/local-20261011/ai-board
 npm ci --ignore-scripts --no-audit --no-fund --cache /tmp/meetingos-npm-cache
+npm test
 npm run build
 npm run dev
 ```
 
-默认后端端口 3001，Vite 端口 5173。启动前停止自己启动的、占用 3001 的预览进程。Vite 代理固定指向 3001，仅修改 `PORT` 不会同时修改代理。
+开发默认后端3001、Vite5173。两个端口可一起调整：
 
-这份本地版提供 22 个角色，后端将数据写入它自己的 `server/data/`，不支持服务器版的 `AI_BOARD_DATA_DIR` 覆盖。验证业务流程时使用独立干净副本与合成数据。构建输出为 `out/`，不与根目录线上发布产物混用。
+```bash
+PORT=3168 VITE_PORT=5178 AI_BOARD_DATA_DIR=/tmp/meetingos-dev-data npm run dev
+```
 
-## 备份范围与验证限制
+开发模式无需邀请码即可注册。生产模式必须设置受保护的 `MEETINGOS_INVITE_CODE`，否则关闭注册；此项目没有预设root网站账号。
 
-- 保存了 `server/*.mjs`、`dossiers/`、`deploy/`、依赖清单与锁文件、`.env.example`、`out/`。
-- 静态文件 `server/data/大咖角色库.json` 来自用户回传的服务器内容，共 23 个大咖；另外两个模型角色由后端定义。
-- `.env`、真实会议数据、自定义运行数据、录音、上传资料、日志、依赖目录和历史备份未提交。
-- 根目录 `out/` 是服务器编译产物。服务器归档本身没有前端可编辑源码；后续恢复的本地工程可以构建，但生成的 JS/CSS 与线上不同，尚未取得与线上发布版本完全对应的前端源码。
-- 本地快照保存 205 个原始源码、资源和说明文件，逐文件 SHA-256 与上传 ZIP 一致。排除了工具记忆、真实会议数据、缓存、旧编译产物与凭据文件；只保留启动必需的静态角色库。
-- 导入的部署文件保留原样；其中说明的角色数和建议配置不一定与当前线上状态相同。不要直接用示例 Nginx 文件覆盖共享服务器现有配置。
+构建后单进程提供页面、API与WebSocket：
 
-服务器备份来源与验证见 [docs/backup.md](docs/backup.md)，本地工程恢复与差异见 [docs/source-recovery.md](docs/source-recovery.md)，功能分析见 [docs/product-audit.md](docs/product-audit.md)。构建和基础接口通过，不代表真实音频、模型、邮件或浏览器完整交互已经验收。
+```bash
+PORT=3168 AI_BOARD_DATA_DIR=/tmp/meetingos-dev-data npm start
+```
 
-2026-10-12 已对恢复的本地版本执行实际页面与接口复测，详见 [带截图的重新测试报告](docs/product-retest-20261012.md)。记录了 23 张截图、19 个现有单测和 28 项隔离接口检查；真实音频、模型质量和邮件发送仍未验收。
+`GET /api/health`应返回ok，未登录访问`/api/v1/meetings`应返回401。`out/`是可重建产物，不再作为当前源码提交；原服务器的out完整保留在历史快照。
 
-## SSH 与后续部署
+## 已实现
 
-用户已从 Windows 成功执行 `ssh ubuntu@101.35.232.194 -p 22`。当前 Codex 云任务的 SSH 连接仍未成功；用户已决定暂缓 SSH 设置，待开发方案确定后继续。
+- 按账号保存/恢复会议，原始记录不按200条裁切；修订保留原文并检测并发版本。
+- 内部/客户两个模式、私有/共享资料、分析范围选择与原文件保存、实时记录、人工/自动建议、引用依据、人工确认决定、总结和导出。
+- 人类Cookie、Agent可撤销/到期/限定会议与权限的令牌，同一变化流即时同步。
+- 客户展示和共享导出在服务器排除私有约束/建议与历史敏感元数据。
+- 桌面双栏、手机页签、键盘可用的表单和弹窗。
 
-仓库提供手动触发的 `MeetingOS SSH check` 工作流和 [SSH 设置说明](deploy/SSH.md)。工作流需要配置 GitHub Actions 的专用密钥和可信主机公钥后，再运行验证；提交工作流本身不代表已经连通。它仅验证 SSH 登录和会议文件读取权限，不执行部署或重启服务。
+模型凭据从受保护环境或未提交的`.env`读取，模板见`.env.example`。真实可用的模型ID通过`MEETINGOS_GPT_MODEL`等配置；旧默认型号没有经过本轮真实网关验证。未配置模型或请求失败时明确报错，不用模板冒充AI。
 
-任何后续发布都应保留 `/opt/aiboard/.env` 和运行数据，只操作会议项目，并在用户决定产品改造方案后另行实施。
+浏览器转写可能调用浏览器厂商的网络服务，不能称为完全本地处理；云端ASR可选。发言人需手动指定，收音过程中暂停后才能切换。收音只采集本设备麦克风，系统音频、真实识别准确率、说话人自动区分尚未验收。
+
+## Agent 接入
+
+登录 → Agent接入 → 选择权限/会议/有效期 → 创建授权 → 把令牌存入Agent受保护环境 → 安装 [MeetingOS Skill](skills/meetingos/SKILL.md)。令牌仅创建时显示，不能放在聊天、URL或Git中。
+
+接口说明见 [API与数据边界](docs/platform-api.md)。Agent可下载导出保存到自己的存储；本版没有自动双向镜像或完整OAuth/MCP服务。会议按账号隔离，尚未实现组织成员共享。
+
+## 设计与验证
+
+- [尽调与方案](docs/design/research-and-decision-20261012.md)
+- [执行记录](docs/implementation-plan.md)
+- [验证报告](docs/implementation-validation-20261012.md)
+- [视觉与交互QA](design-qa.md)
+- [原版本复测](docs/product-retest-20261012.md)
+- [源码恢复](docs/source-recovery.md)
+
+`npm test`只验证当前平台，旧版本的测试结论见复测报告。浏览器受控测试使用 `node scripts/browser-fixture.mjs` 和 `scripts/browser-smoke.py`；后者需要Python Playwright及Chromium CDP，详见验证报告。
+
+## 数据和发布
+
+新数据位于`AI_BOARD_DATA_DIR/meetingos.sqlite`，未设置时在`server/data/`；旧`meetings.json`和培训数据库不自动迁移/覆盖。数据库含会议、修订、附件原件及授权哈希，应放在持久、受保护的目录并备份。模型请求限额与数据保存是两回事。
+
+本轮仅在开发分支工作，没有部署生产。SSH设置仍暂停；[SSH说明](deploy/SSH.md)只是此前保留的说明。后续发布必须先验证Node24、HTTPS来源设置、邀请码、模型、数据迁移与回滚，只操作会议项目，不覆盖共享Nginx或其他站点配置。
+
+2026-10-12 后续开发：新增附件隐私、参与分析开关、原文件删除与实时移除；连续发言自动建议最多等待八秒，会议结束停止自动分析。执行记录见 [后续开发验证](docs/development-validation-20261012.md)。
+
+用户提供凭证后的真实 GPT/Claude/DeepSeek 调用与延迟记录见 [模型接入验证](docs/model-validation-20261012.md)。凭证没有纳入仓库；另两组接口仍受云出站策略限制。

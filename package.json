@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "AI 大咖会议私董会 · 虚拟董事会实时会议系统",
+  "description": "MeetingOS · 实时会议记录、客户辅助与 Agent 协作",
   "scripts": {
     "api": "node server/api-server.mjs",
     "web": "vite",
@@ -11,7 +11,8 @@
     "build": "node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "start": "node server/api-server.mjs",
-    "lint": "oxlint"
+    "lint": "oxlint src server/platform server/tests scripts/dev.mjs scripts/browser-fixture.mjs",
+    "test": "node --test server/tests/*.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^6.2.5",
@@ -29,5 +30,8 @@
     "oxlint": "^1.69.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

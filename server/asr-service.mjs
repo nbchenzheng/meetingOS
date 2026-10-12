@@ -2,6 +2,13 @@
 // 语音识别：保留阿里云实时 ASR（待用户提供 Key 后启用），当前前端走 Web Speech 兜底。
 // 架构 T12 预留接口：ALIYUN_ASR_* 配置读取 + 阿里云实时转写分支均已就位。
 import WebSocket from 'ws'
+import { Agent as HttpsAgent } from 'node:https'
+import { Agent as HttpAgent } from 'node:http'
+
+function proxyAgent(url) {
+  if (!process.env.HTTPS_PROXY && !process.env.HTTP_PROXY && !process.env.https_proxy && !process.env.http_proxy) return undefined
+  return new (url.startsWith('wss:') ? HttpsAgent : HttpAgent)({ proxyEnv: process.env })
+}
 // Node 18 没有全局 crypto，必须显式 import（本地 Node 22 有全局 crypto，所以本地永远不复现线上崩溃）
 import { randomUUID } from 'node:crypto'
 
@@ -16,9 +23,9 @@ export function asrRuntimeConfig() {
     provider: enabled && apiKey ? 'aliyun' : 'web-speech',
     enabled,
     apiKeyConfigured: Boolean(apiKey),
-    appKeyConfigured: Boolean(apiKey),
+    appKeyConfigured: Boolean(appKey),
     region,
-    wsUrl: ALIYUN_WS_URL,
+    wsUrl: process.env.ALIYUN_ASR_WS_URL || ALIYUN_WS_URL,
   }
 }
 
@@ -66,6 +73,7 @@ async function transcribeWithAliyun(payload, config, startedAt) {
   const format = payload.format || audioFormatFromMime(payload.mimeType || mimeType)
   const sampleRate = Number(payload.sampleRate ?? 16000)
   const socket = new WebSocket(config.wsUrl, {
+    agent: proxyAgent(config.wsUrl),
     headers: { Authorization: `Bearer ${apiKey}`, 'X-DashScope-DataInspection': 'enable' },
   })
   const sentences = []
@@ -92,7 +100,7 @@ async function transcribeWithAliyun(payload, config, startedAt) {
           task_group: 'audio',
           task: 'asr',
           function: 'recognition',
-          model: 'fun-asr-realtime',
+          model: process.env.ALIYUN_ASR_MODEL || 'fun-asr-realtime',
           parameters: {
             format,
             sample_rate: sampleRate,
@@ -140,14 +148,16 @@ async function transcribeWithAliyun(payload, config, startedAt) {
 
 // 阿里云实时语音「流式」桥：浏览器持续上行 PCM 音频帧，后端转发 DashScope 并回传转写结果。
 // 每路 /ws/board/transcribe 会话创建一个，返回 { sendAudio, ready, finish, close }。
-export function createAliyunStream({ onResult, sampleRate = 16000, format = 'pcm' } = {}) {
+export function createAliyunStream({ onResult,onError=()=>{}, sampleRate = 16000, format = 'pcm' } = {}) {
   const apiKey = process.env.ALIYUN_ASR_API_KEY
   // 保留原有「取不到唯一 ID 时降级」的语义；不再引用未声明的全局 crypto（Node 18 会 ReferenceError 崩进程）
   const taskId = (typeof randomUUID === 'function'
     ? randomUUID()
     : `${Date.now()}-${Math.random()}`
   ).replaceAll('-', '')
-  const socket = new WebSocket(ALIYUN_WS_URL, {
+  const wsUrl = process.env.ALIYUN_ASR_WS_URL || ALIYUN_WS_URL
+  const socket = new WebSocket(wsUrl, {
+    agent: proxyAgent(wsUrl),
     headers: { Authorization: `Bearer ${apiKey}`, 'X-DashScope-DataInspection': 'enable' },
   })
   let started = false
@@ -164,7 +174,7 @@ export function createAliyunStream({ onResult, sampleRate = 16000, format = 'pcm
             task_group: 'audio',
             task: 'asr',
             function: 'recognition',
-            model: 'fun-asr-realtime',
+            model: process.env.ALIYUN_ASR_MODEL || 'fun-asr-realtime',
             parameters: {
               format,
               sample_rate: sampleRate,
@@ -185,6 +195,7 @@ export function createAliyunStream({ onResult, sampleRate = 16000, format = 'pcm
           if (!settled) { settled = true; clearTimeout(timer); started = true; resolve() }
         } else if (ev === 'task-failed') {
           if (!settled) { settled = true; clearTimeout(timer); reject(new Error(event.payload?.message || 'aliyun_task_failed')) }
+          else onError()
         } else if (ev === 'result-generated') {
           const sentence = event.payload?.output?.sentence
           const text = sentence?.text || event.payload?.output?.text || ''
@@ -196,6 +207,7 @@ export function createAliyunStream({ onResult, sampleRate = 16000, format = 'pcm
       if (!settled) { settled = true; clearTimeout(timer); reject(err instanceof Error ? err : new Error('aliyun_ws_error')) }
     })
   })
+  socket.on('error',()=>{if(started)onError()})
 
   return {
     async ready() { await startPromise },

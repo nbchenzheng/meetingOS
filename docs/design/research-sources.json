@@ -1,0 +1,44 @@
+[
+  {
+    "name": "mcp-authorization",
+    "url": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/2025-11-25/basic/authorization.mdx",
+    "bytes": 41363,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "livekit-agents",
+    "url": "https://raw.githubusercontent.com/livekit/agents/main/README.md",
+    "bytes": 16994,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "livekit-starter-ui",
+    "url": "https://raw.githubusercontent.com/livekit-examples/agent-starter-react/main/README.md",
+    "bytes": 9473,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "fluent-ui",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui/master/README.md",
+    "bytes": 10623,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "meetily",
+    "url": "https://raw.githubusercontent.com/Zackriya-Solutions/meetily/main/README.md",
+    "bytes": 13476,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "open-webui",
+    "url": "https://raw.githubusercontent.com/open-webui/open-webui/main/README.md",
+    "bytes": 18194,
+    "retrieved": "2026-10-12"
+  },
+  {
+    "name": "jitsi-meet",
+    "url": "https://raw.githubusercontent.com/jitsi/jitsi-meet/master/README.md",
+    "bytes": 3603,
+    "retrieved": "2026-10-12"
+  }
+]
