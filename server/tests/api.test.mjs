@@ -21,8 +21,8 @@ const prompts = [];
 const envKeys = [
   "LINKHARBOR_API_KEY",
   "LINKHARBOR_BASE_URL",
-  "DEEPSEEK_API_KEY",
-  "DEEPSEEK_BASE_URL",
+  "WEI_LLM_API_KEY",
+  "WEI_LLM_BASE_URL",
   "NODE_ENV",
   "MEETINGOS_INVITE_CODE",
   "MEETINGOS_PUBLIC_URL",
@@ -139,8 +139,8 @@ before(async () => {
   const gatewayURL = "http://127.0.0.1:" + gateway.address().port + "/v1";
   process.env.LINKHARBOR_API_KEY = "controlled-fixture-key";
   process.env.LINKHARBOR_BASE_URL = gatewayURL;
-  process.env.DEEPSEEK_API_KEY = "controlled-fixture-key";
-  process.env.DEEPSEEK_BASE_URL = gatewayURL;
+  process.env.WEI_LLM_API_KEY = "controlled-fixture-key";
+  process.env.WEI_LLM_BASE_URL = gatewayURL;
   process.env.NODE_ENV = "development";
   process.env.ALIYUN_ASR_ENABLED = "false";
   delete process.env.MEETINGOS_INVITE_CODE;
@@ -161,6 +161,7 @@ before(async () => {
   ).cookie.split(";")[0];
   meeting = app.store.createMeeting(owner.id, {
     title: "测试计划",
+    model: "gpt55",
     mode: "customer",
     brief: "BRIEF_MARKER 三周部署，预算12万元",
     privateNotes: "PRIVATE_MARKER 报价底线",
@@ -1045,4 +1046,87 @@ test("客户总结期间共享资料撤回后不发布旧上下文结果", async
     app.store.allEvents(session.id).filter((e) => e.type === "summary").length,
     0,
   );
+});
+
+test("新会默认wei.run DeepSeek Flash；GPT/Claude/Gemini使用LinkHarbor且失败不跨网关兜底", async () => {
+  const previousKey = process.env.WEI_LLM_API_KEY,
+    previousBase = process.env.WEI_LLM_BASE_URL;
+  const received = [];
+  const wei = http.createServer(async (req, res) => {
+    let raw = "";
+    for await (const chunk of req) raw += chunk;
+    received.push({
+      input: JSON.parse(raw),
+      authorization: req.headers.authorization,
+    });
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        choices: [{ message: { content: "先核实预算。 [brief]" } }],
+      }),
+    );
+  });
+  wei.listen(0, "127.0.0.1");
+  await once(wei, "listening");
+  process.env.WEI_LLM_API_KEY = "wei-specific-test-key";
+  process.env.WEI_LLM_BASE_URL =
+    "http://127.0.0.1:" + wei.address().port + "/v1";
+  try {
+    const created = await request("/meetings", {
+      title: "成本路由验收",
+      brief: "预算待核实",
+    });
+    const session = created.data.meeting;
+    assert.equal(session.model, "deepseek");
+    const path = "/meetings/" + session.id;
+    const before = prompts.length;
+    assert.equal(
+      (await request(path + "/assistant", { question: "检查风险" })).status,
+      200,
+    );
+    assert.equal(received.length, 1);
+    assert.equal(received[0].input.model, "deepseek-v4-flash");
+    assert.equal(received[0].authorization, "Bearer wei-specific-test-key");
+    assert.equal(prompts.length, before);
+    assert.equal(
+      (
+        await request(path + "/assistant", {
+          roleId: "charlie_munger",
+          question: "逆向审查",
+        })
+      ).status,
+      200,
+    );
+    assert.equal(received.length, 2);
+    for (const roleId of ["gpt55", "claude", "gemini"]) {
+      const foreignBefore = prompts.length;
+      assert.equal(
+        (await request(path + "/assistant", { roleId, question: "审查" }))
+          .status,
+        200,
+      );
+      assert.equal(prompts.length, foreignBefore + 1);
+      assert.equal(received.length, 2);
+    }
+    delete process.env.WEI_LLM_API_KEY;
+    assert.equal(
+      (await request(path + "/assistant", { question: "不能用昂贵线路兜底" }))
+        .data.code,
+      "MODEL_NOT_CONFIGURED",
+    );
+    assert.equal(prompts.length, before + 3);
+    process.env.WEI_LLM_API_KEY = "wei-specific-test-key";
+    process.env.WEI_LLM_BASE_URL = "https://api.linkharbor.ai/v1";
+    assert.equal(
+      (await request(path + "/assistant", { question: "拒绝错误路由" })).data
+        .code,
+      "MODEL_ROUTE_NOT_ALLOWED",
+    );
+    assert.equal(prompts.length, before + 3);
+  } finally {
+    process.env.WEI_LLM_API_KEY = previousKey;
+    process.env.WEI_LLM_BASE_URL = previousBase;
+    wei.closeAllConnections();
+    await new Promise((r) => wei.close(r));
+  }
 });

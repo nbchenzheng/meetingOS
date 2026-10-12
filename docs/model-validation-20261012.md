@@ -1,5 +1,7 @@
 # 真实模型接入验证
 
+**后续分工已调整：LinkHarbor 仅用于 GPT/Claude/Gemini，DeepSeek Flash 走 wei.run，阿里百炼用于 ASR。以下 LinkHarbor DeepSeek 测试是历史记录，当前配置以 [本地交接](local-handoff.md) 为准。**
+
 2026-10-12（新加坡时间）。使用用户上传的凭证文档，仅在开发环境运行；文档及凭证位于仓库外，未写入代码、日志或报告。未连接生产服务器。
 
 ## 接入结果

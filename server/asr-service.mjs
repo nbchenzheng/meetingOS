@@ -2,6 +2,13 @@
 // 语音识别：保留阿里云实时 ASR（待用户提供 Key 后启用），当前前端走 Web Speech 兜底。
 // 架构 T12 预留接口：ALIYUN_ASR_* 配置读取 + 阿里云实时转写分支均已就位。
 import WebSocket from 'ws'
+import { Agent as HttpsAgent } from 'node:https'
+import { Agent as HttpAgent } from 'node:http'
+
+function proxyAgent(url) {
+  if (!process.env.HTTPS_PROXY && !process.env.HTTP_PROXY && !process.env.https_proxy && !process.env.http_proxy) return undefined
+  return new (url.startsWith('wss:') ? HttpsAgent : HttpAgent)({ proxyEnv: process.env })
+}
 // Node 18 没有全局 crypto，必须显式 import（本地 Node 22 有全局 crypto，所以本地永远不复现线上崩溃）
 import { randomUUID } from 'node:crypto'
 
@@ -66,6 +73,7 @@ async function transcribeWithAliyun(payload, config, startedAt) {
   const format = payload.format || audioFormatFromMime(payload.mimeType || mimeType)
   const sampleRate = Number(payload.sampleRate ?? 16000)
   const socket = new WebSocket(config.wsUrl, {
+    agent: proxyAgent(config.wsUrl),
     headers: { Authorization: `Bearer ${apiKey}`, 'X-DashScope-DataInspection': 'enable' },
   })
   const sentences = []
@@ -92,7 +100,7 @@ async function transcribeWithAliyun(payload, config, startedAt) {
           task_group: 'audio',
           task: 'asr',
           function: 'recognition',
-          model: 'fun-asr-realtime',
+          model: process.env.ALIYUN_ASR_MODEL || 'fun-asr-realtime',
           parameters: {
             format,
             sample_rate: sampleRate,
@@ -147,7 +155,9 @@ export function createAliyunStream({ onResult,onError=()=>{}, sampleRate = 16000
     ? randomUUID()
     : `${Date.now()}-${Math.random()}`
   ).replaceAll('-', '')
-  const socket = new WebSocket(process.env.ALIYUN_ASR_WS_URL || ALIYUN_WS_URL, {
+  const wsUrl = process.env.ALIYUN_ASR_WS_URL || ALIYUN_WS_URL
+  const socket = new WebSocket(wsUrl, {
+    agent: proxyAgent(wsUrl),
     headers: { Authorization: `Bearer ${apiKey}`, 'X-DashScope-DataInspection': 'enable' },
   })
   let started = false
@@ -164,7 +174,7 @@ export function createAliyunStream({ onResult,onError=()=>{}, sampleRate = 16000
             task_group: 'audio',
             task: 'asr',
             function: 'recognition',
-            model: 'fun-asr-realtime',
+            model: process.env.ALIYUN_ASR_MODEL || 'fun-asr-realtime',
             parameters: {
               format,
               sample_rate: sampleRate,

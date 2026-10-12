@@ -2,10 +2,32 @@ import { createHash, randomUUID } from "node:crypto";
 import { ApiError } from "./store.mjs";
 import { getRole, listRoles } from "../role-service.mjs";
 
+const additionalRoles = [
+  {
+    id: "deepseek",
+    cn: "DeepSeek",
+    title: "日常分析 · wei.run",
+    provider: "deepseek",
+    model: "deepseek-v4-flash",
+    preset: true,
+    persona: "协助会议分析，优先明确事实、风险与可执行下一步。",
+  },
+  {
+    id: "gemini",
+    cn: "Gemini",
+    title: "Google 大模型",
+    provider: "linkharbor",
+    model: "gemini-3.7-flash",
+    preset: true,
+    persona: "协助会议分析，核对事实、比较方案并指出不确定事项。",
+  },
+];
+const assistantRole = (id) =>
+  additionalRoles.find((r) => r.id === id) || getRole(id);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 export function assistantCatalog() {
-  return listRoles()
+  return [...additionalRoles, ...listRoles()]
     .filter((r) => r.preset)
     .map((r) => ({
       id: r.id,
@@ -16,7 +38,7 @@ export function assistantCatalog() {
       configured: Boolean(
         r.provider === "linkharbor"
           ? process.env.LINKHARBOR_API_KEY
-          : process.env.DEEPSEEK_API_KEY,
+          : process.env.WEI_LLM_API_KEY,
       ),
     }));
 }
@@ -25,22 +47,24 @@ function configuredModel(role) {
     ? process.env.MEETINGOS_GPT_MODEL || role.model
     : role.id === "claude"
       ? process.env.MEETINGOS_CLAUDE_MODEL || role.model
-      : process.env.MEETINGOS_DEEPSEEK_MODEL || role.model;
+      : role.id === "gemini"
+        ? process.env.MEETINGOS_GEMINI_MODEL || role.model
+        : process.env.MEETINGOS_DEEPSEEK_MODEL || "deepseek-v4-flash";
 }
 
 function configuration(roleId) {
-  const role = getRole(roleId);
+  const role = assistantRole(roleId);
   if (!role || !role.preset)
     throw new ApiError(400, "INVALID_ASSISTANT", "请选择有效的会议助手");
   const foreign = role.provider === "linkharbor";
   const base = (
     foreign
       ? process.env.LINKHARBOR_BASE_URL || "https://api.linkharbor.ai/v1"
-      : process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1"
+      : process.env.WEI_LLM_BASE_URL || "https://api.wei.run/v1"
   ).replace(/\/$/, "");
   const apiKey = foreign
     ? process.env.LINKHARBOR_API_KEY
-    : process.env.DEEPSEEK_API_KEY;
+    : process.env.WEI_LLM_API_KEY;
   const model = configuredModel(role);
   if (!apiKey)
     throw new ApiError(
@@ -54,6 +78,12 @@ function configuration(roleId) {
   } catch {
     throw new ApiError(503, "MODEL_CONFIGURATION_ERROR", "模型连接配置不正确");
   }
+  if (!foreign && parsed.hostname === "api.linkharbor.ai")
+    throw new ApiError(
+      503,
+      "MODEL_ROUTE_NOT_ALLOWED",
+      "DeepSeek 必须使用 wei.run，禁止转到 LinkHarbor",
+    );
   if (
     !["https:", "http:"].includes(parsed.protocol) ||
     (parsed.protocol === "http:" &&

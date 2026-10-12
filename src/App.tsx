@@ -1768,11 +1768,12 @@ function Workbench({
             <p>
               LINKHARBOR_API_KEY、LINKHARBOR_BASE_URL
               <br />
-              可指定 MEETINGOS_GPT_MODEL、MEETINGOS_CLAUDE_MODEL
+              可指定
+              MEETINGOS_GPT_MODEL、MEETINGOS_CLAUDE_MODEL、MEETINGOS_GEMINI_MODEL
             </p>
-            <strong>DeepSeek 与思维视角</strong>
+            <strong>DeepSeek Flash 与思维视角 · wei.run</strong>
             <p>
-              DEEPSEEK_API_KEY、DEEPSEEK_BASE_URL
+              WEI_LLM_API_KEY、WEI_LLM_BASE_URL
               <br />
               可指定 MEETINGOS_DEEPSEEK_MODEL
             </p>

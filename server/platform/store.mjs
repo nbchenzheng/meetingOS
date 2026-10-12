@@ -96,7 +96,7 @@ export class MeetingStore extends EventEmitter {
       CREATE TABLE IF NOT EXISTS meetings (
         id TEXT PRIMARY KEY, owner_id TEXT NOT NULL REFERENCES users(id), title TEXT NOT NULL,
         mode TEXT NOT NULL, brief TEXT NOT NULL DEFAULT '', private_notes TEXT NOT NULL DEFAULT '',
-        model TEXT NOT NULL DEFAULT 'gpt55', role_ids TEXT NOT NULL DEFAULT '[]',
+        model TEXT NOT NULL DEFAULT 'deepseek', role_ids TEXT NOT NULL DEFAULT '[]',
         auto_enabled INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'active',
         version INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
       );
@@ -324,7 +324,7 @@ export class MeetingStore extends EventEmitter {
         mode,
         string(input.brief, 12000),
         string(input.privateNotes, 12000),
-        string(input.model, 80) || "gpt55",
+        string(input.model, 80) || "deepseek",
         json(roles),
         date,
         date,

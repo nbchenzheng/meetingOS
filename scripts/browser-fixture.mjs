@@ -34,6 +34,8 @@ await once(gateway, "listening");
 process.env.LINKHARBOR_API_KEY = "browser-controlled-fixture";
 process.env.LINKHARBOR_BASE_URL =
   "http://127.0.0.1:" + gateway.address().port + "/v1";
+process.env.WEI_LLM_API_KEY = "browser-controlled-wei-fixture";
+process.env.WEI_LLM_BASE_URL = process.env.LINKHARBOR_BASE_URL;
 process.env.MEETINGOS_TEST_MODE = "true";
 process.env.NODE_ENV = "development";
 delete process.env.MEETINGOS_INVITE_CODE;

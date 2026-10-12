@@ -1,3 +1,5 @@
+> 用户已决定转到 Windows 本地开发：见 [本地启动与接续说明](docs/local-handoff.md)。当前分工为 LinkHarbor 国外三模型、wei.run DeepSeek Flash、阿里百炼 ASR。
+
 # MeetingOS
 
 会中计划审查与客户会谈智囊。人类使用网页，Hermes等Agent通过作用域授权和Skill参与；没有个人Agent也可以使用。
