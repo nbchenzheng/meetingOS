@@ -73,7 +73,7 @@ function visibleEvent(event, principal, customer = false) {
 function projectedEvent(event, principal, customer = false) {
   if (!customer && auth.canPrivateRead(principal)) return event;
   const { originalText: _original, data: _data, ...shared } = event;
-  return { ...shared, data: { model: event.data?.model } };
+  return { ...shared, data: {} };
 }
 function projectedMeeting(meeting, principal, customer = false) {
   const projected = auth.projectMeeting(meeting, principal);
@@ -86,7 +86,7 @@ function projectedChange(change, principal, customer, store) {
   // current visibility so an old public revision cannot reveal a now private record.
   if (change.kind.startsWith("event.")) {
     const current = store.event(change.meetingId, change.payload.id);
-    if (!visibleEvent(current || change.payload, principal, customer))
+    if (!current || !visibleEvent(current, principal, customer))
       return {
         cursor: change.cursor,
         meetingId: change.meetingId,
@@ -95,7 +95,13 @@ function projectedChange(change, principal, customer, store) {
       };
     return {
       ...change,
-      payload: projectedEvent(change.payload, principal, customer),
+      // Public replay returns the currently approved text. Publishing a redacted
+      // revision must never replay its older private text or metadata.
+      payload: projectedEvent(
+        customer || !auth.canPrivateRead(principal) ? current : change.payload,
+        principal,
+        customer,
+      ),
     };
   }
   return change.kind === "meeting.updated"

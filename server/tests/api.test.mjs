@@ -60,19 +60,24 @@ async function event(text, extra = {}) {
   assert.equal(r.status, 201);
   return r.data.event;
 }
-async function streamFor(headers = {}, audience = "") {
+async function streamFor(
+  headers = {},
+  audience = "",
+  after = app.store.cursor(meeting.id),
+) {
   const controller = new AbortController();
   const response = await fetch(
     base +
       "/api/v1/meetings/" +
       meeting.id +
       "/stream?after=" +
-      app.store.cursor(meeting.id) +
+      after +
       audience,
     { headers: { Cookie: cookie, ...headers }, signal: controller.signal },
   );
   assert.equal(response.status, 200);
   const reader = response.body.getReader();
+  const seen = [];
   let buffer = "";
   async function until(predicate) {
     const timeout = setTimeout(() => controller.abort(), 3000);
@@ -87,6 +92,7 @@ async function streamFor(headers = {}, audience = "") {
           const raw = frame.split("\n").find((l) => l.startsWith("data: "));
           if (raw) {
             const data = JSON.parse(raw.slice(6));
+            seen.push(data);
             if (predicate(data)) return data;
           }
         }
@@ -95,7 +101,7 @@ async function streamFor(headers = {}, audience = "") {
       clearTimeout(timeout);
     }
   }
-  return { controller, reader, until };
+  return { controller, reader, until, seen };
 }
 before(async () => {
   dir = mkdtempSync(join(tmpdir(), "meetingos-api-"));
@@ -346,6 +352,27 @@ test("私有内容不进入客户 API/导出/回放；公开转私有立即发�
   );
   assert.equal(removed.payload.id, publicRecord.id);
   customer.controller.abort();
+  const redacted = await event("NEVER_SHARED_HISTORY_MARKER", {
+    visibility: "private",
+    data: { model: { private: "PRIVATE_METADATA_MARKER" } },
+  });
+  assert.equal(
+    (
+      await request(
+        "/meetings/" + meeting.id + "/events/" + redacted.id,
+        { revision: 1, text: "人类允许公开的修订内容", visibility: "shared" },
+        { method: "PATCH" },
+      )
+    ).status,
+    200,
+  );
+  const replay = await streamFor({}, "&audience=customer", 0);
+  await replay.until((data) => typeof data.reload === "boolean");
+  assert.ok(
+    !JSON.stringify(replay.seen).includes("NEVER_SHARED_HISTORY_MARKER"),
+  );
+  assert.ok(!JSON.stringify(replay.seen).includes("PRIVATE_METADATA_MARKER"));
+  replay.controller.abort();
   for (const path of [
     "/meetings/" + meeting.id + "?audience=customer",
     "/meetings/" + meeting.id + "/events?audience=customer",
@@ -358,6 +385,8 @@ test("私有内容不进入客户 API/导出/回放；公开转私有立即发�
     assert.ok(!output.includes("PRIVATE_MARKER"));
     assert.ok(!output.includes("EARLIER_ADVICE_MARKER"));
     assert.ok(!output.includes("WAS_SHARED_MARKER"));
+    assert.ok(!output.includes("NEVER_SHARED_HISTORY_MARKER"));
+    assert.ok(!output.includes("PRIVATE_METADATA_MARKER"));
   }
 });
 test("Agent 限会议/权限写入，人类实时接收；撤销关闭流并拒绝后续请求", async () => {
